@@ -4,15 +4,21 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "@/lib/auth-client";
-import { signInSchema, type SignInValues } from "@/features/auth/schema";
-import { safeAuthCallback } from "@/features/auth/safe-callback";
-import { GoogleOAuthButton } from "@/features/auth/components/google-oauth-button";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Mail, Lock, Loader2 } from "lucide-react";
+import { safeAuthCallback } from "@/lib/safe-auth-callback";
+import { signInSchema, SignInValues } from "@/modules/auth/schema/auth-schema";
+import { GoogleOAuthButton } from "./google-oauth-button";
+import { signIn } from "@/lib/auth-client";
 
 export function SignInForm() {
   const searchParams = useSearchParams();

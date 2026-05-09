@@ -1,15 +1,18 @@
 "use client";
 
-import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { safeAuthCallback } from "@/features/auth/safe-callback";
+import { signIn } from "@/lib/auth-client";
+import { safeAuthCallback } from "@/lib/safe-auth-callback";
 
 type Props = {
   callbackURL: string;
   label?: string;
 };
 
-export function GoogleOAuthButton({ callbackURL, label = "Continue with Google" }: Props) {
+export function GoogleOAuthButton({
+  callbackURL,
+  label = "Continue with Google",
+}: Props) {
   const next = safeAuthCallback(callbackURL);
 
   return (
@@ -17,7 +20,9 @@ export function GoogleOAuthButton({ callbackURL, label = "Continue with Google" 
       type="button"
       variant="outline"
       className="w-full justify-center gap-2.5 border-border bg-background font-semibold shadow-none hover:bg-muted/80"
-      onClick={() => void signIn.social({ provider: "google", callbackURL: next })}
+      onClick={() =>
+        void signIn.social({ provider: "google", callbackURL: next })
+      }
     >
       <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden>
         <path

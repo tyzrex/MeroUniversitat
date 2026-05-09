@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { Container } from "@/modules/shared/components/container";
 
 type Variant = "sign-in" | "sign-up";
 
@@ -28,7 +29,7 @@ export function AuthMarketingPanel({ variant }: { variant: Variant }) {
         {/* Gradient overlay on top of image */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0d2145]/95 via-[#0d2145]/75 to-[#0d2145]/90 z-10" />
         <Image
-          src="/heroimage.png"
+          src="/heroimage.webp"
           alt=""
           fill
           className="object-cover object-bottom opacity-60"
@@ -44,23 +45,6 @@ export function AuthMarketingPanel({ variant }: { variant: Variant }) {
 
       {/* Content */}
       <div className="relative z-20 flex flex-col h-full px-10 py-12 md:px-12 lg:px-14">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="inline-flex max-w-fit items-center gap-3 font-semibold text-white"
-        >
-          <Image
-            src="/logo.png"
-            alt="MeroUniversität"
-            width={40}
-            height={40}
-            className="object-contain"
-          />
-          <span className="text-lg font-bold tracking-tight">
-            MeroUniversität
-          </span>
-        </Link>
-
         {/* Headline */}
         <div className="mt-auto pb-4">
           {variant === "sign-in" ? (
