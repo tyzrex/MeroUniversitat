@@ -30,7 +30,7 @@ export function LandingNavbar() {
             height={60}
             className="size-15 object-contain"
           />
-          <span className="text-[20px] font-black tracking-tight">
+          <span className="hidden md:block text-[20px] font-black tracking-tight">
             Mero<span className="text-blue-500">Universität</span>
           </span>
         </Link>

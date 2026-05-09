@@ -18,7 +18,7 @@ export function LandingHero() {
         aria-hidden
       />
 
-      <Container>
+      <Container className="lg:py-0 py-10">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Left: Content */}
           <div className="relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -30,23 +30,23 @@ export function LandingHero() {
               Built for Nepali students. By the community. 🇳🇵
             </Badge>
 
-            <h1 className="text-balance text-4xl font-extrabold leading-[1.12] tracking-tight text-[#0d2145] md:text-5xl lg:text-[3.75rem]">
+            <h1 className="text-balance text-3xl sm:text-4xl font-extrabold leading-[1.12] tracking-tight text-[#0d2145] md:text-5xl lg:text-[3.75rem]">
               Germany applications made{" "}
               <span className="text-primary">transparent</span> for Nepali
               students.
             </h1>
 
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-500">
+            <p className="mt-5 max-w-xl text-sm lg:text-lg leading-relaxed text-slate-500">
               Search universities, explore real student profiles, track your
               applications, get timelines and collaborate with your team — all
               in one platform.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 md:flex-row">
               <Link
                 href="/sign-up"
                 className={cn(
-                  buttonVariants({ size: "xl", variant: "gradient" }),
+                  buttonVariants({ variant: "gradient", size: "lg" }),
                   "font-bold px-6",
                 )}
               >
@@ -55,7 +55,8 @@ export function LandingHero() {
               <Link
                 href="/universities"
                 className={cn(
-                  buttonVariants({ variant: "outline", size: "xl" }),
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "font-bold px-6 ",
                 )}
               >
                 Explore Universities

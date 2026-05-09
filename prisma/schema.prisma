@@ -11,3 +11,314 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+  VERIFIED_ALUMNI
+}
+
+enum GermanLevel {
+  NONE
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+}
+
+enum DegreeType {
+  BACHELOR
+  MASTER
+  PHD
+  DIPLOMA
+  AUSBILDUNG
+  OTHER
+}
+
+
+enum ApplicationStatus {
+  INTERESTED
+  RESEARCHING
+  PREPARING_DOCS
+  READY_TO_APPLY
+  APPLIED
+  UNDER_REVIEW
+  INTERVIEW
+  OFFER_LETTER
+  REJECTED
+  ENROLLED
+  WITHDRAWN
+}
+
+enum AdmissionResult {
+  ACCEPTED
+  REJECTED
+  WAITLISTED
+  INTERVIEW
+  PENDING
+}
+
+enum TeamMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  role          Role     @default(USER)
+  bio           String?
+  isVerified    Boolean  @default(false)
+  /// Set when user finishes solo vs team onboarding; null = show welcome flow.
+  onboardingCompletedAt DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Better Auth relations
+  sessions           Session[]
+  accounts           Account[]
+
+  // App relations
+  profile            Profile?
+  applications       Application[]
+  acceptanceRecords  AcceptanceRecord[]
+
+  teamsOwned         Team[]
+  teamMemberships    TeamMember[]
+
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+}
+
+model Profile {
+  id                String      @id @default(cuid())
+  userId            String      @unique
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Academic background
+  gpa               Decimal?    @db.Decimal(4, 2)   // 0.00-4.00 German scale
+  percentage        Decimal?    @db.Decimal(5, 2)   // 0.00-100.00
+  ieltsScore        Decimal?    @db.Decimal(3, 1)   // 0.0-9.0
+  germanLevel       GermanLevel @default(NONE)
+  greScore          Int?
+  nepalUniversity   String?
+  nepalBoard        String?     // TU, KU, PU, Foreign, etc.
+  subject           String?
+  bachelorProgram   String?
+  workExperienceYrs Int?        @default(0)
+  hasPublications   Boolean     @default(false)
+
+  // Application preferences
+  targetIntake      String?     // WS2025, SS2026
+  budgetEurCents    Int?
+  preferredCities   String[]
+
+  // Privacy
+  isPublic          Boolean     @default(true)
+  updatedAt         DateTime    @updatedAt
+}
+
+
+model Team {
+  id          String   @id @default(cuid())
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+  inviteCode  String   @unique @default(cuid())
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members      TeamMember[]
+  applications Application[]
+}
+
+model TeamMember {
+  id        String         @id @default(cuid())
+  teamId    String
+  team      Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      TeamMemberRole @default(MEMBER)
+  joinedAt  DateTime       @default(now())
+
+  @@unique([teamId, userId])
+}
+
+
+model Application {
+  id             String            @id @default(cuid())
+  userId         String
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  programId      String?
+  program        Program?          @relation(fields: [programId], references: [id])
+  teamId         String?
+  team           Team?             @relation(fields: [teamId], references: [id])
+
+  // Denormalized for custom (not-in-DB) entries
+  universityName String
+  programName    String?
+  city           String?
+
+  status         ApplicationStatus @default(INTERESTED)
+  deadline       DateTime?
+  notes          String?
+  sopVersion     String?
+  priority       Int?              @default(0)
+
+  // Kanban positioning
+  kanbanColumn   String?
+  kanbanPosition Int?              @default(0)
+
+  // Requirements checklist (stored as JSON array of {label, done} objects)
+  checklist      Json?
+
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  timelines      ApplicationTimeline[]
+}
+
+model ApplicationTimeline {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  event         String      // APPLIED | UNI_ASSIST_COMPLETE | INITIAL_REVIEW | OFFER | VISA | REJECTED
+  date          DateTime
+  notes         String?
+  daysFromApply Int?        // Computed at insert time
+
+  createdAt     DateTime    @default(now())
+}
+
+model AcceptanceRecord {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  universityId  String
+  university    University      @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  programId     String?
+  program       Program?        @relation(fields: [programId], references: [id])
+
+  // Applicant snapshot (captured at submission time)
+  gpa           Decimal?        @db.Decimal(4, 2)
+  percentage    Decimal?        @db.Decimal(5, 2)
+  ieltsScore    Decimal?        @db.Decimal(3, 1)
+  germanLevel   GermanLevel     @default(NONE)
+  nepalBoard    String?
+  subject       String?
+  workExperienceYrs Int?        @default(0)
+  hasAPS        Boolean         @default(false)
+
+  // Result
+  intake        String          // "WS2024", "SS2025"
+  result        AdmissionResult
+  appliedDate   DateTime?
+  responseDate  DateTime?
+  offerDate     DateTime?
+  notes         String?
+
+  // Privacy & moderation
+  isAnonymous   Boolean         @default(true)
+  isVerified    Boolean         @default(false)
+  isDeleted     Boolean         @default(false)
+  deletedAt     DateTime?
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model University {
+  id           String    @id @default(cuid())
+  name         String
+  nameShort    String?
+  city         String
+  state        String?
+  isPublic     Boolean   @default(true)
+  website      String?
+  ranking      Int?
+  description  String?
+  logoUrl      String?
+  imageUrl     String?
+  slug         String    @unique
+  isPopular    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  programs          Program[]
+  acceptanceRecords AcceptanceRecord[]
+}
+
+model Program {
+  id                String     @id @default(cuid())
+  universityId      String
+  university        University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  name              String
+  degree            DegreeType
+  subject           String
+  language          String     @default("English")
+  tuitionEurCents   Int?
+  ects              Int?
+  durationSemesters Int?
+  intake            String[]   // ["WS", "SS"]
+  deadlineWS        DateTime?
+  deadlineSS        DateTime?
+  requiresAPS       Boolean    @default(false)
+  requiresGRE       Boolean    @default(false)
+  minGermanLevel    GermanLevel @default(NONE)
+  minIELTS          Decimal?   @db.Decimal(3, 1)
+  minGPA            Decimal?   @db.Decimal(4, 2)
+  viaUniAssist      Boolean    @default(true)
+  description       String?
+  programUrl        String?
+  slug              String?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  applications      Application[]
+  acceptanceRecords AcceptanceRecord[]
+
+  @@unique([universityId, slug])
+}
