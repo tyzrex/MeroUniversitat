@@ -47,5 +47,8 @@
   "trustedDependencies": [
     "sharp",
     "unrs-resolver"
-  ]
+  ],
+  "scripts": {
+    "postinstall": "prisma generate"
+  }
 }
