@@ -1,3 +1,4 @@
+import { LandingFooter } from "@/modules/landing/components/landing-footer";
 import { LandingNavbar } from "@/modules/landing/components/landing-header";
 
 export default function Layout({
@@ -9,6 +10,7 @@ export default function Layout({
     <>
       <LandingNavbar />
       {children}
+      <LandingFooter />
     </>
   );
 }

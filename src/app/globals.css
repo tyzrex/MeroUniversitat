@@ -128,3 +128,29 @@
     @apply font-sans;
   }
 }
+
+.image-wrap img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 2%,
+    black 30%,
+    black 80%,
+    rgba(0, 0, 0, 0.3) 96%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 2%,
+    black 30%,
+    black 80%,
+    rgba(0, 0, 0, 0.3) 96%,
+    transparent 100%
+  );
+}
