@@ -18,13 +18,16 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
     setError(null);
     setPending(preference);
     const res = await completeWorkspaceOnboardingAction({ preference });
-    setPending(null);
+
     if (!res.ok) {
       setError(res.error);
       return;
     }
     onCompleted?.();
-    window.location.assign("/dashboard");
+    setTimeout(() => {
+      setPending(null);
+      window.location.assign("/dashboard");
+    }, 1000);
   }
 
   return (
