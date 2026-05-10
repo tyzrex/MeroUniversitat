@@ -4,15 +4,7 @@ import {
 } from "@/modules/community/constants/english-test";
 import { z } from "zod";
 
-const germanLevels = [
-  "NONE",
-  "A1",
-  "A2",
-  "B1",
-  "B2",
-  "C1",
-  "C2",
-] as const;
+const germanLevels = ["NONE", "A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
 const admissionResults = [
   "ACCEPTED",
@@ -33,7 +25,10 @@ export const acceptanceRecordFormSchema = z
     programId: z.string().optional().or(z.literal("")),
     programNameFree: z.string().max(240).optional().or(z.literal("")),
 
-    gpa: z.preprocess(emptyToUndefined, z.coerce.number().min(0).max(4).optional()),
+    gpa: z.preprocess(
+      emptyToUndefined,
+      z.coerce.number().min(0).max(4).optional(),
+    ),
     percentage: z.preprocess(
       emptyToUndefined,
       z.coerce.number().min(0).max(100).optional(),
@@ -53,7 +48,10 @@ export const acceptanceRecordFormSchema = z
 
     hasAPS: z.boolean(),
 
-    intake: z.string().min(2).max(32),
+    intake: z
+      .string()
+      .min(2, { error: "Enter a valid intake year" })
+      .max(32, { error: "Enter a valid intake year" }),
     result: z.enum(admissionResults),
 
     appliedDate: z.string().optional().or(z.literal("")),

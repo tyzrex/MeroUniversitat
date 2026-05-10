@@ -2,6 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { UserAccountMenu } from "@/modules/shared/components/user-account-menu";
 import { cn } from "@/lib/utils";
+import { Bell } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 
@@ -34,7 +35,15 @@ export default async function LandingHeaderProfile() {
           </Link>
         </div>
       ) : (
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-3">
+          <button
+            type="button"
+            className="relative flex size-10 items-center justify-center rounded-full border border-slate-200 text-slate-600"
+            aria-label="Notifications"
+          >
+            <Bell className="size-5" strokeWidth={1.8} />
+            <span className="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-white" />
+          </button>
           <UserAccountMenu
             user={{
               id: session.user.id,

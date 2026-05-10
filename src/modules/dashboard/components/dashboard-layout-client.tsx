@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardHeader } from "@/modules/dashboard/components/dashboard-header";
 import { DashboardSidebar } from "@/modules/dashboard/components/dashboard-sidebar";
 import type * as React from "react";
@@ -27,9 +24,11 @@ export function DashboardLayoutClient({
   return (
     <SidebarProvider defaultOpen className="dashboard-shell min-h-svh">
       <DashboardSidebar user={user} />
-      <SidebarInset className="bg-slate-50">
+      <SidebarInset className="bg-[linear-gradient(180deg,#f8fafc_0%,#eef2ff_45%,#f8fafc_100%)]">
         <DashboardHeader user={user} />
-        <div className="flex flex-1 flex-col gap-6 p-6">{children}</div>
+        <div className="flex flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

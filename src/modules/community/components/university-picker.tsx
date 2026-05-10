@@ -21,9 +21,7 @@ export function UniversityPicker({
   const [items, setItems] = useState<Uni[]>([]);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!value) setPickedLabel("");
-  }, [value]);
+  const displayLabel = value ? pickedLabel || "University selected" : "";
 
   const fetchList = useCallback(async (q: string) => {
     setLoading(true);
@@ -54,9 +52,7 @@ export function UniversityPicker({
     <div ref={rootRef} className="relative">
       {value ? (
         <div className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm">
-          <span className="font-medium text-slate-900">
-            {pickedLabel || "University selected"}
-          </span>
+          <span className="font-medium text-slate-900">{displayLabel}</span>
           <button
             type="button"
             className="text-primary shrink-0 text-sm font-semibold"
@@ -95,7 +91,7 @@ export function UniversityPicker({
               role="listbox"
             >
               {items.map((u) => (
-                <li key={u.id} role="option">
+                <li key={u.id} role="option" aria-selected={value === u.id}>
                   <button
                     type="button"
                     className="hover:bg-muted flex w-full px-3 py-2.5 text-left text-sm"
@@ -118,13 +114,6 @@ export function UniversityPicker({
           ) : null}
         </>
       )}
-      <p className="text-muted-foreground mt-2 text-xs">
-        Populate universities locally with{" "}
-        <code className="rounded bg-slate-100 px-1 py-0.5 text-[0.7rem]">
-          bun run scripts/seed-universities.ts
-        </code>
-        .
-      </p>
     </div>
   );
 }

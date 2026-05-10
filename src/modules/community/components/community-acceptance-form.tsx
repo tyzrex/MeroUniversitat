@@ -30,7 +30,17 @@ import {
   RHFTextarea,
 } from "@/modules/shared/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, User } from "lucide-react";
+import {
+  BookOpen,
+  CalendarCheck2,
+  FileCheck2,
+  GraduationCap,
+  Loader2,
+  Send,
+  ShieldCheck,
+  User,
+  UserRound,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -52,8 +62,8 @@ const germanLabels: Record<(typeof germanLevels)[number], string> = {
   C2: "C2",
 };
 
-const fieldPanel =
-  "rounded-2xl border border-slate-200/90 bg-white/95 p-6 shadow-[0_1px_3px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/5 md:p-8";
+const formPanel =
+  "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35";
 
 type Props = Readonly<{
   defaultContributorName: string;
@@ -64,6 +74,16 @@ export function CommunityAcceptanceForm({
   defaultContributorName,
   isLoggedIn,
 }: Props) {
+  const panelClass = formPanel;
+  const [activeStep, setActiveStep] = useState(0);
+
+  function activateStep(step: number) {
+    setActiveStep(step);
+    const target = document.querySelector<HTMLElement>(
+      `[data-form-step="${step}"]`,
+    );
+    target?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
   const defaultValues = useMemo<AcceptanceRecordFormInput>(
     () => ({
       contributorName: defaultContributorName,
@@ -120,7 +140,7 @@ export function CommunityAcceptanceForm({
   return (
     <Form {...form}>
       <form
-        className="flex w-full max-w-none flex-col gap-8 lg:gap-10"
+        className="flex w-full max-w-none flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {done ? (
@@ -151,12 +171,25 @@ export function CommunityAcceptanceForm({
           </Alert>
         ) : null}
 
-        <div className="grid w-full min-w-0 gap-8 xl:grid-cols-2 xl:gap-10 xl:items-start">
-          <div className="min-w-0 space-y-8">
-            <FieldSet className={fieldPanel}>
-              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+        <CommunityFormSteps
+          activeStep={activeStep}
+          onStepClick={activateStep}
+        />
+
+        <div className="grid w-full min-w-0 gap-6 xl:grid-cols-2 xl:gap-6 xl:items-start">
+          <div className="min-w-0 space-y-6">
+            <FieldSet
+              className={panelClass}
+              data-form-step="0"
+              onClick={() => setActiveStep(0)}
+              onFocusCapture={() => setActiveStep(0)}
+            >
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+                  <UserRound className="size-5" strokeWidth={1.8} />
+                </span>
                 About you
-              </FieldLegend>
+              </div>
               <FieldGroup className="gap-5">
                 <RHFInput<AcceptanceRecordFormInput>
                   control={form.control}
@@ -181,47 +214,17 @@ export function CommunityAcceptanceForm({
               </FieldGroup>
             </FieldSet>
 
-            <FieldSet className={fieldPanel}>
-              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
-                Application
-              </FieldLegend>
-              <FieldGroup className="gap-5">
-                <FormField
-                  control={form.control}
-                  name="universityId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-semibold text-slate-700">
-                        University
-                      </FormLabel>
-                      <FormDescription>
-                        Search the seeded list — run the seed script locally if
-                        empty.
-                      </FormDescription>
-                      <UniversityPicker
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <RHFInput<AcceptanceRecordFormInput>
-                  control={form.control}
-                  name="programNameFree"
-                  label="Program (optional)"
-                  placeholder="e.g. M.Sc. Computer Science"
-                />
-              </FieldGroup>
-            </FieldSet>
-          </div>
-
-          <div className="min-w-0 space-y-8">
-            <FieldSet className={fieldPanel}>
-              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+            <FieldSet
+              className={panelClass}
+              onClick={() => setActiveStep(0)}
+              onFocusCapture={() => setActiveStep(0)}
+            >
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+                  <GraduationCap className="size-5" strokeWidth={1.8} />
+                </span>
                 Academic snapshot
-              </FieldLegend>
+              </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <RHFInput
                   control={form.control}
@@ -303,11 +306,64 @@ export function CommunityAcceptanceForm({
                 />
               </div>
             </FieldSet>
+          </div>
 
-            <FieldSet className={fieldPanel}>
-              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+          <div className="min-w-0 space-y-6">
+            <FieldSet
+              className={panelClass}
+              data-form-step="1"
+              onClick={() => setActiveStep(1)}
+              onFocusCapture={() => setActiveStep(1)}
+            >
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+                  <FileCheck2 className="size-5" strokeWidth={1.8} />
+                </span>
+                Application
+              </div>
+              <FieldGroup className="gap-5">
+                <FormField
+                  control={form.control}
+                  name="universityId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-semibold text-slate-700">
+                        University
+                      </FormLabel>
+                      <FormDescription>
+                        Search the seeded list — run the seed script locally if
+                        empty.
+                      </FormDescription>
+                      <UniversityPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <RHFInput<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="programNameFree"
+                  label="Program (optional)"
+                  placeholder="e.g. M.Sc. Computer Science"
+                />
+              </FieldGroup>
+            </FieldSet>
+
+            <FieldSet
+              className={panelClass}
+              data-form-step="2"
+              onClick={() => setActiveStep(2)}
+              onFocusCapture={() => setActiveStep(2)}
+            >
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+                  <CalendarCheck2 className="size-5" strokeWidth={1.8} />
+                </span>
                 Outcome
-              </FieldLegend>
+              </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <RHFInput
                   control={form.control}
@@ -361,12 +417,17 @@ export function CommunityAcceptanceForm({
           </div>
         </div>
 
-        <div className="flex w-full flex-col gap-3 border-t border-slate-200/80 pt-8 sm:flex-row sm:items-center sm:justify-end">
+        <BeforeSubmitPanel onActivate={() => setActiveStep(3)} />
+
+        <div
+          className="flex w-full flex-col gap-3 border-t border-slate-200/80 pt-6 sm:flex-row sm:items-center sm:justify-end"
+          onFocusCapture={() => setActiveStep(3)}
+        >
           <Button
             type="submit"
             size="lg"
             disabled={form.formState.isSubmitting}
-            className="h-12 w-full rounded-xl bg-[#0d2145] font-semibold text-white shadow-lg shadow-[#0d2145]/20 hover:bg-[#1a3461] sm:w-auto sm:min-w-[220px]"
+            className="h-12 w-full rounded-xl bg-[#1238da] font-bold text-white hover:bg-[#0d2bb0] sm:w-auto sm:min-w-65"
           >
             {form.formState.isSubmitting ? (
               <span className="inline-flex items-center gap-2">
@@ -374,11 +435,148 @@ export function CommunityAcceptanceForm({
                 Submitting…
               </span>
             ) : (
-              "Submit acceptance record"
+              <span className="inline-flex items-center gap-2">
+                Submit acceptance record
+                <Send className="size-4" strokeWidth={1.8} />
+              </span>
             )}
           </Button>
         </div>
       </form>
     </Form>
+  );
+}
+
+function CommunityFormSteps({
+  activeStep,
+  onStepClick,
+}: Readonly<{
+  activeStep: number;
+  onStepClick: (step: number) => void;
+}>) {
+  const steps = [
+    {
+      title: "Academic & Profile",
+      subtitle: "Tell us about yourself",
+    },
+    {
+      title: "Application Details",
+      subtitle: "Where did you apply?",
+    },
+    {
+      title: "Outcome & Timeline",
+      subtitle: "Result and timeline",
+    },
+    {
+      title: "Review & Submit",
+      subtitle: "Confirm and submit",
+    },
+  ] as const;
+
+  return (
+    <div className="grid gap-5 border-b border-slate-200/80 pb-7 md:grid-cols-4">
+      {steps.map(({ subtitle, title }, index) => {
+        const active = activeStep === index;
+        return (
+          <button
+            key={title}
+            type="button"
+            onClick={() => onStepClick(index)}
+            className="group flex min-w-0 items-center gap-4 text-left"
+          >
+            <span
+              className={`flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors ${
+                active
+                  ? "bg-[#1238da] text-white"
+                  : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-[#1238da]"
+              }`}
+            >
+              {index + 1}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span
+                className={`block truncate text-sm font-bold transition-colors ${
+                  active ? "text-[#0d2145]" : "text-slate-700"
+                }`}
+              >
+                {title}
+              </span>
+              <span className="block truncate text-xs text-slate-500">
+                {subtitle}
+              </span>
+            </span>
+            {index < steps.length - 1 ? (
+              <span className="hidden h-px flex-1 bg-slate-200 lg:block" />
+            ) : null}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function BeforeSubmitPanel({
+  onActivate,
+}: Readonly<{ onActivate: () => void }>) {
+  const items = [
+    {
+      title: "Community verified",
+      description: "All records are reviewed before they are published.",
+      icon: ShieldCheck,
+    },
+    {
+      title: "Help others",
+      description: "Your data helps future students make informed decisions.",
+      icon: BookOpen,
+    },
+    {
+      title: "You stay in control",
+      description: "Choose anonymity and manage your own submissions.",
+      icon: UserRound,
+    },
+    {
+      title: "No spam",
+      description: "We do not allow promotions or misleading content.",
+      icon: FileCheck2,
+    },
+  ] as const;
+
+  return (
+    <section
+      className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6"
+      data-form-step="3"
+      onClick={onActivate}
+      onFocusCapture={onActivate}
+    >
+      <div className="mb-6 flex items-start gap-4">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-[#1238da]">
+          <ShieldCheck className="size-6" strokeWidth={1.8} />
+        </div>
+        <div>
+          <h2 className="text-lg font-bold text-[#0d2145]">
+            Before you submit
+          </h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Please make sure your information is correct. All submissions go
+            through a review process.
+          </p>
+        </div>
+      </div>
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {items.map(({ description, icon: Icon, title }) => (
+          <div key={title} className="flex gap-3">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#1238da]">
+              <Icon className="size-4" strokeWidth={1.8} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-[#0d2145]">{title}</p>
+              <p className="text-muted-foreground mt-1 text-xs leading-5">
+                {description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

@@ -38,29 +38,26 @@ export function UserAccountMenu({
           buttonVariants({ variant: "outline", size: "sm" }),
           "list-none gap-2 font-semibold [&::-webkit-details-marker]:hidden",
         )
-      : cn(
-          buttonVariants({ variant: "outline", size: "lg" }),
-          "list-none gap-2 font-bold [&::-webkit-details-marker]:hidden",
-        );
+      : "list-none gap-2 bg-transparent px-0 py-0 text-sm font-semibold text-slate-900 hover:text-[#1238da] [&::-webkit-details-marker]:hidden";
 
   return (
     <details className="group relative">
       <summary
         className={cn(
           summaryClass,
-          "flex cursor-pointer items-center rounded-xl outline-none ring-[#0d2145]/10 ring-offset-2 focus-visible:ring-2",
+          "flex cursor-pointer py-4 items-center rounded-xl outline-none ring-[#0d2145]/10 ring-offset-2 focus-visible:ring-2",
         )}
       >
         {user.image ? (
           <Image
             alt={user.name}
-            className="size-8 rounded-full object-cover"
-            height={32}
+            className="size-6 rounded-full object-cover"
+            height={24}
             src={user.image}
-            width={32}
+            width={24}
           />
         ) : (
-          <span className="flex size-8 items-center justify-center rounded-full bg-slate-200 text-sm font-bold text-slate-700">
+          <span className="flex size-6 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-700">
             {user.name.slice(0, 1).toUpperCase()}
           </span>
         )}

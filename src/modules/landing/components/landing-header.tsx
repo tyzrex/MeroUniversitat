@@ -1,20 +1,13 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { Container } from "../../shared/components/container";
 import LandingHeaderProfile from "./landing-header-profile";
-
-const NAV = [
-  { label: "Home", href: "/" },
-  { label: "Universities", href: "/universities" },
-  { label: "Community data", href: "/community-data" },
-  { label: "About", href: "/#about" },
-] as const;
+import { LandingNavLinks } from "./landing-nav-links";
 
 export function LandingNavbar() {
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
       <Container className="flex h-20 items-center gap-6">
-        {/* Logo */}
         <Link
           href="/"
           className="flex shrink-0 items-center gap-2 font-bold text-[#0d2145]"
@@ -22,27 +15,19 @@ export function LandingNavbar() {
           <Image
             src="/merounilogo.png"
             alt="MeroUniversität"
-            width={60}
-            height={60}
-            className="size-15 object-contain"
+            width={62}
+            height={62}
+            className="size-[62px] object-contain"
+            priority
           />
-          <span className="hidden md:block text-[20px] font-black tracking-tight">
-            Mero<span className="text-blue-500">Universität</span>
+          <span className="hidden text-[20px] font-black tracking-tight md:block">
+            Mero<span className="text-[#1238da]">Universität</span>
           </span>
         </Link>
 
-        {/* Nav links */}
-        <nav className="hidden items-center gap-0.5 lg:flex w-full justify-center">
-          {NAV.map((item) => (
-            <Link
-              key={item.href + item.label}
-              href={item.href}
-              className="rounded-md px-3 py-2 text-sm font-bold text-zinc-800 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex flex-1 justify-center">
+          <LandingNavLinks />
+        </div>
 
         <LandingHeaderProfile />
       </Container>

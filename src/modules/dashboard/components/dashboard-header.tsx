@@ -28,7 +28,7 @@ export function DashboardHeader({
   const pathname = usePathname();
 
   return (
-    <header className="flex h-14 shrink-0 flex-wrap items-center gap-3 border-b border-slate-200/80 bg-white px-4 py-2 shadow-sm sm:flex-nowrap">
+    <header className="flex h-14 shrink-0 flex-wrap items-center gap-3 border-b border-slate-200/80 bg-white px-4 py-2 sm:flex-nowrap">
       <SidebarTrigger className="-ml-1 text-slate-600" />
       <Separator className="mr-1 h-6 bg-border" orientation="vertical" />
       <nav className="hidden items-center gap-0.5 lg:flex">
@@ -54,19 +54,6 @@ export function DashboardHeader({
           );
         })}
       </nav>
-
-      <div className="relative min-w-[min(100%,200px)] max-w-xl flex-1 basis-full sm:basis-auto">
-        <Search
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-          strokeWidth={1.75}
-        />
-        <Input
-          className="h-11 rounded-lg border-slate-200/90 bg-slate-50/80 pr-4 pl-10 text-sm shadow-none"
-          placeholder="Search anything…"
-          type="search"
-        />
-      </div>
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
         {user ? (

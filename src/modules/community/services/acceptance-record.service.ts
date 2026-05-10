@@ -90,6 +90,32 @@ export async function listAcceptanceRecordsForUser(userId: string) {
   });
 }
 
+export async function getAcceptanceRecordForUser(id: string, userId: string) {
+  return db.acceptanceRecord.findFirst({
+    where: { id, userId, isDeleted: false },
+    include: {
+      university: {
+        select: {
+          name: true,
+          city: true,
+          state: true,
+          slug: true,
+          website: true,
+        },
+      },
+      program: {
+        select: {
+          name: true,
+          degree: true,
+          subject: true,
+          language: true,
+          programUrl: true,
+        },
+      },
+    },
+  });
+}
+
 export async function listPendingAcceptanceRecords() {
   return db.acceptanceRecord.findMany({
     where: {
