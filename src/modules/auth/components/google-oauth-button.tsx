@@ -19,6 +19,7 @@ export function GoogleOAuthButton({
     <Button
       type="button"
       variant="outline"
+      size={"lg"}
       className="w-full justify-center gap-2.5 border-border bg-background font-semibold shadow-none hover:bg-muted/80"
       onClick={() =>
         void signIn.social({ provider: "google", callbackURL: next })

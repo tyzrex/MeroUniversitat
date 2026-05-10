@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUp } from "@/lib/auth-client";
@@ -32,6 +32,8 @@ export function SignUpForm() {
     resolver: zodResolver(signUpSchema),
     defaultValues: { name: "", email: "", password: "" },
   });
+
+  const router = useRouter();
 
   return (
     <>
@@ -74,7 +76,19 @@ export function SignUpForm() {
           className="flex flex-col gap-4"
           onSubmit={form.handleSubmit(async (data) => {
             form.clearErrors("root");
-            const res = await signUp.email({ ...data, callbackURL });
+            const res = await signUp.email(
+              {
+                email: data.email,
+                password: data.password,
+                name: data.name,
+                callbackURL,
+              },
+              {
+                onSuccess: () => {
+                  router.push("/");
+                },
+              },
+            );
             if (res.error) {
               form.setError("root", {
                 message: res.error.message || "Sign up failed",

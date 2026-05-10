@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Container } from "../../shared/components/container";
+import LandingHeaderProfile from "./landing-header-profile";
 
 const NAV = [
   { label: "Home", href: "/" },
@@ -48,27 +47,7 @@ export function LandingNavbar() {
           ))}
         </nav>
 
-        {/* Auth CTAs */}
-        <div className="ml-auto flex shrink-0 items-center gap-2">
-          <Link
-            href="/sign-in"
-            className={cn(
-              buttonVariants({ variant: "outline", size: "lg" }),
-              "font-bold",
-            )}
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/sign-up"
-            className={cn(
-              buttonVariants({ variant: "default", size: "lg" }),
-              "font-bold",
-            )}
-          >
-            Get Started
-          </Link>
-        </div>
+        <LandingHeaderProfile />
       </Container>
     </header>
   );
