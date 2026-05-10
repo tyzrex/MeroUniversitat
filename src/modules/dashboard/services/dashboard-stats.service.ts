@@ -10,8 +10,12 @@ export type DashboardStats = {
   acceptanceSubmissionCount: number;
   /** True when profile missing or core academic fields empty — prompt user to complete settings. */
   profileIncomplete: boolean;
-  /** Top universities by application row count (visible to user + team pipelines). */
-  topUniversities: { label: string; count: number }[];
+  /** Next application deadlines (future only), sorted soonest first. */
+  upcomingDeadlines: {
+    universityName: string;
+    deadline: Date;
+    intakeSemester: string | null;
+  }[];
 };
 
 function isProfileIncomplete(profile: {
@@ -59,6 +63,7 @@ export const getDashboardStats = cache(async function getDashboardStats(
         status: true,
         deadline: true,
         universityName: true,
+        intakeSemester: true,
       },
       orderBy: { deadline: "asc" },
     }),
@@ -75,25 +80,36 @@ export const getDashboardStats = cache(async function getDashboardStats(
   ]);
 
   const statusMap = new Map<string, number>();
-  const uniMap = new Map<string, number>();
   for (const app of applications) {
     statusMap.set(app.status, (statusMap.get(app.status) ?? 0) + 1);
-    const label = app.universityName.trim() || "Unknown";
-    uniMap.set(label, (uniMap.get(label) ?? 0) + 1);
   }
 
   const statusBreakdown = [...statusMap.entries()]
     .map(([status, count]) => ({ status, count }))
     .sort((a, b) => b.count - a.count);
 
-  const topUniversities = [...uniMap.entries()]
-    .map(([label, count]) => ({ label, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
-
   const now = new Date();
-  const upcoming = applications.find((a) => a.deadline && a.deadline > now);
-  const nearestDeadline = upcoming?.deadline
+  const upcomingDeadlinesRaw = applications.filter(
+    (a) => a.deadline && a.deadline > now,
+  );
+  const seen = new Set<string>();
+  const upcomingDeadlines: DashboardStats["upcomingDeadlines"] = [];
+  for (const a of upcomingDeadlinesRaw.sort(
+    (x, y) => x.deadline!.getTime() - y.deadline!.getTime(),
+  )) {
+    const key = `${a.universityName}-${a.deadline!.toISOString()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    upcomingDeadlines.push({
+      universityName: a.universityName.trim() || "University",
+      deadline: a.deadline!,
+      intakeSemester: a.intakeSemester,
+    });
+    if (upcomingDeadlines.length >= 6) break;
+  }
+
+  const upcoming = upcomingDeadlines[0];
+  const nearestDeadline = upcoming
     ? { universityName: upcoming.universityName, deadline: upcoming.deadline }
     : null;
 
@@ -105,6 +121,6 @@ export const getDashboardStats = cache(async function getDashboardStats(
     workspacePreference: user?.workspacePreference ?? null,
     acceptanceSubmissionCount,
     profileIncomplete: isProfileIncomplete(profile),
-    topUniversities,
+    upcomingDeadlines,
   };
 });

@@ -5,6 +5,8 @@ export type UniversityApplicationStats = {
   totalTrackedApplications: number;
   distinctApplicants: number;
   myApplicationCount: number;
+  /** Published community outcomes for this institution. */
+  communityPublishedOutcomes: number;
 };
 
 /** Aggregate application counts for a directory university (platform-wide + optional viewer). */
@@ -13,7 +15,7 @@ export const getUniversityApplicationStats = cache(
     universityId: string,
     viewerUserId?: string | null,
   ): Promise<UniversityApplicationStats> {
-    const [total, grouped, mine] = await Promise.all([
+    const [total, grouped, mine, communityPublishedOutcomes] = await Promise.all([
       db.application.count({ where: { universityId } }),
       db.application.groupBy({
         by: ["userId"],
@@ -24,12 +26,19 @@ export const getUniversityApplicationStats = cache(
             where: { universityId, userId: viewerUserId },
           })
         : Promise.resolve(0),
+      db.acceptanceRecord.count({
+        where: {
+          universityId,
+          moderationStatus: "APPROVED",
+        },
+      }),
     ]);
 
     return {
       totalTrackedApplications: total,
       distinctApplicants: grouped.length,
       myApplicationCount: mine,
+      communityPublishedOutcomes,
     };
   },
 );

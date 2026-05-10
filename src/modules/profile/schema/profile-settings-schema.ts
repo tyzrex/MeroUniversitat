@@ -58,6 +58,8 @@ export const profileSettingsSchema = z.object({
   ),
   targetIntake: z.string().max(32).optional().or(z.literal("")),
   isPublic: z.boolean(),
+  peerMatchingOptIn: z.boolean(),
+  embassyTimelinePublic: z.boolean(),
 });
 
 export type ProfileSettingsInput = z.infer<typeof profileSettingsSchema>;

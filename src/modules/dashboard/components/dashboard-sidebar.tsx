@@ -16,6 +16,7 @@ import type { DashboardUser } from "@/modules/dashboard/components/dashboard-lay
 import {
   Building2,
   CalendarClock,
+  CircleUser,
   ClipboardList,
   Columns3,
   Database,
@@ -30,7 +31,14 @@ import Link from "next/link";
 import { isDashboardNavActive } from "@/modules/dashboard/lib/dashboard-nav-active";
 import { usePathname } from "next/navigation";
 
-const NAV_ITEMS = [
+type NavItem = {
+  title: string;
+  href: string;
+  icon: typeof LayoutDashboard;
+  badge?: string;
+};
+
+const NAV_ITEMS: NavItem[] = [
   {
     title: "Dashboard",
     href: "/dashboard",
@@ -67,16 +75,22 @@ const NAV_ITEMS = [
     icon: ClipboardList,
   },
   {
-    title: "Timelines",
+    title: "Consular timeline",
     href: "/dashboard/timelines",
     icon: CalendarClock,
+    badge: "New",
+  },
+  {
+    title: "Profile",
+    href: "/dashboard/profile",
+    icon: CircleUser,
   },
   {
     title: "Settings",
     href: "/dashboard/settings",
     icon: Settings,
   },
-] as const;
+];
 
 function navButtonClass(isActive: boolean) {
   return cn(
@@ -149,7 +163,14 @@ export function DashboardSidebar({
                       tooltip={item.title}
                     >
                       <Icon className="shrink-0" strokeWidth={1.75} />
-                      <span>{item.title}</span>
+                      <span className="flex min-w-0 flex-1 items-center gap-2">
+                        <span className="truncate">{item.title}</span>
+                        {item.badge ? (
+                          <span className="rounded-full bg-blue-400/25 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-blue-100 group-data-[collapsible=icon]:hidden">
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

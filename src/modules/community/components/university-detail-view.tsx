@@ -6,10 +6,13 @@ import type { UniversityApplicationStats } from "@/modules/community/services/un
 import { Container } from "@/modules/shared/components/container";
 import {
   ArrowLeft,
+  CheckCircle2,
   ExternalLink,
   GraduationCap,
+  ListChecks,
   MapPin,
   Send,
+  ShieldCheck,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -162,19 +165,28 @@ export function UniversityDetailView({
       ) : null}
 
       <section
-        className={cn("grid gap-5 md:grid-cols-3", embedded ? "mt-0" : "mt-8")}
+        className={cn(
+          "grid gap-5 sm:grid-cols-2 xl:grid-cols-4",
+          embedded ? "mt-0" : "mt-8",
+        )}
       >
         <StatCard
           icon={GraduationCap}
           label="Applications tracked"
           value={stats.totalTrackedApplications}
-          hint="Rows in MeroUniversität linked to this university"
+          hint="Rows linked to this university"
         />
         <StatCard
           icon={Users}
           label="Applicants on platform"
           value={stats.distinctApplicants}
-          hint="Unique students tracking this institution"
+          hint="Unique students with this school in their pipeline"
+        />
+        <StatCard
+          icon={ShieldCheck}
+          label="Published outcomes"
+          value={stats.communityPublishedOutcomes}
+          hint="Moderated acceptance records for this institution"
         />
         <StatCard
           icon={UserCheck}
@@ -186,6 +198,51 @@ export function UniversityDetailView({
               : "Sign in to see your count"
           }
         />
+      </section>
+
+      <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
+        <div className="flex flex-wrap items-start gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#4a52c8]/12 text-[#4a52c8]">
+            <ListChecks className="size-5" strokeWidth={1.8} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl font-bold text-[#0d2145]">
+              Applicant playbook
+            </h2>
+            <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
+              Use this page as your anchor: compare community outcomes to your
+              GPA, then mirror deadlines and documents on your Kanban board.
+            </p>
+            <ul className="mt-5 space-y-3 text-sm text-slate-700">
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                <span>
+                  <strong className="text-[#0d2145]">Benchmark:</strong>{" "}
+                  {stats.communityPublishedOutcomes} published outcome
+                  {stats.communityPublishedOutcomes === 1 ? "" : "s"} from peers
+                  — cross-check against your profile GPA before you submit
+                  yours.
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                <span>
+                  <strong className="text-[#0d2145]">Track:</strong> add this
+                  uni as a row so intake, checklist, and deadlines stay next to
+                  your other apps.
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                <span>
+                  <strong className="text-[#0d2145]">Share:</strong> when your
+                  result is final, post an anonymized outcome — it helps
+                  applicants behind you.
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">

@@ -19,10 +19,13 @@ export default async function DashboardMainLayout({
     session?.user?.id != null
       ? await db.user.findUnique({
           where: { id: session.user.id },
-          select: { role: true, onboardingCompletedAt: true },
+          select: { role: true, onboardingCompletedAt: true, suspendedAt: true },
         })
       : null;
 
+  if (session?.user?.id && workspaceUser?.suspendedAt) {
+    redirect("/suspended");
+  }
   if (session?.user?.id && !workspaceUser?.onboardingCompletedAt) {
     redirect("/dashboard/onboarding");
   }

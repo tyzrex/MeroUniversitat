@@ -93,7 +93,7 @@ export function UserAccountMenu({
           </Link>
           <Link
             className="hover:bg-muted flex items-center gap-2 px-3 py-2.5 text-sm font-medium"
-            href="/dashboard/settings/profile"
+            href="/dashboard/profile"
           >
             <User className="size-4" strokeWidth={1.75} />
             Profile

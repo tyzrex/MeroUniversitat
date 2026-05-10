@@ -23,7 +23,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GraduationCap, Loader2, UserRound } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 
 const germanLabels: Record<(typeof PROFILE_GERMAN_LEVELS)[number], string> = {
   NONE: "None",
@@ -44,7 +44,9 @@ export function ProfileSettingsForm({
   defaultValues: ProfileSettingsInput;
 }>) {
   const form = useForm<ProfileSettingsInput>({
-    resolver: zodResolver(profileSettingsSchema),
+    resolver: zodResolver(
+      profileSettingsSchema,
+    ) as Resolver<ProfileSettingsInput>,
     defaultValues,
     mode: "onBlur",
   });
@@ -110,10 +112,24 @@ export function ProfileSettingsForm({
                 label="Show academic profile to other signed-in users"
                 description="You can still keep your application data private in other areas of the app."
               />
+              <div id="peer-matching" className="scroll-mt-28" />
+              <RHFCheckbox<ProfileSettingsInput>
+                control={form.control}
+                name="peerMatchingOptIn"
+                label="Find similar applicants (GPA band)"
+                description="Off by default. When on, other users who opt in and are within ±0.25 GPA points can see your name and which universities you track in the dashboard — not your documents or private notes."
+              />
+              <div id="embassy-timeline" className="scroll-mt-28" />
+              <RHFCheckbox<ProfileSettingsInput>
+                control={form.control}
+                name="embassyTimelinePublic"
+                label="Share embassy-stage dates on the Consular timeline"
+                description="When enabled, your milestone dates can appear as anonymized rows so peers can compare Nepal embassy wait times. Your name is never shown."
+              />
             </FieldGroup>
           </FieldSet>
 
-          <FieldSet className={formPanel}>
+          <FieldSet id="gpa" className={formPanel}>
             <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
               <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
                 <GraduationCap className="size-5" strokeWidth={1.8} />

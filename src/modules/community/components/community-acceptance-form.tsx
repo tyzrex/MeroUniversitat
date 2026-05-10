@@ -68,11 +68,26 @@ const formPanel =
 type Props = Readonly<{
   defaultContributorName: string;
   isLoggedIn: boolean;
+  /** Maps saved profile academics into the acceptance form when logged in. */
+  profilePrefill?: Partial<
+    Pick<
+      AcceptanceRecordFormInput,
+      | "gpa"
+      | "percentage"
+      | "englishTestType"
+      | "englishTestScore"
+      | "germanLevel"
+      | "nepalBoard"
+      | "subject"
+      | "workExperienceYrs"
+    >
+  >;
 }>;
 
 export function CommunityAcceptanceForm({
   defaultContributorName,
   isLoggedIn,
+  profilePrefill,
 }: Props) {
   const panelClass = formPanel;
   const [activeStep, setActiveStep] = useState(0);
@@ -106,8 +121,10 @@ export function CommunityAcceptanceForm({
       offerDate: "",
       notes: "",
       isAnonymous: false,
+      ...profilePrefill,
+      contributorName: defaultContributorName,
     }),
-    [defaultContributorName],
+    [defaultContributorName, profilePrefill],
   );
 
   const form = useForm<AcceptanceRecordFormInput>({

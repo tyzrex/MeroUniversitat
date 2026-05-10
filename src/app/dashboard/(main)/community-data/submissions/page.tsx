@@ -1,3 +1,8 @@
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
+import {
+  dashboardOutlineActionClass,
+  dashboardPrimaryActionClass,
+} from "@/modules/dashboard/lib/dashboard-header-actions";
 import { auth } from "@/lib/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -22,7 +27,7 @@ import type { ComponentType } from "react";
 import { Suspense } from "react";
 
 export const metadata = {
-  title: "My contributions | MeroUniversität",
+  title: "Acceptance submissions | MeroUniversität",
 };
 
 export default async function MyContributionsPage() {
@@ -57,38 +62,32 @@ export default async function MyContributionsPage() {
   };
 
   return (
-    <div>
-      <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
-        <div className="relative bg-gradient-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
-          <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_14%_20%,white_0,transparent_24%),radial-gradient(circle_at_86%_6%,white_0,transparent_22%)]" />
-          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-blue-100">
-                Community dashboard
-              </p>
-              <h1 className="text-balance text-3xl font-extrabold tracking-tight md:text-4xl">
-                My acceptance submissions
-              </h1>
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/78">
-                Track every outcome you shared, open a detailed profile, and see
-                whether each record is pending, published, or rejected.
-              </p>
-            </div>
-            <Link
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "h-11 rounded-xl bg-white text-[#0d2145] shadow-lg shadow-black/10 hover:bg-white/90",
-              )}
-              href="/dashboard/community-data"
-            >
-              <Plus className="size-4" strokeWidth={1.8} />
-              Add submission
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="flex flex-col gap-8">
+      <DashboardPageIntro
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
+        crumbs={[
+          { label: "Community data", href: "/dashboard/community-data" },
+          { label: "Acceptance submissions" },
+        ]}
+        title="My acceptance submissions"
+        description="Track moderation status for every admission outcome you shared while signed in. Published rows appear in public community stats."
+      >
+        <Link
+          className={dashboardOutlineActionClass()}
+          href="/dashboard/community-data"
+        >
+          Submit another outcome
+        </Link>
+        <Link
+          className={dashboardPrimaryActionClass()}
+          href="/dashboard/community-data"
+        >
+          <Plus className="size-4" strokeWidth={1.8} />
+          New submission
+        </Link>
+      </DashboardPageIntro>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-4">
         <SummaryCard label="Total" value={summary.total} icon={FileText} />
         <SummaryCard
           label="Published"

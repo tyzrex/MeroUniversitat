@@ -21,7 +21,7 @@ export function DashboardPageIntro({
   children,
 }: Readonly<{
   crumbs: DashboardCrumb[];
-  title: string;
+  title: React.ReactNode;
   description?: React.ReactNode;
   className?: string;
   /** Actions aligned on large screens (e.g. primary buttons). */

@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import type { ActionResult } from "@/modules/shared/types/action-result";
 import type { FieldErrors } from "react-hook-form";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 export async function updateProfileSettingsAction(
   raw: unknown,
@@ -60,6 +61,8 @@ export async function updateProfileSettingsAction(
           workExperienceYrs: data.workExperienceYrs ?? 0,
           targetIntake: data.targetIntake?.trim() || null,
           isPublic: data.isPublic,
+          peerMatchingOptIn: data.peerMatchingOptIn,
+          embassyTimelinePublic: data.embassyTimelinePublic,
           preferredCities: [],
         },
         update: {
@@ -77,9 +80,14 @@ export async function updateProfileSettingsAction(
           workExperienceYrs: data.workExperienceYrs ?? 0,
           targetIntake: data.targetIntake?.trim() || null,
           isPublic: data.isPublic,
+          peerMatchingOptIn: data.peerMatchingOptIn,
+          embassyTimelinePublic: data.embassyTimelinePublic,
         },
       }),
     ]);
+
+    revalidatePath("/dashboard/profile");
+    revalidatePath("/dashboard/timelines");
 
     return { ok: true, data: undefined };
   } catch {

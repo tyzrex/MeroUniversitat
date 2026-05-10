@@ -107,17 +107,18 @@ export function ApplicationsMainBodySkeleton() {
   );
 }
 
-/** Intro block matching Kanban-style `DashboardPageIntro` (transparent shell). */
+/** Intro block matching Kanban-style `DashboardPageIntro` (transparent shell). Long title skeleton reduces layout shift vs short pages. */
 export function DashboardIntroSkeleton() {
   return (
     <div className="border-0 bg-transparent p-0">
-      <Skeleton className="h-4 w-48" />
-      <Skeleton className="mt-5 h-8 w-[min(100%,28rem)] max-w-full" />
+      <Skeleton className="h-4 w-52 md:w-64" />
+      <Skeleton className="mt-5 h-9 w-[min(100%,42rem)] max-w-full" />
+      <Skeleton className="mt-3 h-9 w-[min(100%,36rem)] max-w-full md:h-10" />
       <Skeleton className="mt-3 h-4 w-full max-w-2xl" />
       <Skeleton className="mt-2 h-4 w-full max-w-xl" />
       <div className="mt-5 flex flex-wrap gap-2">
         <Skeleton className="h-11 w-[8.5rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
-        <Skeleton className="h-11 w-[9.5rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
+        <Skeleton className="h-11 w-[10rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
       </div>
     </div>
   );

@@ -4,6 +4,11 @@ import {
   dashboardPrimaryActionClass,
 } from "@/modules/dashboard/lib/dashboard-header-actions";
 import { getDashboardStats } from "@/modules/dashboard/services/dashboard-stats.service";
+import { SimilarPeersPanel } from "@/modules/dashboard/components/similar-peers-panel";
+import {
+  dashboardInsightShell,
+  dashboardInsightShellAlt,
+} from "@/modules/dashboard/lib/dashboard-theme";
 import { applicationStatusLabel } from "@/modules/applications/lib/application-status-labels";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -12,6 +17,7 @@ import {
   ArrowRight,
   Building2,
   Calendar,
+  CalendarClock,
   ClipboardList,
   Columns3,
   Database,
@@ -20,7 +26,6 @@ import {
   KeyRound,
   Plus,
   Sparkles,
-  TrendingUp,
   UserCircle2,
   Users,
   UsersRound,
@@ -180,14 +185,15 @@ export default async function DashboardPage() {
         )}
       </section>
 
-      {(stats.statusBreakdown.length > 0 || stats.topUniversities.length > 0) ? (
+      {(stats.statusBreakdown.length > 0 ||
+        stats.upcomingDeadlines.length > 0) ? (
         <section className="grid gap-6 lg:grid-cols-2">
           {stats.statusBreakdown.length > 0 ? (
-            <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-indigo-50/30 p-6 ring-1 ring-slate-900/5 md:p-7">
+            <div className={dashboardInsightShell}>
               <div className="mb-5 flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Sparkles className="size-5 text-indigo-600" strokeWidth={1.8} />
+                    <Sparkles className="size-5 text-[#4a52c8]" strokeWidth={1.8} />
                     <h2 className="text-lg font-bold text-[#0d2145]">
                       Pipeline mix
                     </h2>
@@ -230,7 +236,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
-              <TrendingUp className="mx-auto size-10 text-slate-300" strokeWidth={1.5} />
+              <Sparkles className="mx-auto size-10 text-slate-300" strokeWidth={1.5} />
               <p className="mt-4 font-semibold text-[#0d2145]">
                 No pipeline data yet
               </p>
@@ -246,68 +252,80 @@ export default async function DashboardPage() {
             </div>
           )}
 
-          {stats.topUniversities.length > 0 ? (
-            <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-violet-50/40 to-fuchsia-50/30 p-6 ring-1 ring-slate-900/5 md:p-7">
+          {stats.upcomingDeadlines.length > 0 ? (
+            <div className={dashboardInsightShellAlt}>
               <div className="mb-5 flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="size-5 text-violet-600" strokeWidth={1.8} />
+                    <CalendarClock className="size-5 text-sky-700" strokeWidth={1.8} />
                     <h2 className="text-lg font-bold text-[#0d2145]">
-                      Where you apply most
+                      Deadline radar
                     </h2>
                   </div>
                   <p className="mt-1 text-sm text-slate-500">
-                    Universities with the most rows in your workspace (solo + teams).
+                    Next dates across solo and team pipelines — stay ahead of
+                    submissions.
                   </p>
                 </div>
                 <Link
-                  href="/dashboard/universities"
+                  href="/dashboard/applications"
                   className="text-sm font-semibold text-[#4a52c8] hover:underline"
                 >
-                  Directory →
+                  View list →
                 </Link>
               </div>
               <ul className="space-y-3">
-                {stats.topUniversities.map(({ label, count }, i) => (
-                  <li
-                    key={`${label}-${i}`}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-white/60 bg-white/70 px-4 py-3 shadow-sm ring-1 ring-slate-900/[0.03]"
-                  >
-                    <span className="flex min-w-0 items-center gap-3">
-                      <span
-                        className="flex size-8 shrink-0 items-center justify-center rounded-xl text-xs font-black text-white shadow-inner"
-                        style={{
-                          backgroundColor:
-                            PIPELINE_BAR_COLORS[(i + 3) % PIPELINE_BAR_COLORS.length],
-                        }}
-                      >
-                        {i + 1}
-                      </span>
-                      <span className="truncate font-semibold text-[#0d2145]">
-                        {label}
-                      </span>
-                    </span>
-                    <span className="shrink-0 tabular-nums text-sm font-bold text-slate-600">
-                      {count} row{count === 1 ? "" : "s"}
-                    </span>
-                  </li>
-                ))}
+                {stats.upcomingDeadlines.map((row, i) => {
+                  const days = Math.ceil(
+                    (row.deadline.getTime() - Date.now()) / (86400000),
+                  );
+                  return (
+                    <li
+                      key={`${row.universityName}-${row.deadline.toISOString()}-${i}`}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-sm ring-1 ring-slate-900/[0.04]"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-[#0d2145]">
+                          {row.universityName}
+                        </p>
+                        {row.intakeSemester ? (
+                          <p className="text-muted-foreground text-xs">
+                            Intake {row.intakeSemester}
+                          </p>
+                        ) : null}
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                          {days <= 0 ? "Soon" : `In ${days}d`}
+                        </p>
+                        <p className="text-sm font-bold tabular-nums text-[#0d2145]">
+                          {row.deadline.toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ) : (
-            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-violet-50/30 p-8 text-center">
-              <Building2 className="mx-auto size-10 text-violet-200" strokeWidth={1.5} />
+            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-sky-50/40 p-8 text-center">
+              <CalendarClock className="mx-auto size-10 text-sky-200" strokeWidth={1.5} />
               <p className="mt-4 font-semibold text-[#0d2145]">
-                University breakdown
+                No upcoming deadlines
               </p>
               <p className="text-muted-foreground mt-2 text-sm">
-                Once you add applications with university names, your top targets
-                appear here.
+                Add deadline dates on your application rows to see a countdown here.
               </p>
             </div>
           )}
         </section>
       ) : null}
+
+      <SimilarPeersPanel userId={session.user.id} />
 
       {stats.workspacePreference === "SOLO" && stats.teamCount === 0 ? (
         <section className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 ring-1 ring-blue-100/80">

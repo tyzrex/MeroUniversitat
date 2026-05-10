@@ -1,12 +1,14 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Container } from "@/modules/shared/components/container";
-import { ArrowLeft, Database, Settings, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Database, Settings, ShieldCheck, Users } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 const links = [
+  { href: "/admin", label: "Overview", icon: ShieldCheck },
   { href: "/admin/community", label: "Community review", icon: Database },
+  { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/settings", label: "Site settings", icon: Settings },
 ] as const;
 
@@ -17,7 +19,7 @@ export function AdminShell({ children }: Readonly<{ children: ReactNode }>) {
         <Container className="flex min-h-16 max-w-[1500px] flex-wrap items-center gap-4 py-3">
           <Link
             className="flex items-center gap-3 rounded-2xl outline-none ring-[#4a52c8]/30 focus-visible:ring-2"
-            href="/admin/community"
+            href="/admin"
           >
             <span className="flex size-10 items-center justify-center rounded-2xl bg-[#0d2145] text-white shadow-lg shadow-[#0d2145]/20">
               <ShieldCheck className="size-5" strokeWidth={1.8} />

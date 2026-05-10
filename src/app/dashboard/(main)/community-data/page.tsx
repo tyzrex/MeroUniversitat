@@ -3,8 +3,8 @@ import {
   CommunityDataHero,
   CommunityDataPageWrap,
 } from "@/modules/community/components/community-data-hero";
-import { Container } from "@/modules/shared/components/container";
 import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
@@ -21,6 +21,24 @@ export default async function DashboardCommunityDataPage() {
     redirect("/sign-in");
   }
 
+  const profile = await db.profile.findUnique({
+    where: { userId: session.user.id },
+  });
+
+  const profilePrefill = profile
+    ? {
+        gpa: profile.gpa != null ? Number(profile.gpa) : undefined,
+        percentage:
+          profile.percentage != null ? Number(profile.percentage) : undefined,
+        englishTestType: profile.englishTestType,
+        englishTestScore: profile.englishTestScore ?? "",
+        germanLevel: profile.germanLevel,
+        nepalBoard: profile.nepalBoard ?? "",
+        subject: profile.subject ?? "",
+        workExperienceYrs: profile.workExperienceYrs ?? undefined,
+      }
+    : undefined;
+
   return (
     <div className="flex flex-col gap-8 pb-12">
       <CommunityDataPageWrap>
@@ -28,6 +46,7 @@ export default async function DashboardCommunityDataPage() {
         <CommunityAcceptanceForm
           defaultContributorName={session.user.name ?? ""}
           isLoggedIn
+          profilePrefill={profilePrefill}
         />
       </CommunityDataPageWrap>
     </div>

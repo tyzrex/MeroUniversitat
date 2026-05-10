@@ -101,6 +101,18 @@ enum WorkspacePreference {
   TEAM
 }
 
+/// Nepal / embassy pipeline — documents through passport pickup (community + personal tracker).
+enum VisaJourneyMilestone {
+  DOCUMENTS_PREP
+  UNIVERSITY_ADMIT
+  CSP_SUBMITTED
+  WAITING_LIST
+  PRELIM_REVIEW
+  CASE_REVIEW
+  INTERVIEW
+  PASSPORT_COLLECTED
+}
+
 
 /// Singleton row `id = "default"` — global toggles (manual review, etc.).
 model SiteSettings {
@@ -117,6 +129,8 @@ model User {
   image         String?
   role          Role     @default(USER)
   bio           String?
+  /// When set, user cannot access the app until lifted by an admin.
+  suspendedAt   DateTime?
   isVerified    Boolean  @default(false)
   /// Set when user finishes solo vs team onboarding; null = show welcome flow.
   onboardingCompletedAt DateTime?
@@ -139,6 +153,7 @@ model User {
 
   teamActivityEvents TeamActivity[] @relation("TeamActivityActor")
 
+  visaJourneyCheckpoints VisaJourneyCheckpoint[]
 }
 
 model Session {
@@ -198,7 +213,27 @@ model Profile {
 
   // Privacy
   isPublic          Boolean     @default(true)
+  /// Share GPA band with other opted-in users for “similar applicants” discovery.
+  peerMatchingOptIn Boolean     @default(false)
+  /// When true, anonymized embassy-stage dates may appear on the Consular timeline for the community.
+  embassyTimelinePublic Boolean @default(false)
   updatedAt         DateTime    @updatedAt
+}
+
+model VisaJourneyCheckpoint {
+  id           String               @id @default(cuid())
+  userId       String
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestone    VisaJourneyMilestone
+  occurredAt   DateTime
+  notes        String?
+  /// Optional estimate for “still waiting” stages (e.g. expected interview window).
+  expectedEta  DateTime?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@unique([userId, milestone])
+  @@index([userId])
 }
 
 
