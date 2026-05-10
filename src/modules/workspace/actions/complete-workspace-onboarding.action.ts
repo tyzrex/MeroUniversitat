@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import type { ActionResult } from "@/modules/shared/types/action-result";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const schema = z.object({
@@ -33,6 +34,9 @@ export async function completeWorkspaceOnboardingAction(
       onboardingCompletedAt: new Date(),
     },
   });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/onboarding");
 
   return { ok: true, data: undefined };
 }

@@ -127,7 +127,11 @@ export function ApplicationForm({
       setSubmitError(res.error);
       return;
     }
-    router.push("/dashboard/applications");
+    if (mode === "create" && res.data?.id) {
+      window.location.assign(`/dashboard/applications/${res.data.id}/edit`);
+      return;
+    }
+    router.replace("/dashboard/applications");
     router.refresh();
   }
 

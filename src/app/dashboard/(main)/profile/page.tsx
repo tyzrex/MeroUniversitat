@@ -9,6 +9,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, CalendarClock, UserSearch } from "lucide-react";
 import { Suspense } from "react";
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 
 export const metadata = {
   title: "Profile | MeroUniversität",
@@ -62,17 +63,15 @@ async function ProfilePageContent() {
 
   return (
     <div className="flex flex-col gap-8">
-      <DashboardBannerHero
-        crumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Profile" },
-        ]}
-        eyebrow="Your account"
+      <DashboardPageIntro
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
+        crumbs={[{ label: "Profile" }]}
         title="Profile & academics"
         description={
           <>
-            Display name, bio, GPA and tests, peer matching, and optional embassy timeline
-            sharing — everything that drives dashboard insights and community features.
+            Display name, bio, GPA and tests, peer matching, and optional
+            embassy timeline sharing — everything that drives dashboard insights
+            and community features.
           </>
         }
       />
@@ -80,7 +79,7 @@ async function ProfilePageContent() {
       <section className="grid gap-4 md:grid-cols-2">
         <Link
           href="/dashboard/visa-journey"
-          className="group flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-900/5 transition-colors hover:border-[#1238da]/35 hover:shadow-md md:p-7"
+          className="group flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6  ring-1 ring-slate-900/5 transition-colors hover:border-[#1238da]/35 hover:shadow-md md:p-7"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex size-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
@@ -92,14 +91,14 @@ async function ProfilePageContent() {
             Visa &amp; embassy journey
           </h2>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-            Dedicated page to log CSP, embassy queue, interview, and passport dates —
-            step by step.
+            Dedicated page to log CSP, embassy queue, interview, and passport
+            dates — step by step.
           </p>
         </Link>
 
         <Link
           href="/dashboard/similar-profiles"
-          className="group flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-900/5 transition-colors hover:border-[#1238da]/35 hover:shadow-md md:p-7"
+          className="group flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6  ring-1 ring-slate-900/5 transition-colors hover:border-[#1238da]/35 hover:shadow-md md:p-7"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex size-11 items-center justify-center rounded-2xl bg-violet-50 text-violet-700">
@@ -111,8 +110,8 @@ async function ProfilePageContent() {
             Similar applicants
           </h2>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-            See opted-in peers near your GPA and which universities they track (when you
-            opt in too).
+            See opted-in peers near your GPA and which universities they track
+            (when you opt in too).
           </p>
         </Link>
       </section>

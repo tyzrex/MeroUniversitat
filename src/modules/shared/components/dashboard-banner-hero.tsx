@@ -8,12 +8,18 @@ export type DashboardBannerCrumb = {
   href?: string;
 };
 
+export type DashboardBannerRootCrumb = {
+  label: string;
+  href: string;
+};
+
 /**
  * Shared blue banner used across dashboard (and dashboard-only community/university views).
  * Matches the Community Data / Universities directory visual language.
  */
 export function DashboardBannerHero({
   crumbs,
+  rootCrumb,
   eyebrow,
   title,
   description,
@@ -23,6 +29,8 @@ export function DashboardBannerHero({
   minHeightClass = "min-h-[260px]",
 }: Readonly<{
   crumbs?: DashboardBannerCrumb[];
+  /** First breadcrumb segment (defaults to Dashboard → `/dashboard`). Use for public pages, e.g. Home. */
+  rootCrumb?: DashboardBannerRootCrumb;
   eyebrow: string;
   title: React.ReactNode;
   description: React.ReactNode;
@@ -54,10 +62,10 @@ export function DashboardBannerHero({
               className="flex flex-wrap items-center gap-1 text-sm text-white/75"
             >
               <Link
-                href="/dashboard"
+                href={rootCrumb?.href ?? "/dashboard"}
                 className="hover:text-white hover:underline-offset-4"
               >
-                Dashboard
+                {rootCrumb?.label ?? "Dashboard"}
               </Link>
               {crumbs.map((c) => (
                 <span key={`${c.label}-${c.href ?? "here"}`} className="contents">
