@@ -1,4 +1,5 @@
 import { ApplicationForm } from "@/modules/applications/components/application-form";
+import { DeleteApplicationButton } from "@/modules/applications/components/delete-application-button";
 import { getApplicationForEditor } from "@/modules/applications/services/application-mutations.service";
 import { listTeamOptionsForUser } from "@/modules/teams/services/team.service";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
@@ -70,6 +71,16 @@ export default async function EditApplicationPage({
         teamOptions={teamOptions}
         universityInitialLabel={universityInitialLabel}
       />
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-base font-bold text-[#0d2145]">Danger zone</h2>
+        <p className="text-muted-foreground mt-1 text-sm">
+          Deleting removes only your row (and cannot be undone).
+        </p>
+        <div className="mt-4">
+          <DeleteApplicationButton id={app.id} />
+        </div>
+      </div>
     </div>
   );
 }

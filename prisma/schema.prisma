@@ -82,6 +82,19 @@ enum TeamMemberRole {
   MEMBER
 }
 
+enum TeamActivityType {
+  TEAM_CREATED
+  MEMBER_JOINED
+  MEMBER_LEFT
+  MEMBER_REMOVED
+  MEMBER_ROLE_UPDATED
+  INVITE_REGENERATED
+  APPLICATION_CREATED
+  APPLICATION_UPDATED
+  APPLICATION_STATUS_CHANGED
+  APPLICATION_DELETED
+}
+
 /// First dashboard visit: solo tracker vs team collaboration.
 enum WorkspacePreference {
   SOLO
@@ -123,6 +136,8 @@ model User {
 
   teamsOwned         Team[]
   teamMemberships    TeamMember[]
+
+  teamActivityEvents TeamActivity[] @relation("TeamActivityActor")
 
 }
 
@@ -202,6 +217,7 @@ model Team {
 
   members      TeamMember[]
   applications Application[]
+  activities   TeamActivity[]
 }
 
 model TeamMember {
@@ -214,6 +230,20 @@ model TeamMember {
   joinedAt  DateTime       @default(now())
 
   @@unique([teamId, userId])
+}
+
+model TeamActivity {
+  id          String           @id @default(cuid())
+  teamId      String
+  team        Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  actorUserId String?
+  actor       User?            @relation("TeamActivityActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  type        TeamActivityType
+  data        Json?
+  createdAt   DateTime         @default(now())
+
+  @@index([teamId, createdAt])
+  @@index([actorUserId, createdAt])
 }
 
 

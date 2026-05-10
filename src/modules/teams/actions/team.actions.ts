@@ -38,7 +38,8 @@ export async function createTeamAction(
       description: parsed.data.description,
     });
     return { ok: true, data: { teamId: team.id } };
-  } catch {
+  } catch (e) {
+    console.error(e);
     return { ok: false, error: "Could not create the team." };
   }
 }

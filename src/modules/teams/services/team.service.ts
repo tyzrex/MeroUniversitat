@@ -65,6 +65,15 @@ export async function createTeamForUser(options: {
       _count: { select: { members: true, applications: true } },
     },
   });
+
+  // Activity log
+  await db.teamActivity.create({
+    data: {
+      teamId: team.id,
+      actorUserId: options.userId,
+      type: "TEAM_CREATED",
+    },
+  });
   return team;
 }
 
@@ -99,6 +108,14 @@ export async function joinTeamByInviteCode(options: {
       teamId: team.id,
       userId: options.userId,
       role: "MEMBER",
+    },
+  });
+
+  await db.teamActivity.create({
+    data: {
+      teamId: team.id,
+      actorUserId: options.userId,
+      type: "MEMBER_JOINED",
     },
   });
 

@@ -90,7 +90,7 @@ export async function createApplicationForUser(
 
   const groupId = input.applicationGroupId?.trim() || null;
 
-  return db.application.create({
+  const created = await db.application.create({
     data: {
       userId,
       teamId,
@@ -107,6 +107,23 @@ export async function createApplicationForUser(
       applicationGroupId: groupId,
     },
   });
+
+  if (created.teamId) {
+    await db.teamActivity.create({
+      data: {
+        teamId: created.teamId,
+        actorUserId: userId,
+        type: "APPLICATION_CREATED",
+        data: {
+          applicationId: created.id,
+          universityName: created.universityName,
+          programLabel: created.programName ?? "Program TBD",
+        },
+      },
+    });
+  }
+
+  return created;
 }
 
 export async function getApplicationForEditor(userId: string, applicationId: string) {
@@ -132,17 +149,35 @@ export async function updateApplicationStatusForOwner(
 ) {
   const existing = await db.application.findUnique({
     where: { id: applicationId },
-    select: { userId: true },
+    select: { userId: true, teamId: true, universityName: true, programName: true },
   });
 
   if (!existing || existing.userId !== userId) {
     throw new Error("Application not found or access denied.");
   }
 
-  return db.application.update({
+  const updated = await db.application.update({
     where: { id: applicationId },
     data: { status: status as never },
   });
+
+  if (existing.teamId) {
+    await db.teamActivity.create({
+      data: {
+        teamId: existing.teamId,
+        actorUserId: userId,
+        type: "APPLICATION_STATUS_CHANGED",
+        data: {
+          applicationId,
+          status,
+          universityName: existing.universityName,
+          programLabel: existing.programName ?? "Program TBD",
+        },
+      },
+    });
+  }
+
+  return updated;
 }
 
 export async function updateApplicationForUser(
@@ -179,7 +214,7 @@ export async function updateApplicationForUser(
     throw new Error("Invalid deadline date.");
   }
 
-  return db.application.update({
+  const updated = await db.application.update({
     where: { id: data.id },
     data: {
       universityId: uni.id,
@@ -194,6 +229,23 @@ export async function updateApplicationForUser(
         deadline && !Number.isNaN(deadline.getTime()) ? deadline : null,
     },
   });
+
+  if (teamId) {
+    await db.teamActivity.create({
+      data: {
+        teamId,
+        actorUserId: userId,
+        type: "APPLICATION_UPDATED",
+        data: {
+          applicationId: updated.id,
+          universityName: updated.universityName,
+          programLabel: updated.programName ?? "Program TBD",
+        },
+      },
+    });
+  }
+
+  return updated;
 }
 
 export async function getMirrorPrefill(mirrorApplicationId: string, userId: string) {
@@ -212,4 +264,32 @@ export async function getMirrorPrefill(mirrorApplicationId: string, userId: stri
   });
 
   return mirror;
+}
+
+export async function deleteApplicationForUser(userId: string, applicationId: string) {
+  const existing = await db.application.findUnique({
+    where: { id: applicationId },
+    select: { id: true, userId: true, teamId: true, universityName: true, programName: true },
+  });
+
+  if (!existing || existing.userId !== userId) {
+    throw new Error("Application not found or access denied.");
+  }
+
+  await db.application.delete({ where: { id: applicationId } });
+
+  if (existing.teamId) {
+    await db.teamActivity.create({
+      data: {
+        teamId: existing.teamId,
+        actorUserId: userId,
+        type: "APPLICATION_DELETED",
+        data: {
+          applicationId,
+          universityName: existing.universityName,
+          programLabel: existing.programName ?? "Program TBD",
+        },
+      },
+    });
+  }
 }

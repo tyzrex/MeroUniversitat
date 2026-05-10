@@ -5,6 +5,7 @@ import {
 import { KanbanToolbar } from "@/modules/applications/components/kanban-toolbar";
 import type { KanbanBoardCard } from "@/modules/applications/lib/kanban-columns";
 import { listDashboardApplications } from "@/modules/applications/services/application-list.service";
+import { listTeamOptionsForUser } from "@/modules/teams/services/team.service";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
@@ -18,7 +19,7 @@ export const metadata = {
 export default async function ApplicationsKanbanPage({
   searchParams,
 }: Readonly<{
-  searchParams: Promise<{ view?: string; compact?: string }>;
+  searchParams: Promise<{ view?: string; compact?: string; team?: string }>;
 }>) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
@@ -30,8 +31,16 @@ export default async function ApplicationsKanbanPage({
   const view: KanbanViewMode =
     rawView === "university" || rawView === "member" ? rawView : "board";
   const compact = sp.compact === "1";
+  const teamId = sp.team?.trim() || undefined;
 
-  const apps = await listDashboardApplications(session.user.id);
+  const [apps, teamOptions] = await Promise.all([
+    listDashboardApplications(session.user.id, teamId ? { teamId } : undefined),
+    listTeamOptionsForUser(session.user.id),
+  ]);
+
+  const teamLabel = teamId
+    ? teamOptions.find((t) => t.id === teamId)?.name
+    : undefined;
 
   const cards: KanbanBoardCard[] = apps.map((a) => ({
     id: a.id,
@@ -53,6 +62,8 @@ export default async function ApplicationsKanbanPage({
         ? "Grouped by institution — scan where your cohort is applying."
         : "Grouped by teammate — see who owns each row.";
 
+  const titleSuffix = teamLabel ? ` · ${teamLabel}` : "";
+
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
@@ -60,11 +71,17 @@ export default async function ApplicationsKanbanPage({
           { label: "Applications", href: "/dashboard/applications" },
           { label: "Kanban" },
         ]}
-        title="Kanban board"
+        title={`Kanban board${titleSuffix}`}
         description={description}
       />
 
-      <KanbanToolbar compact={compact} view={view} />
+      <KanbanToolbar
+        compact={compact}
+        view={view}
+        teamId={teamId}
+        teamOptions={teamOptions}
+        teamLabel={teamLabel}
+      />
 
       <ApplicationsKanbanBoard
         cards={cards}
@@ -73,9 +90,9 @@ export default async function ApplicationsKanbanPage({
         view={view}
       />
 
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-center text-sm text-slate-500">
         <Link
-          className="text-primary font-semibold underline-offset-4 hover:underline"
+          className="font-semibold text-[#4a52c8] underline-offset-4 hover:underline"
           href="/dashboard/applications"
         >
           ← Applications list
