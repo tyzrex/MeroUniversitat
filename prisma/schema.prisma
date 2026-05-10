@@ -82,6 +82,12 @@ enum TeamMemberRole {
   MEMBER
 }
 
+/// First dashboard visit: solo tracker vs team collaboration.
+enum WorkspacePreference {
+  SOLO
+  TEAM
+}
+
 
 /// Singleton row `id = "default"` — global toggles (manual review, etc.).
 model SiteSettings {
@@ -101,6 +107,8 @@ model User {
   isVerified    Boolean  @default(false)
   /// Set when user finishes solo vs team onboarding; null = show welcome flow.
   onboardingCompletedAt DateTime?
+  /// Chosen on first dashboard visit (solo vs team). Null until onboarding completes.
+  workspacePreference WorkspacePreference?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -218,10 +226,25 @@ model Application {
   teamId         String?
   team           Team?             @relation(fields: [teamId], references: [id])
 
+  /// Linked directory university when known (optional).
+  universityId   String?
+  university     University?       @relation(fields: [universityId], references: [id], onDelete: SetNull)
+
   // Denormalized for custom (not-in-DB) entries
   universityName String
   programName    String?
   city           String?
+
+  /// Target intake, e.g. WS2026 / SS2026.
+  intakeSemester String?
+
+  /// Rows sharing one logical application (multiple subjects/programs to same uni).
+  applicationGroupId String?
+
+  /// User marked “I applied here too” — links to another member’s application row.
+  mirrorsApplicationId String?
+  mirrorsApplication   Application?  @relation("ApplicationMirror", fields: [mirrorsApplicationId], references: [id], onDelete: SetNull)
+  mirroredBy           Application[]   @relation("ApplicationMirror")
 
   status         ApplicationStatus @default(INTERESTED)
   deadline       DateTime?
@@ -318,6 +341,7 @@ model University {
 
   programs          Program[]
   acceptanceRecords AcceptanceRecord[]
+  applications      Application[]
 }
 
 model Program {

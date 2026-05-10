@@ -3,7 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldGroup, FieldSet } from "@/components/ui/field";
 import { updateProfileSettingsAction } from "@/modules/profile/actions/update-profile-settings.action";
 import {
   profileSettingsSchema,
@@ -21,7 +21,7 @@ import {
   RHFTextarea,
 } from "@/modules/shared/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, User } from "lucide-react";
+import { GraduationCap, Loader2, UserRound } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -35,8 +35,8 @@ const germanLabels: Record<(typeof PROFILE_GERMAN_LEVELS)[number], string> = {
   C2: "C2",
 };
 
-const fieldPanel =
-  "rounded-2xl border border-slate-200/90 bg-white/95 p-6 shadow-[0_1px_3px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/5 md:p-8";
+const formPanel =
+  "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35";
 
 export function ProfileSettingsForm({
   defaultValues,
@@ -66,7 +66,7 @@ export function ProfileSettingsForm({
   return (
     <Form {...form}>
       <form
-        className="mt-10 flex w-full max-w-none flex-col gap-8"
+        className="flex w-full flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {saved ? (
@@ -83,17 +83,19 @@ export function ProfileSettingsForm({
           </Alert>
         ) : null}
 
-        <div className="grid w-full gap-8 lg:grid-cols-2 lg:items-start">
-          <FieldSet className={fieldPanel}>
-            <FieldLegend className="text-lg font-semibold text-[#0d2145]">
-              Account
-            </FieldLegend>
+        <div className="grid w-full gap-6 lg:grid-cols-2 lg:items-start">
+          <FieldSet className={formPanel}>
+            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+                <UserRound className="size-5" strokeWidth={1.8} />
+              </span>
+              About you
+            </div>
             <FieldGroup className="gap-5">
               <RHFInput<ProfileSettingsInput>
                 control={form.control}
                 name="name"
                 label="Display name"
-                icon={User}
                 autoComplete="name"
               />
               <RHFTextarea<ProfileSettingsInput>
@@ -111,10 +113,14 @@ export function ProfileSettingsForm({
             </FieldGroup>
           </FieldSet>
 
-          <FieldSet className={fieldPanel}>
-            <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+          <FieldSet className={formPanel}>
+            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+                <GraduationCap className="size-5" strokeWidth={1.8} />
+              </span>
               Academics
-            </FieldLegend>
+            </div>
+            <FieldGroup className="gap-5">
             <div className="grid gap-5 sm:grid-cols-2">
               <RHFInput
                 control={form.control}
@@ -198,6 +204,7 @@ export function ProfileSettingsForm({
                 placeholder="e.g. WS2026"
               />
             </div>
+            </FieldGroup>
           </FieldSet>
         </div>
 

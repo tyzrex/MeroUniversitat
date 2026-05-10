@@ -1,8 +1,8 @@
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import { ProfileSettingsForm } from "@/modules/profile/components/profile-settings-form";
 import type { ProfileSettingsInput } from "@/modules/profile/schema/profile-settings-schema";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Container } from "@/modules/shared/components/container";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -47,17 +47,17 @@ export default async function ProfileSettingsPage() {
   };
 
   return (
-    <Container className="max-w-[1100px] py-2">
-      <header className="border-b border-slate-200/80 pb-8">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[#0d2145]">
-          Profile
-        </h1>
-        <p className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed">
-          Your display name, bio, and academic snapshot. Control visibility with
-          the toggle below.
-        </p>
-      </header>
+    <div className="flex flex-col gap-8">
+      <DashboardPageIntro
+        crumbs={[
+          { label: "Settings", href: "/dashboard/settings" },
+          { label: "Profile" },
+        ]}
+        title="Profile"
+        description="Your display name, bio, and academic snapshot. Control visibility with the toggle in the form."
+      />
+
       <ProfileSettingsForm defaultValues={defaults} />
-    </Container>
+    </div>
   );
 }

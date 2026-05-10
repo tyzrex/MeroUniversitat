@@ -1,6 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Container } from "@/modules/shared/components/container";
 import { Building2, Heart, Send, ShieldCheck, UserRound } from "lucide-react";
 import Link from "next/link";
 import type { ComponentType, ReactNode } from "react";

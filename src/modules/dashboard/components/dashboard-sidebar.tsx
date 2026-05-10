@@ -17,6 +17,7 @@ import {
   Building2,
   CalendarClock,
   ClipboardList,
+  Columns3,
   Database,
   LayoutDashboard,
   Settings,
@@ -38,6 +39,11 @@ const NAV_ITEMS = [
     title: "Applications",
     href: "/dashboard/applications",
     icon: UsersRound,
+  },
+  {
+    title: "Kanban",
+    href: "/dashboard/applications/kanban",
+    icon: Columns3,
   },
   {
     title: "Universities",

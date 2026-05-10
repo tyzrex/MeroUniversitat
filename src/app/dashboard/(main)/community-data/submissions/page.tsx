@@ -3,7 +3,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { listAcceptanceRecordsForUser } from "@/modules/community/services/acceptance-record.service";
-import { Container } from "@/modules/shared/components/container";
 import {
   ArrowRight,
   CheckCircle2,

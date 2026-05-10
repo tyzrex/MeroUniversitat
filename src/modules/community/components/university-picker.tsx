@@ -10,18 +10,27 @@ type Uni = { id: string; name: string; city: string };
 export function UniversityPicker({
   value,
   onChange,
+  initialLabel,
 }: Readonly<{
   value: string;
   onChange: (id: string) => void;
+  /** When `value` is preset (e.g. deep link), show this instead of “University selected”. */
+  initialLabel?: string;
 }>) {
   const [query, setQuery] = useState("");
-  const [pickedLabel, setPickedLabel] = useState("");
+  const [pickedLabel, setPickedLabel] = useState(initialLabel ?? "");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<Uni[]>([]);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const displayLabel = value ? pickedLabel || "University selected" : "";
+
+  useEffect(() => {
+    if (value && initialLabel) {
+      setPickedLabel(initialLabel);
+    }
+  }, [value, initialLabel]);
 
   const fetchList = useCallback(async (q: string) => {
     setLoading(true);

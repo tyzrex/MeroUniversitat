@@ -1,13 +1,12 @@
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Container } from "@/modules/shared/components/container";
 import {
   ArrowRight,
   Building2,
   ClipboardList,
   Database,
   GraduationCap,
-  LayoutDashboard,
   Plus,
 } from "lucide-react";
 import Link from "next/link";
@@ -38,55 +37,39 @@ const quickActions = [
 
 export default function DashboardPage() {
   return (
-    <Container className="max-w-[1500px] py-2">
-      <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
-        <div className="relative bg-gradient-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
-          <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
-          <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-4xl">
-              <p className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-blue-100">
-                <LayoutDashboard className="size-4" strokeWidth={1.8} />
-                Student workspace
-              </p>
-              <h1 className="text-balance text-3xl font-extrabold tracking-tight md:text-4xl lg:text-5xl">
-                Your Germany application hub
-              </h1>
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/78 md:text-lg">
-                Keep your applications, university research, timelines, and
-                community contributions in one clean dashboard.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "h-11 rounded-xl bg-white text-[#0d2145] shadow-lg shadow-black/10 hover:bg-white/90",
-                )}
-                href="/dashboard/community-data"
-              >
-                Add outcome
-              </Link>
-              <Link
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white hover:text-[#0d2145]",
-                )}
-                href="/universities"
-              >
-                Browse universities
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="flex flex-col gap-8">
+      <DashboardPageIntro
+        crumbs={[{ label: "Overview" }]}
+        title="Your Germany application hub"
+        description="Keep your applications, university research, timelines, and community contributions in one workspace. Use the sidebar to jump between tools."
+      >
+        <Link
+          className={cn(
+            buttonVariants({ size: "lg" }),
+            "h-11 rounded-xl bg-[#0d2145] text-white shadow-md hover:bg-[#1a3461]",
+          )}
+          href="/dashboard/community-data"
+        >
+          Add outcome
+        </Link>
+        <Link
+          className={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            "h-11 rounded-xl border-slate-200 bg-white hover:bg-slate-50",
+          )}
+          href="/universities"
+        >
+          Browse universities
+        </Link>
+      </DashboardPageIntro>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-3">
         <MetricCard icon={GraduationCap} label="Applications" value="Plan" />
         <MetricCard icon={Database} label="Community records" value="Share" />
         <MetricCard icon={Building2} label="Universities" value="Explore" />
       </section>
 
-      <section className="mt-8">
+      <section>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-bold text-[#0d2145]">Quick actions</h2>
@@ -119,7 +102,7 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
-    </Container>
+    </div>
   );
 }
 
