@@ -69,7 +69,7 @@ export async function listUniversitiesDirectory(options: {
       logoUrl: true,
       imageUrl: true,
       isPopular: true,
-      _count: { select: { programs: true } },
+      _count: { select: { programs: true, applications: true } },
     },
   });
 }

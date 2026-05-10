@@ -96,15 +96,46 @@ export function ApplicationsTableSkeleton() {
   );
 }
 
-export function ApplicationsPageSkeleton() {
+/** Filters + table only — use under Suspense when stats load separately (avoids duplicate stats skeleton). */
+export function ApplicationsMainBodySkeleton() {
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <ApplicationsStatsSkeleton />
       <ApplicationsFiltersSkeleton />
       <ApplicationsTableSkeleton />
       <Skeleton className="h-32 w-full rounded-3xl" />
     </div>
   );
+}
+
+/** Intro block matching Kanban-style `DashboardPageIntro` (transparent shell). */
+export function DashboardIntroSkeleton() {
+  return (
+    <div className="border-0 bg-transparent p-0">
+      <Skeleton className="h-4 w-48" />
+      <Skeleton className="mt-5 h-8 w-[min(100%,28rem)] max-w-full" />
+      <Skeleton className="mt-3 h-4 w-full max-w-2xl" />
+      <Skeleton className="mt-2 h-4 w-full max-w-xl" />
+      <div className="mt-5 flex flex-wrap gap-2">
+        <Skeleton className="h-11 w-[8.5rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
+        <Skeleton className="h-11 w-[9.5rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
+      </div>
+    </div>
+  );
+}
+
+/** Full applications route loading (nav transitions): intro + stats + body. */
+export function ApplicationsFullPageSkeleton() {
+  return (
+    <div className="flex min-w-0 flex-col gap-6">
+      <DashboardIntroSkeleton />
+      <ApplicationsStatsSkeleton />
+      <ApplicationsMainBodySkeleton />
+    </div>
+  );
+}
+
+export function ApplicationsPageSkeleton() {
+  return <ApplicationsFullPageSkeleton />;
 }
 
 export function KanbanToolbarSkeleton() {
@@ -162,6 +193,7 @@ export function KanbanBoardSkeleton() {
 export function KanbanPageSkeleton() {
   return (
     <div className="flex min-w-0 flex-col gap-6">
+      <DashboardIntroSkeleton />
       <KanbanToolbarSkeleton />
       <KanbanBoardSkeleton />
     </div>

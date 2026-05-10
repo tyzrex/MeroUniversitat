@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { cache } from "react";
 
 type ActivityData = {
   applicationId?: string;
@@ -48,82 +49,7 @@ export type TeamActivityItem =
       applicationId: string;
     };
 
-export async function listTeamActivityForUser(userId: string, take = 12) {
-  const memberships = await db.teamMember.findMany({
-    where: { userId },
-    select: { teamId: true },
-  });
-  const teamIds = memberships.map((m) => m.teamId);
-  if (teamIds.length === 0) return [] satisfies TeamActivityItem[];
-
-  const rows = await db.teamActivity.findMany({
-    where: { teamId: { in: teamIds } },
-    orderBy: { createdAt: "desc" },
-    take,
-    include: {
-      team: { select: { id: true, name: true } },
-      actor: { select: { name: true, image: true } },
-    },
-  });
-
-  return rows.flatMap<TeamActivityItem>((r) => {
-    const actorName = r.actor?.name ?? "Someone";
-    const actorImage = r.actor?.image ?? null;
-    const teamId = r.team.id;
-    const teamName = r.team.name;
-
-    if (r.type === "MEMBER_JOINED") {
-      return [
-        {
-          type: "member_joined",
-          at: r.createdAt,
-          teamId,
-          teamName,
-          actorName,
-          actorImage,
-        },
-      ];
-    }
-
-    if (r.type === "APPLICATION_CREATED" || r.type === "APPLICATION_UPDATED") {
-      const data = readActivityData(r.data);
-      return [
-        {
-          type:
-            r.type === "APPLICATION_CREATED"
-              ? "application_created"
-              : "application_updated",
-          at: r.createdAt,
-          teamId,
-          teamName,
-          actorName,
-          actorImage,
-          universityName: data.universityName ?? "University",
-          programLabel: data.programLabel ?? "Program TBD",
-          applicationId: data.applicationId ?? "",
-        },
-      ];
-    }
-
-    return [];
-  });
-}
-
-export async function listTeamActivityForTeam(teamId: string, take = 12) {
-  const rows = (await (
-    db as unknown as {
-      teamActivity: { findMany: (args: unknown) => Promise<unknown> };
-    }
-  ).teamActivity.findMany({
-    where: { teamId },
-    orderBy: { createdAt: "desc" },
-    take,
-    include: {
-      team: { select: { id: true, name: true } },
-      actor: { select: { name: true, image: true } },
-    },
-  })) as TeamActivityRow[];
-
+function mapRowsToActivity(rows: TeamActivityRow[]): TeamActivityItem[] {
   return rows.flatMap<TeamActivityItem>((r) => {
     const actorName = r.actor?.name ?? "Someone";
     const actorImage = r.actor?.image ?? null;
@@ -166,3 +92,42 @@ export async function listTeamActivityForTeam(teamId: string, take = 12) {
     return [];
   });
 }
+
+export const listTeamActivityForUser = cache(
+  async function listTeamActivityForUser(userId: string, take = 12) {
+    const memberships = await db.teamMember.findMany({
+      where: { userId },
+      select: { teamId: true },
+    });
+    const teamIds = memberships.map((m) => m.teamId);
+    if (teamIds.length === 0) return [] satisfies TeamActivityItem[];
+
+    const rows = await db.teamActivity.findMany({
+      where: { teamId: { in: teamIds } },
+      orderBy: { createdAt: "desc" },
+      take,
+      include: {
+        team: { select: { id: true, name: true } },
+        actor: { select: { name: true, image: true } },
+      },
+    });
+
+    return mapRowsToActivity(rows as TeamActivityRow[]);
+  },
+);
+
+export const listTeamActivityForTeam = cache(
+  async function listTeamActivityForTeam(teamId: string, take = 12) {
+    const rows = await db.teamActivity.findMany({
+      where: { teamId },
+      orderBy: { createdAt: "desc" },
+      take,
+      include: {
+        team: { select: { id: true, name: true } },
+        actor: { select: { name: true, image: true } },
+      },
+    });
+
+    return mapRowsToActivity(rows as TeamActivityRow[]);
+  },
+);

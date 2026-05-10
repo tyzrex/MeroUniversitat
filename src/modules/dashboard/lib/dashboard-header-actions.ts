@@ -18,3 +18,12 @@ export function dashboardOutlineActionClass(className?: string) {
     className,
   );
 }
+
+/** Indigo filled — distinct from navy primary (e.g. Join team). */
+export function dashboardAccentActionClass(className?: string) {
+  return cn(
+    buttonVariants({ size: "lg" }),
+    "h-11 rounded-xl border-0 bg-[#4a52c8] text-white shadow-md hover:bg-[#3f46b8]",
+    className,
+  );
+}

@@ -3,6 +3,7 @@ import type { ApplicationCreateInput } from "@/modules/applications/schema/appli
 import { getMirrorPrefill } from "@/modules/applications/services/application-mutations.service";
 import { listTeamOptionsForUser } from "@/modules/teams/services/team.service";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
+import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { headers } from "next/headers";
@@ -15,14 +16,15 @@ export const metadata = {
 export default async function NewApplicationPage({
   searchParams,
 }: Readonly<{
-  searchParams: Promise<{ mirror?: string }>;
+  searchParams: Promise<{ mirror?: string; universityId?: string }>;
 }>) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
     redirect("/sign-in");
   }
 
-  const mirrorId = (await searchParams).mirror?.trim();
+  const sp = await searchParams;
+  const mirrorId = sp.mirror?.trim();
   const teamOptions = await listTeamOptionsForUser(session.user.id);
 
   let mirrorTeammateName: string | undefined;
@@ -33,6 +35,9 @@ export default async function NewApplicationPage({
   if (mirrorId) {
     try {
       const mirror = await getMirrorPrefill(mirrorId, session.user.id);
+      if (!mirror) {
+        redirect("/dashboard/applications");
+      }
       mirrorTeammateName = mirror.user.name;
       if (mirror.universityId) {
         defaultValues.universityId = mirror.universityId;
@@ -51,11 +56,31 @@ export default async function NewApplicationPage({
     } catch {
       redirect("/dashboard/applications");
     }
+  } else {
+    const universityId = sp.universityId?.trim();
+    if (universityId) {
+      const uni = await db.university.findUnique({
+        where: { id: universityId },
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          logoUrl: true,
+          imageUrl: true,
+        },
+      });
+      if (uni) {
+        defaultValues.universityId = uni.id;
+        universityInitialLabel = `${uni.name} — ${uni.city}`;
+        universityInitialLogoUrl = uni.logoUrl ?? uni.imageUrl ?? null;
+      }
+    }
   }
 
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
         crumbs={[
           { label: "Applications", href: "/dashboard/applications" },
           { label: "New" },

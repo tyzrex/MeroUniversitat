@@ -1,4 +1,3 @@
-import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import { getTeamDetail } from "@/modules/teams/services/team-detail.service";
 import { TeamMemberTable } from "@/modules/teams/components/team-member-table";
 import { TeamInviteCodeCard } from "@/modules/teams/components/team-invite-code-card";
@@ -8,13 +7,17 @@ import { applicationStatusLabel } from "@/modules/applications/lib/application-s
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
+import {
+  dashboardOutlineActionClass,
+  dashboardPrimaryActionClass,
+} from "@/modules/dashboard/lib/dashboard-header-actions";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  ArrowLeft,
   Columns3,
   Crown,
   FileText,
@@ -60,28 +63,22 @@ export default async function TeamDetailPage({
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
         crumbs={[
           { label: "Teams", href: "/dashboard/teams" },
           { label: team.name },
         ]}
         title={team.name}
-        description={team.description ?? undefined}
+        description={
+          team.description ??
+          "Shared applications and activity for this team. Owners manage the invite code; admins help moderate members."
+        }
       >
-        <Link
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            "h-11 rounded-xl border-slate-200 bg-white hover:bg-slate-50",
-          )}
-          href="/dashboard/teams"
-        >
-          <ArrowLeft className="size-4" strokeWidth={1.8} />
+        <Link className={dashboardOutlineActionClass()} href="/dashboard/teams">
           All teams
         </Link>
         <Link
-          className={cn(
-            buttonVariants({ size: "lg" }),
-            "h-11 rounded-xl bg-[#0d2145] text-white shadow-md hover:bg-[#1a3461]",
-          )}
+          className={dashboardPrimaryActionClass()}
           href={`/dashboard/applications/kanban?team=${teamId}`}
         >
           <Columns3 className="size-4" strokeWidth={1.8} />

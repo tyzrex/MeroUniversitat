@@ -1,7 +1,6 @@
 "use client";
 
-import { dashboardOutlineActionClass } from "@/modules/dashboard/lib/dashboard-header-actions";
-import { cn } from "@/lib/utils";
+import { dashboardAccentActionClass } from "@/modules/dashboard/lib/dashboard-header-actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -53,7 +52,7 @@ export function JoinTeamDialog() {
       <DialogTrigger
         render={
           <Button
-            className={cn(dashboardOutlineActionClass(), "gap-2 shadow-none")}
+            className={dashboardAccentActionClass("gap-2")}
           >
             <KeyRound className="size-4" strokeWidth={1.8} />
             Join team

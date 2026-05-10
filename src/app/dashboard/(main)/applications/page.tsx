@@ -1,6 +1,9 @@
 import { ApplicationsMainView } from "@/modules/applications/components/applications-data-view";
 import { ApplicationsStatsCards } from "@/modules/applications/components/applications-stats-cards";
-import { ApplicationsPageSkeleton, ApplicationsStatsSkeleton } from "@/modules/applications/components/applications-skeletons";
+import {
+  ApplicationsMainBodySkeleton,
+  ApplicationsStatsSkeleton,
+} from "@/modules/applications/components/applications-skeletons";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import {
   dashboardOutlineActionClass,
@@ -69,7 +72,7 @@ export default async function ApplicationsPage({
         <ApplicationsStatsCards userId={session.user.id} />
       </Suspense>
 
-      <Suspense fallback={<ApplicationsPageSkeleton />}>
+      <Suspense fallback={<ApplicationsMainBodySkeleton />}>
         <ApplicationsMainView userId={session.user.id} searchParams={sp} />
       </Suspense>
     </div>

@@ -14,6 +14,7 @@
     "db:generate": "prisma generate",
     "seed:universities": "bun run scripts/seed-universities.ts",
     "seed:university-logos": "bun run scripts/seed-university-logos.ts",
+    "sync:university-cities": "bun run scripts/sync-university-cities-from-json.ts",
     "db:migrate:prod": "prisma migrate deploy"
   },
   "dependencies": {

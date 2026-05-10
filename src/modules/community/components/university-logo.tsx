@@ -1,6 +1,9 @@
 "use client";
 
-import { universityInitialsFromName } from "@/modules/applications/lib/university-initials";
+import {
+  universityInitialChipClass,
+  universityInitialsFromName,
+} from "@/modules/applications/lib/university-initials";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -60,7 +63,7 @@ export function UniversityLogo({
           src={src}
           alt=""
           fill
-          className="object-contain p-1"
+          className="object-cover"
           sizes={imgSizes[size]}
         />
       </div>
@@ -70,7 +73,8 @@ export function UniversityLogo({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center justify-center bg-[#0d2145] text-white ring-1 ring-slate-200/80 shadow-lg shadow-black/10",
+        "flex shrink-0 items-center justify-center text-white shadow-md shadow-black/10 ring-1 ring-white/25",
+        universityInitialChipClass(name),
         box[size],
         text[size],
         className,

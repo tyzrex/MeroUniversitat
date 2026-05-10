@@ -5,7 +5,6 @@ import {
 } from "@/modules/dashboard/lib/dashboard-header-actions";
 import { getDashboardStats } from "@/modules/dashboard/services/dashboard-stats.service";
 import { applicationStatusLabel } from "@/modules/applications/lib/application-status-labels";
-import { Badge } from "@/components/ui/badge";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -20,11 +19,28 @@ import {
   GraduationCap,
   KeyRound,
   Plus,
+  Sparkles,
+  TrendingUp,
+  UserCircle2,
   Users,
   UsersRound,
 } from "lucide-react";
 import Link from "next/link";
 import type { ComponentType } from "react";
+
+const PIPELINE_BAR_COLORS = [
+  "#4f46e5",
+  "#7c3aed",
+  "#2563eb",
+  "#0d9488",
+  "#ea580c",
+  "#db2777",
+  "#ca8a04",
+  "#059669",
+  "#dc2626",
+  "#0891b2",
+  "#9333ea",
+];
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -36,13 +52,23 @@ export default async function DashboardPage() {
 
   const quickActions = getQuickActions(stats.workspacePreference, stats.teamCount);
 
+  const maxStatus = Math.max(
+    1,
+    ...stats.statusBreakdown.map((s) => s.count),
+  );
+
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
         className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
         crumbs={[{ label: "Overview" }]}
         title="Your Germany application hub"
-        description="Keep your applications, university research, timelines, and community contributions in one workspace. Use the sidebar to jump between tools."
+        description={
+          <>
+            Deadlines, Kanban, teams, and community outcomes — scoped to you and the
+            teams you join.
+          </>
+        }
       >
         <Link
           className={dashboardPrimaryActionClass()}
@@ -60,19 +86,54 @@ export default async function DashboardPage() {
         </Link>
       </DashboardPageIntro>
 
-      {/* Real metrics */}
+      {stats.profileIncomplete ? (
+        <section className="rounded-3xl border border-amber-200/90 bg-gradient-to-br from-amber-50 via-orange-50/80 to-rose-50/60 p-6 ring-1 ring-amber-100/80 md:p-7">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white text-amber-700 shadow-sm ring-1 ring-amber-100">
+                <UserCircle2 className="size-7" strokeWidth={1.8} />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-800/90">
+                  Profile
+                </p>
+                <h2 className="mt-1 text-lg font-bold text-[#0d2145] md:text-xl">
+                  Complete your academic profile
+                </h2>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-700">
+                  Add GPA, degree background, or target intake so recommendations and
+                  community submissions stay accurate — it takes under two minutes.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/dashboard/settings"
+              className={dashboardPrimaryActionClass(
+                "shrink-0 bg-[#c2410c] hover:bg-[#9a3412]",
+              )}
+            >
+              Open settings
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
+        <GradientMetricCard
+          accent="from-indigo-500/15 via-white to-violet-500/10"
+          iconWrapClass="bg-indigo-500/15 text-indigo-700"
           icon={GraduationCap}
           label="Applications"
           value={stats.applicationCount}
           hint={
             stats.applicationCount === 0
               ? "Start tracking"
-              : `${stats.statusBreakdown[0]?.count ?? 0} ${applicationStatusLabel(stats.statusBreakdown[0]?.status ?? "")}`
+              : `${stats.statusBreakdown[0]?.count ?? 0} · ${applicationStatusLabel(stats.statusBreakdown[0]?.status ?? "")}`
           }
         />
-        <MetricCard
+        <GradientMetricCard
+          accent="from-sky-500/15 via-white to-cyan-500/10"
+          iconWrapClass="bg-sky-500/15 text-sky-800"
           icon={Users}
           label="Teams"
           value={stats.teamCount}
@@ -80,14 +141,23 @@ export default async function DashboardPage() {
             stats.teamCount === 0 ? "Join or create" : "Active memberships"
           }
         />
-        <MetricCard
+        <GradientMetricCard
+          accent="from-emerald-500/15 via-white to-teal-500/10"
+          iconWrapClass="bg-emerald-500/15 text-emerald-800"
           icon={Database}
-          label="Community records"
-          value="Share"
-          hint="Help future applicants"
+          label="Community submissions"
+          value={stats.acceptanceSubmissionCount}
+          hint={
+            stats.acceptanceSubmissionCount === 0
+              ? "Share your first outcome"
+              : "Outcomes you submitted"
+          }
+          href="/dashboard/community-data/submissions"
         />
         {stats.nearestDeadline ? (
-          <MetricCard
+          <GradientMetricCard
+            accent="from-rose-500/15 via-white to-fuchsia-500/10"
+            iconWrapClass="bg-rose-500/15 text-rose-800"
             icon={Calendar}
             label="Next deadline"
             value={stats.nearestDeadline.deadline.toLocaleDateString("en-US", {
@@ -95,55 +165,150 @@ export default async function DashboardPage() {
               day: "numeric",
             })}
             hint={stats.nearestDeadline.universityName}
+            href="/dashboard/applications"
           />
         ) : (
-          <MetricCard
+          <GradientMetricCard
+            accent="from-blue-500/15 via-white to-indigo-500/10"
+            iconWrapClass="bg-blue-500/15 text-blue-900"
             icon={Building2}
             label="Universities"
-            value="Explore"
-            hint="Browse the directory"
+            value="Browse"
+            hint="Directory & stats per uni"
+            href="/dashboard/universities"
           />
         )}
       </section>
 
-      {/* Status breakdown (if user has applications) */}
-      {stats.statusBreakdown.length > 0 ? (
-        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-bold text-[#0d2145]">
-                Pipeline overview
-              </h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Where your applications stand right now.
+      {(stats.statusBreakdown.length > 0 || stats.topUniversities.length > 0) ? (
+        <section className="grid gap-6 lg:grid-cols-2">
+          {stats.statusBreakdown.length > 0 ? (
+            <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-indigo-50/30 p-6 ring-1 ring-slate-900/5 md:p-7">
+              <div className="mb-5 flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="size-5 text-indigo-600" strokeWidth={1.8} />
+                    <h2 className="text-lg font-bold text-[#0d2145]">
+                      Pipeline mix
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Share of rows by status — matches your Kanban columns.
+                  </p>
+                </div>
+                <Link
+                  href="/dashboard/applications/kanban"
+                  className="text-sm font-semibold text-[#4a52c8] hover:underline"
+                >
+                  Open board →
+                </Link>
+              </div>
+              <div className="space-y-4">
+                {stats.statusBreakdown.map(({ status, count }, i) => (
+                  <div key={status}>
+                    <div className="mb-1 flex justify-between text-sm">
+                      <span className="font-medium text-slate-700">
+                        {applicationStatusLabel(status)}
+                      </span>
+                      <span className="tabular-nums font-bold text-[#0d2145]">
+                        {count}
+                      </span>
+                    </div>
+                    <div className="h-2.5 overflow-hidden rounded-full bg-white/80 ring-1 ring-slate-200/80">
+                      <div
+                        className="h-full rounded-full shadow-sm"
+                        style={{
+                          width: `${(count / maxStatus) * 100}%`,
+                          backgroundColor:
+                            PIPELINE_BAR_COLORS[i % PIPELINE_BAR_COLORS.length],
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
+              <TrendingUp className="mx-auto size-10 text-slate-300" strokeWidth={1.5} />
+              <p className="mt-4 font-semibold text-[#0d2145]">
+                No pipeline data yet
+              </p>
+              <p className="text-muted-foreground mt-2 text-sm">
+                Add your first application to see status distribution here.
+              </p>
+              <Link
+                href="/dashboard/applications/new"
+                className={`${dashboardPrimaryActionClass()} mx-auto mt-5`}
+              >
+                Add application
+              </Link>
+            </div>
+          )}
+
+          {stats.topUniversities.length > 0 ? (
+            <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-violet-50/40 to-fuchsia-50/30 p-6 ring-1 ring-slate-900/5 md:p-7">
+              <div className="mb-5 flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="size-5 text-violet-600" strokeWidth={1.8} />
+                    <h2 className="text-lg font-bold text-[#0d2145]">
+                      Where you apply most
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Universities with the most rows in your workspace (solo + teams).
+                  </p>
+                </div>
+                <Link
+                  href="/dashboard/universities"
+                  className="text-sm font-semibold text-[#4a52c8] hover:underline"
+                >
+                  Directory →
+                </Link>
+              </div>
+              <ul className="space-y-3">
+                {stats.topUniversities.map(({ label, count }, i) => (
+                  <li
+                    key={`${label}-${i}`}
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-white/60 bg-white/70 px-4 py-3 shadow-sm ring-1 ring-slate-900/[0.03]"
+                  >
+                    <span className="flex min-w-0 items-center gap-3">
+                      <span
+                        className="flex size-8 shrink-0 items-center justify-center rounded-xl text-xs font-black text-white shadow-inner"
+                        style={{
+                          backgroundColor:
+                            PIPELINE_BAR_COLORS[(i + 3) % PIPELINE_BAR_COLORS.length],
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span className="truncate font-semibold text-[#0d2145]">
+                        {label}
+                      </span>
+                    </span>
+                    <span className="shrink-0 tabular-nums text-sm font-bold text-slate-600">
+                      {count} row{count === 1 ? "" : "s"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-violet-50/30 p-8 text-center">
+              <Building2 className="mx-auto size-10 text-violet-200" strokeWidth={1.5} />
+              <p className="mt-4 font-semibold text-[#0d2145]">
+                University breakdown
+              </p>
+              <p className="text-muted-foreground mt-2 text-sm">
+                Once you add applications with university names, your top targets
+                appear here.
               </p>
             </div>
-            <Link
-              href="/dashboard/applications"
-              className="text-sm font-semibold text-[#4a52c8] hover:underline"
-            >
-              View all →
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {stats.statusBreakdown.map(({ status, count }) => (
-              <div
-                key={status}
-                className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/80 px-3 py-2"
-              >
-                <Badge variant="outline" className="font-semibold">
-                  {applicationStatusLabel(status)}
-                </Badge>
-                <span className="text-sm font-bold text-[#0d2145]">
-                  {count}
-                </span>
-              </div>
-            ))}
-          </div>
+          )}
         </section>
       ) : null}
 
-      {/* Team awareness banner */}
       {stats.workspacePreference === "SOLO" && stats.teamCount === 0 ? (
         <section className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 ring-1 ring-blue-100/80">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -182,7 +347,6 @@ export default async function DashboardPage() {
         </section>
       ) : null}
 
-      {/* Quick actions */}
       <section>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -196,11 +360,11 @@ export default async function DashboardPage() {
           {quickActions.map(({ description, href, icon: Icon, title }) => (
             <Link
               key={href}
-              className="group rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 transition-colors hover:border-[#4a52c8]/30 hover:bg-slate-50/50"
+              className="group rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 transition-colors hover:border-[#4a52c8]/30 hover:bg-gradient-to-br hover:from-white hover:to-indigo-50/40"
               href={href}
             >
               <div className="flex items-start justify-between gap-4">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#4a52c8]/15 to-indigo-500/10 text-[#4a52c8]">
                   <Icon className="size-6" strokeWidth={1.8} />
                 </div>
                 <ArrowRight
@@ -235,7 +399,7 @@ function getQuickActions(
     {
       title: "Track a new application",
       description:
-        "Add a university program to your pipeline and monitor its progress on the Kanban board.",
+        "Add a university row to your pipeline and move it on the Kanban board.",
       href: "/dashboard/applications/new",
       icon: FileText,
     },
@@ -260,8 +424,8 @@ function getQuickActions(
     actions.push({
       title: "Browse universities",
       description:
-        "Explore universities and programs from the public directory.",
-      href: "/universities",
+        "Search the directory and see how many students track each institution.",
+      href: "/dashboard/universities",
       icon: Building2,
     });
   } else {
@@ -277,31 +441,52 @@ function getQuickActions(
   return actions;
 }
 
-function MetricCard({
+function GradientMetricCard({
   icon: Icon,
   label,
   value,
   hint,
+  accent,
+  iconWrapClass,
+  href,
 }: Readonly<{
   icon: ComponentType<{ className?: string; strokeWidth?: number }>;
   label: string;
   value: string | number;
   hint: string;
+  accent: string;
+  iconWrapClass: string;
+  href?: string;
 }>) {
-  return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 ring-1 ring-slate-900/5">
+  const inner = (
+    <>
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold text-slate-500">{label}</p>
+          <p className="text-sm font-semibold text-slate-600">{label}</p>
           <p className="mt-1 text-2xl font-extrabold tracking-tight text-[#0d2145]">
             {value}
           </p>
-          <p className="mt-1 text-xs text-slate-400">{hint}</p>
+          <p className="mt-1 text-xs text-slate-500">{hint}</p>
         </div>
-        <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+        <div
+          className={`flex size-11 items-center justify-center rounded-2xl ${iconWrapClass}`}
+        >
           <Icon className="size-5" strokeWidth={1.8} />
         </div>
       </div>
+    </>
+  );
+
+  const shell = (
+    <div
+      className={`rounded-3xl border border-slate-200/70 bg-gradient-to-br p-5 ring-1 ring-slate-900/[0.04] transition-colors ${accent} ${href ? "cursor-pointer hover:ring-[#4a52c8]/25" : ""}`}
+    >
+      {inner}
     </div>
   );
+
+  if (href) {
+    return <Link href={href}>{shell}</Link>;
+  }
+  return shell;
 }

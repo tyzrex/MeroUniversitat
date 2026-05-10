@@ -1,11 +1,13 @@
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { UniversityLogo } from "@/modules/community/components/university-logo";
+import {
+  MyContributionsView,
+  type ContributionRow,
+} from "@/modules/community/components/my-contributions-view";
+import { Skeleton } from "@/components/ui/skeleton";
 import { listAcceptanceRecordsForUser } from "@/modules/community/services/acceptance-record.service";
 import {
-  ArrowRight,
   CheckCircle2,
   Clock3,
   FileText,
@@ -17,26 +19,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ComponentType } from "react";
-
-const moderationLabel: Record<string, string> = {
-  PENDING: "Pending review",
-  APPROVED: "Published",
-  REJECTED: "Rejected",
-};
-
-const resultLabel: Record<string, string> = {
-  ACCEPTED: "Accepted",
-  REJECTED: "Rejected",
-  WAITLISTED: "Waitlisted",
-  INTERVIEW: "Interview",
-  PENDING: "Pending",
-};
-
-const moderationStyles: Record<string, string> = {
-  PENDING: "border-amber-200 bg-amber-50 text-amber-800",
-  APPROVED: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  REJECTED: "border-rose-200 bg-rose-50 text-rose-800",
-};
+import { Suspense } from "react";
 
 export const metadata = {
   title: "My contributions | MeroUniversität",
@@ -51,6 +34,21 @@ export default async function MyContributionsPage() {
   }
 
   const rows = await listAcceptanceRecordsForUser(session.user.id);
+  const payload: ContributionRow[] = rows.map((r) => ({
+    id: r.id,
+    intake: r.intake,
+    result: r.result,
+    moderationStatus: r.moderationStatus,
+    createdAt: r.createdAt.toISOString(),
+    programNameSnapshot: r.programNameSnapshot,
+    university: {
+      name: r.university.name,
+      slug: r.university.slug,
+      logoUrl: r.university.logoUrl,
+      imageUrl: r.university.imageUrl,
+    },
+  }));
+
   const summary = {
     total: rows.length,
     approved: rows.filter((r) => r.moderationStatus === "APPROVED").length,
@@ -135,81 +133,18 @@ export default async function MyContributionsPage() {
           </Link>
         </section>
       ) : (
-        <ul className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-          {rows.map((r) => {
-            const program =
-              r.programNameSnapshot?.trim() || "Program not specified";
-            return (
-              <li key={r.id}>
-                <Link
-                  className="group flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
-                  href={`/dashboard/community-data/submissions/${r.id}`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "h-7 rounded-full px-3 font-semibold",
-                        moderationStyles[r.moderationStatus],
-                      )}
-                    >
-                      {moderationLabel[r.moderationStatus] ??
-                        r.moderationStatus}
-                    </Badge>
-                    <ArrowRight
-                      className="size-4 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-[#4a52c8]"
-                      strokeWidth={1.9}
-                    />
-                  </div>
-
-                  <div className="mt-5 flex gap-4">
-                    <UniversityLogo
-                      name={r.university.name}
-                      logoUrl={r.university.logoUrl}
-                      imageUrl={r.university.imageUrl}
-                      size="compact"
-                      className="shadow-lg shadow-[#0d2145]/15"
-                    />
-                    <div className="min-w-0">
-                      <p className="font-bold text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
-                        {r.university.name}
-                      </p>
-                      <p className="text-muted-foreground mt-1 line-clamp-2 text-sm">
-                        {program}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-2 gap-3 border-t border-slate-100 pt-5 text-sm">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-                        Intake
-                      </p>
-                      <p className="mt-1 font-semibold text-slate-800">
-                        {r.intake}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-                        Result
-                      </p>
-                      <p className="mt-1 font-semibold text-slate-800">
-                        {resultLabel[r.result] ?? r.result}
-                      </p>
-                    </div>
-                  </div>
-
-                  <p className="text-muted-foreground mt-5 text-xs">
-                    Submitted{" "}
-                    {new Intl.DateTimeFormat("en", {
-                      dateStyle: "medium",
-                    }).format(r.createdAt)}
-                  </p>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <Suspense
+          fallback={
+            <div className="mt-8 space-y-4">
+              <div className="flex justify-end">
+                <Skeleton className="h-9 w-48 rounded-xl" />
+              </div>
+              <Skeleton className="h-[420px] w-full rounded-3xl" />
+            </div>
+          }
+        >
+          <MyContributionsView rows={payload} />
+        </Suspense>
       )}
     </div>
   );

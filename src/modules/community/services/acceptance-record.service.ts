@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import type { AcceptanceRecordFormValues } from "@/modules/community/schema/acceptance-record-form-schema";
 import { getSiteSettings } from "@/modules/community/services/site-settings.service";
+import { cache } from "react";
 
 function parseOptionalDate(value?: string) {
   if (!value?.trim()) return undefined;
@@ -66,73 +67,79 @@ export async function createAcceptanceRecord(
   });
 }
 
-export async function listApprovedAcceptanceRecordsPublic(limit = 12) {
-  return db.acceptanceRecord.findMany({
-    where: {
-      moderationStatus: "APPROVED",
-      isDeleted: false,
-    },
-    orderBy: { createdAt: "desc" },
-    take: limit,
-    include: {
-      university: {
-        select: {
-          name: true,
-          city: true,
-          slug: true,
-          logoUrl: true,
-          imageUrl: true,
+export const listApprovedAcceptanceRecordsPublic = cache(
+  async function listApprovedAcceptanceRecordsPublic(limit = 12) {
+    return db.acceptanceRecord.findMany({
+      where: {
+        moderationStatus: "APPROVED",
+        isDeleted: false,
+      },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      include: {
+        university: {
+          select: {
+            name: true,
+            city: true,
+            slug: true,
+            logoUrl: true,
+            imageUrl: true,
+          },
         },
       },
-    },
-  });
-}
+    });
+  },
+);
 
-export async function listAcceptanceRecordsForUser(userId: string) {
-  return db.acceptanceRecord.findMany({
-    where: { userId, isDeleted: false },
-    orderBy: { createdAt: "desc" },
-    include: {
-      university: {
-        select: {
-          name: true,
-          city: true,
-          slug: true,
-          logoUrl: true,
-          imageUrl: true,
+export const listAcceptanceRecordsForUser = cache(
+  async function listAcceptanceRecordsForUser(userId: string) {
+    return db.acceptanceRecord.findMany({
+      where: { userId, isDeleted: false },
+      orderBy: { createdAt: "desc" },
+      include: {
+        university: {
+          select: {
+            name: true,
+            city: true,
+            slug: true,
+            logoUrl: true,
+            imageUrl: true,
+          },
         },
       },
-    },
-  });
-}
+    });
+  },
+);
 
-export async function getAcceptanceRecordForUser(id: string, userId: string) {
-  return db.acceptanceRecord.findFirst({
-    where: { id, userId, isDeleted: false },
-    include: {
-      university: {
-        select: {
-          name: true,
-          city: true,
-          state: true,
-          slug: true,
-          website: true,
-          logoUrl: true,
-          imageUrl: true,
+export const getAcceptanceRecordForUser = cache(
+  async function getAcceptanceRecordForUser(id: string, userId: string) {
+    return db.acceptanceRecord.findFirst({
+      where: { id, userId, isDeleted: false },
+      include: {
+        university: {
+          select: {
+            name: true,
+            city: true,
+            state: true,
+            slug: true,
+            website: true,
+            logoUrl: true,
+            imageUrl: true,
+          },
+        },
+        program: {
+          select: {
+            name: true,
+            degree: true,
+            subject: true,
+            language: true,
+            programUrl: true,
+          },
         },
       },
-      program: {
-        select: {
-          name: true,
-          degree: true,
-          subject: true,
-          language: true,
-          programUrl: true,
-        },
-      },
-    },
-  });
-}
+    });
+  },
+);
 
 export async function listPendingAcceptanceRecords() {
   return db.acceptanceRecord.findMany({
