@@ -9,6 +9,7 @@ import { DashboardSidebar } from "@/modules/dashboard/components/dashboard-sideb
 import type * as React from "react";
 
 export type DashboardUser = {
+  id: string;
   name: string;
   email: string;
   image: string | null;
@@ -25,7 +26,7 @@ export function DashboardLayoutClient({
     <SidebarProvider defaultOpen className="dashboard-shell min-h-svh">
       <DashboardSidebar user={user} />
       <SidebarInset className="bg-slate-50">
-        <DashboardHeader />
+        <DashboardHeader user={user} />
         <div className="flex flex-1 flex-col gap-6 p-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>

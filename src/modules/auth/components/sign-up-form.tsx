@@ -10,7 +10,7 @@ import {
   type SignUpValues,
 } from "@/modules/auth/schema/auth-schema";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/modules/shared/components/form-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Field,
@@ -104,16 +104,13 @@ export function SignUpForm() {
               >
                 Full name
               </FieldLabel>
-              <div className="relative">
-                <User className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  id="sign-up-name"
-                  autoComplete="name"
-                  placeholder="Your name"
-                  className="pl-10"
-                  {...form.register("name")}
-                />
-              </div>
+              <FormInput
+                icon={User}
+                id="sign-up-name"
+                autoComplete="name"
+                placeholder="Your name"
+                {...form.register("name")}
+              />
               <FieldError errors={[form.formState.errors.name]} />
             </Field>
 
@@ -124,17 +121,14 @@ export function SignUpForm() {
               >
                 Email address
               </FieldLabel>
-              <div className="relative">
-                <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  id="sign-up-email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  className="pl-10"
-                  {...form.register("email")}
-                />
-              </div>
+              <FormInput
+                icon={Mail}
+                id="sign-up-email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...form.register("email")}
+              />
               <FieldError errors={[form.formState.errors.email]} />
             </Field>
 
@@ -145,17 +139,14 @@ export function SignUpForm() {
               >
                 Password
               </FieldLabel>
-              <div className="relative">
-                <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  id="sign-up-password"
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="At least 8 characters"
-                  className="pl-10"
-                  {...form.register("password")}
-                />
-              </div>
+              <FormInput
+                icon={Lock}
+                id="sign-up-password"
+                type="password"
+                autoComplete="new-password"
+                placeholder="At least 8 characters"
+                {...form.register("password")}
+              />
               <FieldError errors={[form.formState.errors.password]} />
             </Field>
           </FieldGroup>

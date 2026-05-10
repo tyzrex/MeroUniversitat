@@ -1,26 +1,95 @@
 "use client";
 
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Search } from "lucide-react";
+import type { DashboardUser } from "@/modules/dashboard/components/dashboard-layout-client";
+import { UserAccountMenu } from "@/modules/shared/components/user-account-menu";
+import { cn } from "@/lib/utils";
+import { Database, LayoutDashboard, Search } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export function DashboardHeader() {
+const TOP_LINKS = [
+  { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  {
+    label: "Community data",
+    href: "/dashboard/community-data",
+    icon: Database,
+  },
+] as const;
+
+export function DashboardHeader({
+  user,
+}: Readonly<{
+  user: DashboardUser | null;
+}>) {
+  const pathname = usePathname();
+
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200/80 bg-white px-4">
+    <header className="flex h-14 shrink-0 flex-wrap items-center gap-3 border-b border-slate-200/80 bg-white px-4 py-2 shadow-sm sm:flex-nowrap">
       <SidebarTrigger className="-ml-1 text-slate-600" />
       <Separator className="mr-1 h-6 bg-border" orientation="vertical" />
-      <div className="relative max-w-xl flex-1">
+      <nav className="hidden items-center gap-0.5 lg:flex">
+        {TOP_LINKS.map(({ label, href, icon: Icon }) => {
+          const active =
+            href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname === href || pathname.startsWith(`${href}/`);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+                active
+                  ? "bg-slate-100 text-[#0d2145]"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+              )}
+            >
+              <Icon className="size-4" strokeWidth={1.75} />
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="relative min-w-[min(100%,200px)] max-w-xl flex-1 basis-full sm:basis-auto">
         <Search
           aria-hidden
           className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
           strokeWidth={1.75}
         />
         <Input
-          className="h-10 rounded-lg border-slate-200/90 bg-slate-50/80 pr-4 pl-10 text-sm shadow-none"
+          className="h-11 rounded-lg border-slate-200/90 bg-slate-50/80 pr-4 pl-10 text-sm shadow-none"
           placeholder="Search anything…"
           type="search"
         />
+      </div>
+
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        {user ? (
+          <UserAccountMenu user={user} variant="compact" />
+        ) : (
+          <>
+            <Link
+              href="/sign-in"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "sm" }),
+                "font-semibold",
+              )}
+            >
+              Sign in
+            </Link>
+            <Link
+              href="/sign-up"
+              className={cn(buttonVariants({ size: "sm" }), "font-semibold")}
+            >
+              Get started
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );

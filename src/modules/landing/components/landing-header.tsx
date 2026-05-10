@@ -6,11 +6,8 @@ import LandingHeaderProfile from "./landing-header-profile";
 const NAV = [
   { label: "Home", href: "/" },
   { label: "Universities", href: "/universities" },
-  { label: "Programs", href: "/universities" },
-  { label: "Community", href: "/community" },
-  { label: "Timeline", href: "/dashboard/analytics" },
-  { label: "Resources", href: "/community" },
-  { label: "About", href: "/" },
+  { label: "Community data", href: "/dashboard/community-data" },
+  { label: "About", href: "/#about" },
 ] as const;
 
 export function LandingNavbar() {

@@ -1,5 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+import { UserAccountMenu } from "@/modules/shared/components/user-account-menu";
 import { cn } from "@/lib/utils";
 import { headers } from "next/headers";
 import Link from "next/link";
@@ -34,16 +35,14 @@ export default async function LandingHeaderProfile() {
         </div>
       ) : (
         <div className="ml-auto flex shrink-0 items-center gap-2">
-          <span className="text-sm font-medium">{session.user.name}</span>
-          <Link
-            href="/dashboard"
-            className={cn(
-              buttonVariants({ variant: "outline", size: "lg" }),
-              "font-bold",
-            )}
-          >
-            Dashboard
-          </Link>
+          <UserAccountMenu
+            user={{
+              id: session.user.id,
+              name: session.user.name,
+              email: session.user.email,
+              image: session.user.image,
+            }}
+          />
         </div>
       )}
     </>

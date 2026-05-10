@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/modules/shared/components/form-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Field,
@@ -89,17 +89,14 @@ export function SignInForm() {
               >
                 Email address
               </FieldLabel>
-              <div className="relative">
-                <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  id="sign-in-email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  className="pl-10"
-                  {...form.register("email")}
-                />
-              </div>
+              <FormInput
+                icon={Mail}
+                id="sign-in-email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...form.register("email")}
+              />
               <FieldError errors={[form.formState.errors.email]} />
             </Field>
 
@@ -118,17 +115,14 @@ export function SignInForm() {
                   Forgot password?
                 </Link>
               </div>
-              <div className="relative">
-                <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  id="sign-in-password"
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                  className="pl-10"
-                  {...form.register("password")}
-                />
-              </div>
+              <FormInput
+                icon={Lock}
+                id="sign-in-password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="••••••••"
+                {...form.register("password")}
+              />
               <FieldError errors={[form.formState.errors.password]} />
             </Field>
           </FieldGroup>

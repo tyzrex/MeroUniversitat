@@ -1,0 +1,61 @@
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import type { AcceptanceRecordFormValues } from "@/modules/community/schema/acceptance-record-form-schema";
+
+function parseOptionalDate(value?: string) {
+  if (!value?.trim()) return undefined;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? undefined : d;
+}
+
+/** After editing `prisma/schema.prisma`, run `npm run db:generate` (needs Node ≥20). */
+export async function createAcceptanceRecord(
+  data: AcceptanceRecordFormValues,
+  session: Awaited<ReturnType<typeof auth.api.getSession>>,
+) {
+  const uni = await db.university.findUnique({
+    where: { id: data.universityId },
+    select: { id: true },
+  });
+  if (!uni) {
+    throw new Error("University not found");
+  }
+
+  let programId: string | null = data.programId?.trim() || null;
+  if (programId) {
+    const program = await db.program.findFirst({
+      where: { id: programId, universityId: data.universityId },
+      select: { id: true },
+    });
+    if (!program) programId = null;
+  }
+
+  const contributorName = data.contributorName?.trim();
+
+  return db.acceptanceRecord.create({
+    data: {
+      userId: session?.user?.id ?? null,
+      contributorName: contributorName?.length ? contributorName : null,
+      universityId: data.universityId,
+      programId: programId ?? undefined,
+      programNameSnapshot: data.programNameFree?.trim() || null,
+      gpa: data.gpa !== undefined ? String(data.gpa) : null,
+      percentage:
+        data.percentage !== undefined ? String(data.percentage) : null,
+      englishTestType: data.englishTestType,
+      englishTestScore: data.englishTestScore?.trim() || null,
+      germanLevel: data.germanLevel,
+      nepalBoard: data.nepalBoard?.trim() || null,
+      subject: data.subject?.trim() || null,
+      workExperienceYrs: data.workExperienceYrs ?? 0,
+      hasAPS: data.hasAPS,
+      intake: data.intake.trim(),
+      result: data.result,
+      appliedDate: parseOptionalDate(data.appliedDate),
+      responseDate: parseOptionalDate(data.responseDate),
+      offerDate: parseOptionalDate(data.offerDate),
+      notes: data.notes?.trim() || null,
+      isAnonymous: data.isAnonymous,
+    },
+  });
+}

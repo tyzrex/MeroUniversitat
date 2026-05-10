@@ -18,9 +18,9 @@ export default async function Layout({
   }
   return (
     <>
-      <LandingNavbar />
+      {/* <LandingNavbar /> */}
       {children}
-      <LandingFooter />
+      {/* <LandingFooter /> */}
     </>
   );
 }
