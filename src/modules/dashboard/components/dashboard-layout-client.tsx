@@ -13,6 +13,8 @@ export type DashboardUser = {
   name: string;
   email: string;
   image: string | null;
+  /** Better Auth / Prisma `User.role` — used for staff nav. */
+  role?: string;
 };
 
 export function DashboardLayoutClient({

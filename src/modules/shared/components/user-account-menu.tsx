@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
+  User,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -81,17 +82,24 @@ export function UserAccountMenu({
           </Link>
           <Link
             className="hover:bg-muted flex items-center gap-2 px-3 py-2.5 text-sm font-medium"
-            href="/dashboard/community-data"
+            href="/community-data"
           >
             <Database className="size-4" strokeWidth={1.75} />
             Community data
           </Link>
           <Link
             className="hover:bg-muted flex items-center gap-2 px-3 py-2.5 text-sm font-medium"
-            href="/dashboard/universities"
+            href="/universities"
           >
             <Building2 className="size-4" strokeWidth={1.75} />
             Universities
+          </Link>
+          <Link
+            className="hover:bg-muted flex items-center gap-2 px-3 py-2.5 text-sm font-medium"
+            href="/dashboard/settings/profile"
+          >
+            <User className="size-4" strokeWidth={1.75} />
+            Profile
           </Link>
           <Link
             className="hover:bg-muted flex items-center gap-2 px-3 py-2.5 text-sm font-medium"

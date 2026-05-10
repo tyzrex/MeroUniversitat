@@ -6,7 +6,7 @@ import LandingHeaderProfile from "./landing-header-profile";
 const NAV = [
   { label: "Home", href: "/" },
   { label: "Universities", href: "/universities" },
-  { label: "Community data", href: "/dashboard/community-data" },
+  { label: "Community data", href: "/community-data" },
   { label: "About", href: "/#about" },
 ] as const;
 

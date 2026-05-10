@@ -8,7 +8,9 @@ import type { FieldErrors } from "react-hook-form";
 
 export async function submitAcceptanceRecordAction(
   raw: unknown,
-): Promise<ActionResult<{ id: string }>> {
+): Promise<
+  ActionResult<{ id: string; moderationStatus: string }>
+> {
   const parsed = acceptanceRecordFormSchema.safeParse(raw);
   if (!parsed.success) {
     return {
@@ -23,7 +25,10 @@ export async function submitAcceptanceRecordAction(
 
   try {
     const record = await createAcceptanceRecord(parsed.data, session);
-    return { ok: true, data: { id: record.id } };
+    return {
+      ok: true,
+      data: { id: record.id, moderationStatus: record.moderationStatus },
+    };
   } catch {
     return {
       ok: false,

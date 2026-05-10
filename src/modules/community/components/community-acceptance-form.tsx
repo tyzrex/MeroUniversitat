@@ -10,13 +10,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  FieldGroup,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
+import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import { submitAcceptanceRecordAction } from "@/modules/community/actions/submit-acceptance-record.action";
-import { ENGLISH_TEST_LABELS, ENGLISH_TEST_VALUES } from "@/modules/community/constants/english-test";
+import {
+  ENGLISH_TEST_LABELS,
+  ENGLISH_TEST_VALUES,
+} from "@/modules/community/constants/english-test";
 import {
   acceptanceRecordFormSchema,
   admissionResults,
@@ -52,6 +51,9 @@ const germanLabels: Record<(typeof germanLevels)[number], string> = {
   C1: "C1",
   C2: "C2",
 };
+
+const fieldPanel =
+  "rounded-2xl border border-slate-200/90 bg-white/95 p-6 shadow-[0_1px_3px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/5 md:p-8";
 
 type Props = Readonly<{
   defaultContributorName: string;
@@ -95,32 +97,49 @@ export function CommunityAcceptanceForm({
   });
 
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [doneId, setDoneId] = useState<string | null>(null);
+  const [done, setDone] = useState<{
+    id: string;
+    moderationStatus: string;
+  } | null>(null);
 
   async function onSubmit(values: AcceptanceRecordFormInput) {
     setSubmitError(null);
-    setDoneId(null);
+    setDone(null);
     const result = await submitAcceptanceRecordAction(values);
     if (!result.ok) {
       setSubmitError(result.error);
       return;
     }
-    setDoneId(result.data.id);
+    setDone({
+      id: result.data.id,
+      moderationStatus: result.data.moderationStatus,
+    });
     form.reset(defaultValues);
   }
 
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-10"
+        className="flex w-full max-w-none flex-col gap-8 lg:gap-10"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {doneId ? (
-          <Alert className="rounded-xl border-emerald-200 bg-emerald-50 text-emerald-950">
-            <AlertTitle>Thanks for contributing</AlertTitle>
+        {done ? (
+          <Alert
+            className={
+              done.moderationStatus === "PENDING"
+                ? "rounded-xl border-amber-200/90 bg-amber-50 text-amber-950"
+                : "rounded-xl border-emerald-200 bg-emerald-50 text-emerald-950"
+            }
+          >
+            <AlertTitle>
+              {done.moderationStatus === "PENDING"
+                ? "Received — pending review"
+                : "Thanks — published"}
+            </AlertTitle>
             <AlertDescription>
-              Your acceptance record was saved. It may be reviewed before
-              appearing in community stats.
+              {done.moderationStatus === "PENDING"
+                ? "Your record was saved and is awaiting moderator approval before it appears in public stats."
+                : "Your acceptance record is visible in community stats (subject to normal moderation rules)."}
             </AlertDescription>
           </Alert>
         ) : null}
@@ -132,224 +151,233 @@ export function CommunityAcceptanceForm({
           </Alert>
         ) : null}
 
-        <FieldSet className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <FieldLegend className="text-lg font-semibold text-[#0d2145]">
-            About you
-          </FieldLegend>
-          <FieldGroup className="gap-5">
-            <RHFInput<AcceptanceRecordFormInput>
-              control={form.control}
-              name="contributorName"
-              label="Your name (optional)"
-              placeholder={
-                isLoggedIn
-                  ? "Prefilled from your account — edit if you want"
-                  : "How you’d like to be credited"
-              }
-              icon={User}
-              autoComplete="name"
-              description="Leave blank or submit anonymously below if you prefer not to share your name publicly."
-            />
+        <div className="grid w-full min-w-0 gap-8 xl:grid-cols-2 xl:gap-10 xl:items-start">
+          <div className="min-w-0 space-y-8">
+            <FieldSet className={fieldPanel}>
+              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+                About you
+              </FieldLegend>
+              <FieldGroup className="gap-5">
+                <RHFInput<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="contributorName"
+                  label="Your name (optional)"
+                  placeholder={
+                    isLoggedIn
+                      ? "Prefilled from your account — edit if you want"
+                      : "How you’d like to be credited"
+                  }
+                  icon={User}
+                  autoComplete="name"
+                  description="Leave blank or submit anonymously below if you prefer not to share your name publicly."
+                />
 
-            <RHFCheckbox<AcceptanceRecordFormInput>
-              control={form.control}
-              name="isAnonymous"
-              label="Submit anonymously"
-              description="Your name will be hidden in public views (we still store the record for moderation)."
-            />
-          </FieldGroup>
-        </FieldSet>
+                <RHFCheckbox<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="isAnonymous"
+                  label="Submit anonymously"
+                  description="Your name will be hidden in public views (we still store the record for moderation)."
+                />
+              </FieldGroup>
+            </FieldSet>
 
-        <FieldSet className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <FieldLegend className="text-lg font-semibold text-[#0d2145]">
-            Application
-          </FieldLegend>
-          <FieldGroup className="gap-5">
-            <FormField
-              control={form.control}
-              name="universityId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-semibold text-slate-700">
-                    University
-                  </FormLabel>
-                  <FormDescription>
-                    Search the seeded list — run the seed script locally if empty.
-                  </FormDescription>
-                  <UniversityPicker
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FieldSet className={fieldPanel}>
+              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+                Application
+              </FieldLegend>
+              <FieldGroup className="gap-5">
+                <FormField
+                  control={form.control}
+                  name="universityId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-semibold text-slate-700">
+                        University
+                      </FormLabel>
+                      <FormDescription>
+                        Search the seeded list — run the seed script locally if
+                        empty.
+                      </FormDescription>
+                      <UniversityPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <RHFInput<AcceptanceRecordFormInput>
-              control={form.control}
-              name="programNameFree"
-              label="Program (optional)"
-              placeholder="e.g. M.Sc. Computer Science"
-            />
-          </FieldGroup>
-        </FieldSet>
-
-        <FieldSet className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <FieldLegend className="text-lg font-semibold text-[#0d2145]">
-            Academic snapshot
-          </FieldLegend>
-          <div className="grid gap-5 md:grid-cols-2">
-            <RHFInput
-              control={form.control}
-              name="gpa"
-              label="GPA (German scale 0–4)"
-              placeholder="e.g. 3.2"
-              inputMode="decimal"
-            />
-            <RHFInput
-              control={form.control}
-              name="percentage"
-              label="Percentage (0–100)"
-              placeholder="e.g. 72"
-              inputMode="decimal"
-            />
+                <RHFInput<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="programNameFree"
+                  label="Program (optional)"
+                  placeholder="e.g. M.Sc. Computer Science"
+                />
+              </FieldGroup>
+            </FieldSet>
           </div>
 
-          <div className="mt-5 grid gap-5 md:grid-cols-2">
-            <RHFSelect<AcceptanceRecordFormInput>
-              control={form.control}
-              name="englishTestType"
-              label="English proficiency test"
-            >
-              {ENGLISH_TEST_VALUES.map((v) => (
-                <option key={v} value={v}>
-                  {ENGLISH_TEST_LABELS[v]}
-                </option>
-              ))}
-            </RHFSelect>
-            <RHFInput
-              control={form.control}
-              name="englishTestScore"
-              label="Test score"
-              placeholder="e.g. 7.5 (IELTS), 105 (TOEFL)"
-            />
-          </div>
+          <div className="min-w-0 space-y-8">
+            <FieldSet className={fieldPanel}>
+              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+                Academic snapshot
+              </FieldLegend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <RHFInput
+                  control={form.control}
+                  name="gpa"
+                  label="GPA (German scale 0–4)"
+                  placeholder="e.g. 3.2"
+                  inputMode="decimal"
+                />
+                <RHFInput
+                  control={form.control}
+                  name="percentage"
+                  label="Percentage (0–100)"
+                  placeholder="e.g. 72"
+                  inputMode="decimal"
+                />
+              </div>
 
-          <div className="mt-5 grid gap-5 md:grid-cols-2">
-            <RHFSelect<AcceptanceRecordFormInput>
-              control={form.control}
-              name="germanLevel"
-              label="German level"
-            >
-              {germanLevels.map((v) => (
-                <option key={v} value={v}>
-                  {germanLabels[v]}
-                </option>
-              ))}
-            </RHFSelect>
-            <RHFInput
-              control={form.control}
-              name="workExperienceYrs"
-              label="Work experience (years)"
-              placeholder="0"
-              inputMode="numeric"
-            />
-          </div>
+              <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                <RHFSelect<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="englishTestType"
+                  label="English proficiency test"
+                >
+                  {ENGLISH_TEST_VALUES.map((v) => (
+                    <option key={v} value={v}>
+                      {ENGLISH_TEST_LABELS[v]}
+                    </option>
+                  ))}
+                </RHFSelect>
+                <RHFInput
+                  control={form.control}
+                  name="englishTestScore"
+                  label="Test score"
+                  placeholder="e.g. 7.5 (IELTS), 105 (TOEFL)"
+                />
+              </div>
 
-          <div className="mt-5 grid gap-5 md:grid-cols-2">
-            <RHFInput
-              control={form.control}
-              name="nepalBoard"
-              label="Nepal board / institution"
-              placeholder="e.g. TU, KU"
-            />
-            <RHFInput
-              control={form.control}
-              name="subject"
-              label="Subject / field"
-              placeholder="e.g. Computer Engineering"
-            />
-          </div>
+              <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                <RHFSelect<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="germanLevel"
+                  label="German level"
+                >
+                  {germanLevels.map((v) => (
+                    <option key={v} value={v}>
+                      {germanLabels[v]}
+                    </option>
+                  ))}
+                </RHFSelect>
+                <RHFInput
+                  control={form.control}
+                  name="workExperienceYrs"
+                  label="Work experience (years)"
+                  placeholder="0"
+                  inputMode="numeric"
+                />
+              </div>
 
-          <div className="mt-5">
-            <RHFCheckbox<AcceptanceRecordFormInput>
-              control={form.control}
-              name="hasAPS"
-              label="APS completed"
-            />
-          </div>
-        </FieldSet>
+              <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                <RHFInput
+                  control={form.control}
+                  name="nepalBoard"
+                  label="Nepal board / institution"
+                  placeholder="e.g. TU, KU"
+                />
+                <RHFInput
+                  control={form.control}
+                  name="subject"
+                  label="Subject / field"
+                  placeholder="e.g. Computer Engineering"
+                />
+              </div>
 
-        <FieldSet className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <FieldLegend className="text-lg font-semibold text-[#0d2145]">
-            Outcome
-          </FieldLegend>
-          <div className="grid gap-5 md:grid-cols-2">
-            <RHFInput
-              control={form.control}
-              name="intake"
-              label="Intake"
-              placeholder="e.g. WS2025 or SS2026"
-            />
-            <RHFSelect<AcceptanceRecordFormInput>
-              control={form.control}
-              name="result"
-              label="Result"
-            >
-              {admissionResults.map((v) => (
-                <option key={v} value={v}>
-                  {admissionLabels[v]}
-                </option>
-              ))}
-            </RHFSelect>
-          </div>
+              <div className="mt-5">
+                <RHFCheckbox<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="hasAPS"
+                  label="APS completed"
+                />
+              </div>
+            </FieldSet>
 
-          <div className="mt-5 grid gap-5 md:grid-cols-3">
-            <RHFInput
-              control={form.control}
-              name="appliedDate"
-              label="Applied on"
-              type="date"
-            />
-            <RHFInput
-              control={form.control}
-              name="responseDate"
-              label="Response on"
-              type="date"
-            />
-            <RHFInput
-              control={form.control}
-              name="offerDate"
-              label="Offer on"
-              type="date"
-            />
-          </div>
+            <FieldSet className={fieldPanel}>
+              <FieldLegend className="text-lg font-semibold text-[#0d2145]">
+                Outcome
+              </FieldLegend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <RHFInput
+                  control={form.control}
+                  name="intake"
+                  label="Intake"
+                  placeholder="e.g. WS2025 or SS2026"
+                />
+                <RHFSelect<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="result"
+                  label="Result"
+                >
+                  {admissionResults.map((v) => (
+                    <option key={v} value={v}>
+                      {admissionLabels[v]}
+                    </option>
+                  ))}
+                </RHFSelect>
+              </div>
 
-          <div className="mt-5">
-            <RHFTextarea<AcceptanceRecordFormInput>
-              control={form.control}
-              name="notes"
-              label="Notes"
-              placeholder="Visa timeline, scholarship, course thoughts…"
-            />
-          </div>
-        </FieldSet>
+              <div className="mt-5 grid gap-5 lg:grid-cols-3">
+                <RHFInput
+                  control={form.control}
+                  name="appliedDate"
+                  label="Applied on"
+                  type="date"
+                />
+                <RHFInput
+                  control={form.control}
+                  name="responseDate"
+                  label="Response on"
+                  type="date"
+                />
+                <RHFInput
+                  control={form.control}
+                  name="offerDate"
+                  label="Offer on"
+                  type="date"
+                />
+              </div>
 
-        <Button
-          type="submit"
-          size="lg"
-          disabled={form.formState.isSubmitting}
-          className="h-12 w-full rounded-xl bg-[#0d2145] font-semibold text-white shadow-lg shadow-[#0d2145]/20 hover:bg-[#1a3461] sm:w-auto sm:min-w-[200px]"
-        >
-          {form.formState.isSubmitting ? (
-            <span className="inline-flex items-center gap-2">
-              <Loader2 className="size-4 animate-spin" />
-              Submitting…
-            </span>
-          ) : (
-            "Submit acceptance record"
-          )}
-        </Button>
+              <div className="mt-5">
+                <RHFTextarea<AcceptanceRecordFormInput>
+                  control={form.control}
+                  name="notes"
+                  label="Notes"
+                  placeholder="Visa timeline, scholarship, course thoughts…"
+                />
+              </div>
+            </FieldSet>
+          </div>
+        </div>
+
+        <div className="flex w-full flex-col gap-3 border-t border-slate-200/80 pt-8 sm:flex-row sm:items-center sm:justify-end">
+          <Button
+            type="submit"
+            size="lg"
+            disabled={form.formState.isSubmitting}
+            className="h-12 w-full rounded-xl bg-[#0d2145] font-semibold text-white shadow-lg shadow-[#0d2145]/20 hover:bg-[#1a3461] sm:w-auto sm:min-w-[220px]"
+          >
+            {form.formState.isSubmitting ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="size-4 animate-spin" />
+                Submitting…
+              </span>
+            ) : (
+              "Submit acceptance record"
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );

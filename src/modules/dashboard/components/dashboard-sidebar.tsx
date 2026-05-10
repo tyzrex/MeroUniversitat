@@ -16,9 +16,11 @@ import type { DashboardUser } from "@/modules/dashboard/components/dashboard-lay
 import {
   Building2,
   CalendarClock,
+  ClipboardList,
   Database,
   LayoutDashboard,
   Settings,
+  Shield,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -53,6 +55,11 @@ const NAV_ITEMS = [
     icon: Database,
   },
   {
+    title: "My contributions",
+    href: "/dashboard/community-data/submissions",
+    icon: ClipboardList,
+  },
+  {
     title: "Timelines",
     href: "/dashboard/timelines",
     icon: CalendarClock,
@@ -67,6 +74,9 @@ const NAV_ITEMS = [
 function isNavActive(pathname: string, href: string) {
   if (href === "/dashboard") {
     return pathname === "/dashboard";
+  }
+  if (href.startsWith("/admin")) {
+    return pathname.startsWith("/admin");
   }
   if (href.startsWith("/dashboard")) {
     return pathname === href || pathname.startsWith(`${href}/`);
@@ -92,7 +102,18 @@ export function DashboardSidebar({
   const pathname = usePathname();
   const displayName = user?.name ?? "Guest";
   const displayEmail = user?.email ?? "Sign in to continue";
+  const showStaffNav =
+    user?.role === "ADMIN" || user?.role === "MODERATOR";
 
+  const staffNav = showStaffNav
+    ? ([
+        {
+          title: "Admin",
+          href: "/admin/community",
+          icon: Shield,
+        },
+      ] as const)
+    : ([] as const);
   return (
     <Sidebar
       className="border-sidebar-border border-r-0"
@@ -123,6 +144,23 @@ export function DashboardSidebar({
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               {NAV_ITEMS.map((item) => {
+                const active = isNavActive(pathname, item.href);
+                const Icon = item.icon;
+                return (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      className={navButtonClass(active)}
+                      isActive={active}
+                      render={<Link href={item.href} />}
+                      tooltip={item.title}
+                    >
+                      <Icon className="shrink-0" strokeWidth={1.75} />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+              {staffNav.map((item) => {
                 const active = isNavActive(pathname, item.href);
                 const Icon = item.icon;
                 return (

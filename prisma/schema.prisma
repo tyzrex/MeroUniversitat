@@ -70,12 +70,25 @@ enum AdmissionResult {
   PENDING
 }
 
+enum AcceptanceModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum TeamMemberRole {
   OWNER
   ADMIN
   MEMBER
 }
 
+
+/// Singleton row `id = "default"` — global toggles (manual review, etc.).
+model SiteSettings {
+  id                     String   @id
+  acceptanceManualReview Boolean  @default(true)
+  updatedAt              DateTime @updatedAt
+}
 
 model User {
   id            String   @id @default(cuid())
@@ -280,6 +293,7 @@ model AcceptanceRecord {
   isVerified    Boolean         @default(false)
   isDeleted     Boolean         @default(false)
   deletedAt     DateTime?
+  moderationStatus AcceptanceModerationStatus @default(APPROVED)
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
