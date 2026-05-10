@@ -4,26 +4,43 @@ import {
 import { getSimilarPeersForUser } from "@/modules/dashboard/services/peer-matching.service";
 import { UsersRound } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export async function SimilarPeersPanel({
   userId,
-}: Readonly<{ userId: string }>) {
+  variant = "compact",
+}: Readonly<{ userId: string; variant?: "compact" | "fullPage" }>) {
   const result = await getSimilarPeersForUser(userId);
 
   return (
-    <div className={dashboardInsightShellAlt}>
-      <div className="mb-4 flex items-start gap-2">
-        <UsersRound className="size-5 shrink-0 text-[#4a52c8]" strokeWidth={1.8} />
-        <div>
-          <h2 className="text-lg font-bold text-[#0d2145]">
-            Similar applicants (opt-in)
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Peers near your GPA who chose to share schools they track — names only,
-            no documents.
-          </p>
+    <div
+      className={cn(
+        dashboardInsightShellAlt,
+        variant === "fullPage" && "p-6 md:p-8",
+      )}
+    >
+      {variant === "compact" ? (
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-start gap-2">
+            <UsersRound className="size-5 shrink-0 text-[#4a52c8]" strokeWidth={1.8} />
+            <div>
+              <h2 className="text-lg font-bold text-[#0d2145]">
+                Similar applicants (opt-in)
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Peers near your GPA who chose to share schools they track — names only,
+                no documents.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/dashboard/similar-profiles"
+            className="text-sm font-semibold text-[#4a52c8] hover:underline sm:shrink-0"
+          >
+            Open full page →
+          </Link>
         </div>
-      </div>
+      ) : null}
 
       {!result.hasGpa ? (
         <p className="text-sm leading-relaxed text-slate-600">

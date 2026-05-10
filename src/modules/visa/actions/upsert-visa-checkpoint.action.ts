@@ -44,6 +44,7 @@ export async function upsertVisaCheckpointAction(
     });
     revalidatePath("/dashboard/profile");
     revalidatePath("/dashboard/timelines");
+    revalidatePath("/dashboard/visa-journey");
     return { ok: true, data: undefined };
   }
 
@@ -67,5 +68,6 @@ export async function upsertVisaCheckpointAction(
 
   revalidatePath("/dashboard/profile");
   revalidatePath("/dashboard/timelines");
+  revalidatePath("/dashboard/visa-journey");
   return { ok: true, data: undefined };
 }

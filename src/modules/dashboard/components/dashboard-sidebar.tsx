@@ -21,8 +21,10 @@ import {
   Columns3,
   Database,
   LayoutDashboard,
+  Plane,
   Settings,
   Shield,
+  UserSearch,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -79,6 +81,16 @@ const NAV_ITEMS: NavItem[] = [
     href: "/dashboard/timelines",
     icon: CalendarClock,
     badge: "New",
+  },
+  {
+    title: "Visa journey",
+    href: "/dashboard/visa-journey",
+    icon: Plane,
+  },
+  {
+    title: "Similar applicants",
+    href: "/dashboard/similar-profiles",
+    icon: UserSearch,
   },
   {
     title: "Profile",

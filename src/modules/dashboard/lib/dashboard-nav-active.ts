@@ -33,6 +33,10 @@ export function isDashboardNavActive(pathname: string, href: string): boolean {
     return pathname.startsWith("/admin");
   }
 
+  if (href === "/dashboard/profile") {
+    return pathname === "/dashboard/profile";
+  }
+
   if (href.startsWith("/dashboard")) {
     return pathname === href || pathname.startsWith(`${href}/`);
   }

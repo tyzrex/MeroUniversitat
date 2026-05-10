@@ -98,7 +98,7 @@ export function ConsularTimelineView({
           Share
         </Link>
         <Link
-          href="/dashboard/profile#visa-journey"
+          href="/dashboard/visa-journey"
           className={dashboardPrimaryActionClass(
             "inline-flex items-center gap-2 shadow-lg shadow-[#1238da]/25",
           )}
@@ -190,7 +190,7 @@ export function ConsularTimelineView({
               <p className="text-muted-foreground mt-2 text-sm">
                 From milestones on{" "}
                 <Link
-                  href="/dashboard/profile#visa-journey"
+                  href="/dashboard/visa-journey"
                   className="font-semibold text-[#1238da] underline-offset-4 hover:underline"
                 >
                   Profile
@@ -199,7 +199,7 @@ export function ConsularTimelineView({
               </p>
             </div>
             <Link
-              href="/dashboard/profile#visa-journey"
+              href="/dashboard/visa-journey"
               className="text-sm font-semibold text-[#1238da] hover:underline"
             >
               Edit dates
