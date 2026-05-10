@@ -39,13 +39,12 @@ export async function setUserSuspendedAction(
   return { ok: true, data: undefined };
 }
 
+/** Form `action` — must return `void` for Next.js types (errors are no-ops here). */
 export async function toggleUserSuspendedFormAction(
   formData: FormData,
-): Promise<ActionResult<void>> {
+): Promise<void> {
   const userId = String(formData.get("userId") ?? "").trim();
   const suspend = formData.get("suspend") === "true";
-  if (!userId) {
-    return { ok: false, error: "Missing user." };
-  }
-  return setUserSuspendedAction(userId, suspend);
+  if (!userId) return;
+  await setUserSuspendedAction(userId, suspend);
 }

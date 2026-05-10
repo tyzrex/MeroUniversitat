@@ -122,7 +122,6 @@ export function CommunityAcceptanceForm({
       notes: "",
       isAnonymous: false,
       ...profilePrefill,
-      contributorName: defaultContributorName,
     }),
     [defaultContributorName, profilePrefill],
   );

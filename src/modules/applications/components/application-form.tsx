@@ -232,7 +232,9 @@ export function ApplicationForm({
                       <select
                         className="border-input bg-background ring-offset-background flex h-11 w-full rounded-xl border px-4 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={Boolean(lockTeam)}
-                        value={field.value ?? ""}
+                        value={
+                          typeof field.value === "string" ? field.value : ""
+                        }
                         onChange={(e) =>
                           field.onChange(e.target.value || undefined)
                         }
