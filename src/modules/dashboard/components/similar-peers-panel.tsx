@@ -1,6 +1,4 @@
-import {
-  dashboardInsightShellAlt,
-} from "@/modules/dashboard/lib/dashboard-theme";
+import { dashboardInsightShellAlt } from "@/modules/dashboard/lib/dashboard-theme";
 import { getSimilarPeersForUser } from "@/modules/dashboard/services/peer-matching.service";
 import { UsersRound } from "lucide-react";
 import Link from "next/link";
@@ -22,14 +20,17 @@ export async function SimilarPeersPanel({
       {variant === "compact" ? (
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-start gap-2">
-            <UsersRound className="size-5 shrink-0 text-[#4a52c8]" strokeWidth={1.8} />
+            <UsersRound
+              className="size-5 shrink-0 text-[#4a52c8]"
+              strokeWidth={1.8}
+            />
             <div>
               <h2 className="text-lg font-bold text-[#0d2145]">
                 Similar applicants (opt-in)
               </h2>
               <p className="mt-1 text-sm text-slate-500">
-                Peers near your GPA who chose to share schools they track — names only,
-                no documents.
+                Peers near your GPA who chose to share schools they track —
+                names only, no documents.
               </p>
             </div>
           </div>
@@ -74,7 +75,7 @@ export async function SimilarPeersPanel({
           {result.peers.map((p) => (
             <li
               key={p.userId}
-              className="rounded-2xl border border-white/70 bg-white/80 px-4 py-3 shadow-sm ring-1 ring-slate-900/[0.04]"
+              className="rounded-2xl border border-white/70 bg-white/80 px-4 py-3  ring-1 ring-slate-900/[0.04]"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <span className="font-semibold text-[#0d2145]">
