@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { getUniversityBySlug } from "@/modules/community/services/university.service";
 import { Container } from "@/modules/shared/components/container";
 import {
@@ -79,9 +80,13 @@ export default async function UniversityDetailPage({
                   ) : null}
                 </div>
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-                  <div className="flex size-20 shrink-0 items-center justify-center rounded-3xl bg-white text-3xl font-extrabold text-[#0d2145] shadow-lg shadow-black/10">
-                    {uni.name.slice(0, 1).toUpperCase()}
-                  </div>
+                  <UniversityLogo
+                    name={uni.name}
+                    logoUrl={uni.logoUrl}
+                    imageUrl={uni.imageUrl}
+                    size="lg"
+                    className="shadow-lg shadow-black/10"
+                  />
                   <div>
                     <h1 className="text-balance text-3xl font-extrabold tracking-tight md:text-4xl lg:text-5xl">
                       {uni.name}

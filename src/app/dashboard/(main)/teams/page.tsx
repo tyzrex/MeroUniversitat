@@ -1,3 +1,7 @@
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
+import {
+  dashboardOutlineActionClass,
+} from "@/modules/dashboard/lib/dashboard-header-actions";
 import { CreateTeamDialog } from "@/modules/teams/components/create-team-dialog";
 import { JoinTeamDialog } from "@/modules/teams/components/join-team-dialog";
 import { TeamListTable } from "@/modules/teams/components/team-list-table";
@@ -5,6 +9,7 @@ import { listTeamsForUser } from "@/modules/teams/services/team.service";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Columns3, FileText, Users, UsersRound } from "lucide-react";
 import { TeamActivityPanel } from "@/modules/teams/components/team-activity-panel";
 
@@ -57,20 +62,22 @@ export default async function TeamsPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#0d2145] md:text-3xl">
-            Team Management
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500 md:text-base">
-            Manage teams, members, roles, and their shared application pipeline.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <CreateTeamDialog />
-          <JoinTeamDialog />
-        </div>
-      </header>
+      <DashboardPageIntro
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
+        crumbs={[{ label: "Teams" }]}
+        title="Team management"
+        description="Manage teams, members, roles, and their shared application pipeline."
+      >
+        <Link
+          className={dashboardOutlineActionClass()}
+          href="/dashboard/applications/kanban"
+        >
+          <Columns3 className="size-4" strokeWidth={1.8} />
+          Kanban board
+        </Link>
+        <CreateTeamDialog />
+        <JoinTeamDialog />
+      </DashboardPageIntro>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
@@ -114,7 +121,7 @@ function SummaryCard({
   icon,
 }: Readonly<{ label: string; value: number | string; icon?: React.ReactNode }>) {
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/3">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-5 ring-1 ring-slate-900/5">
       <div className="flex items-center gap-4">
         {icon ? (
           <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-50">

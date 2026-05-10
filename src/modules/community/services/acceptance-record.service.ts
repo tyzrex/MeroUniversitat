@@ -75,7 +75,15 @@ export async function listApprovedAcceptanceRecordsPublic(limit = 12) {
     orderBy: { createdAt: "desc" },
     take: limit,
     include: {
-      university: { select: { name: true, city: true, slug: true } },
+      university: {
+        select: {
+          name: true,
+          city: true,
+          slug: true,
+          logoUrl: true,
+          imageUrl: true,
+        },
+      },
     },
   });
 }
@@ -85,7 +93,15 @@ export async function listAcceptanceRecordsForUser(userId: string) {
     where: { userId, isDeleted: false },
     orderBy: { createdAt: "desc" },
     include: {
-      university: { select: { name: true, city: true, slug: true } },
+      university: {
+        select: {
+          name: true,
+          city: true,
+          slug: true,
+          logoUrl: true,
+          imageUrl: true,
+        },
+      },
     },
   });
 }
@@ -101,6 +117,8 @@ export async function getAcceptanceRecordForUser(id: string, userId: string) {
           state: true,
           slug: true,
           website: true,
+          logoUrl: true,
+          imageUrl: true,
         },
       },
       program: {

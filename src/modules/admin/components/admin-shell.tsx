@@ -13,7 +13,7 @@ const links = [
 export function AdminShell({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <div className="min-h-svh bg-[linear-gradient(180deg,#f8fafc_0%,#eef2ff_45%,#f8fafc_100%)]">
-      <header className="sticky top-0 z-30 border-b border-white/70 bg-white/85 shadow-sm backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/70 bg-white/85  backdrop-blur-xl">
         <Container className="flex min-h-16 max-w-[1500px] flex-wrap items-center gap-4 py-3">
           <Link
             className="flex items-center gap-3 rounded-2xl outline-none ring-[#4a52c8]/30 focus-visible:ring-2"

@@ -13,6 +13,7 @@
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "seed:universities": "bun run scripts/seed-universities.ts",
+    "seed:university-logos": "bun run scripts/seed-university-logos.ts",
     "db:migrate:prod": "prisma migrate deploy"
   },
   "dependencies": {

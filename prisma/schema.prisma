@@ -362,7 +362,9 @@ model University {
   website      String?
   ranking      Int?
   description  String?
+  /// Compact logo / icon URL (e.g. square mark for lists and chips).
   logoUrl      String?
+  /// Larger visual / hero image URL; UI may fall back to `logoUrl` when empty.
   imageUrl     String?
   slug         String    @unique
   isPopular    Boolean   @default(false)

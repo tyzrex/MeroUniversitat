@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { cache } from "react";
 
 export async function listTeamsForUser(userId: string) {
   const owned = await db.team.findMany({
@@ -32,7 +33,8 @@ export async function listTeamsForUser(userId: string) {
   return { owned, memberOf };
 }
 
-export async function listTeamOptionsForUser(userId: string) {
+/** Dedupes parallel calls in the same request (e.g. Kanban page + toolbar). */
+export const listTeamOptionsForUser = cache(async (userId: string) => {
   const { owned, memberOf } = await listTeamsForUser(userId);
   const map = new Map<string, { id: string; name: string }>();
   for (const t of owned) {
@@ -42,7 +44,7 @@ export async function listTeamOptionsForUser(userId: string) {
     map.set(m.team.id, { id: m.team.id, name: m.team.name });
   }
   return [...map.values()].sort((a, b) => a.name.localeCompare(b.name));
-}
+});
 
 export async function createTeamForUser(options: {
   userId: string;

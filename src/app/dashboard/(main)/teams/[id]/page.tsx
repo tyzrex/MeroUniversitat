@@ -45,11 +45,16 @@ export default async function TeamDetailPage({
 
   const totalApps = team._count.applications;
   const activity = await listTeamActivityForTeam(team.id, 10);
-  const statusCounts = team.applications.reduce<Record<string, number>>((acc, a) => {
-    acc[a.status] = (acc[a.status] ?? 0) + 1;
-    return acc;
-  }, {});
-  const statusBars = Object.entries(statusCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const statusCounts = team.applications.reduce<Record<string, number>>(
+    (acc, a) => {
+      acc[a.status] = (acc[a.status] ?? 0) + 1;
+      return acc;
+    },
+    {},
+  );
+  const statusBars = Object.entries(statusCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
   const maxCount = Math.max(1, ...statusBars.map(([, v]) => v));
 
   return (
@@ -96,7 +101,9 @@ export default async function TeamDetailPage({
           label="Applications"
           value={totalApps}
           hint="Shared pipeline"
-          icon={<FileText className="size-5 text-[#4a52c8]" strokeWidth={1.8} />}
+          icon={
+            <FileText className="size-5 text-[#4a52c8]" strokeWidth={1.8} />
+          }
         />
         <SummaryCard
           label="Owner"
@@ -222,10 +229,7 @@ export default async function TeamDetailPage({
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <Badge
-                            variant="outline"
-                            className="font-medium"
-                          >
+                          <Badge variant="outline" className="font-medium">
                             {applicationStatusLabel(app.status)}
                           </Badge>
                         </td>
@@ -256,8 +260,13 @@ export default async function TeamDetailPage({
             ) : (
               <ul className="mt-4 space-y-3">
                 {activity.map((it, idx) => (
-                  <li key={`${it.type}-${it.at.toISOString()}-${idx}`} className="text-sm">
-                    <span className="font-semibold text-[#0d2145]">{it.actorName}</span>{" "}
+                  <li
+                    key={`${it.type}-${it.at.toISOString()}-${idx}`}
+                    className="text-sm"
+                  >
+                    <span className="font-semibold text-[#0d2145]">
+                      {it.actorName}
+                    </span>{" "}
                     <span className="text-slate-600">
                       {it.type === "member_joined"
                         ? "joined"
@@ -273,7 +282,10 @@ export default async function TeamDetailPage({
                     ) : null}
                     <span className="text-slate-400"> · </span>
                     <span className="text-xs text-slate-400">
-                      {new Intl.DateTimeFormat("en", { month: "short", day: "numeric" }).format(it.at)}
+                      {new Intl.DateTimeFormat("en", {
+                        month: "short",
+                        day: "numeric",
+                      }).format(it.at)}
                     </span>
                   </li>
                 ))}
@@ -282,12 +294,16 @@ export default async function TeamDetailPage({
           </div>
 
           <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/3">
-            <h3 className="text-lg font-bold text-[#0d2145]">Pipeline snapshot</h3>
+            <h3 className="text-lg font-bold text-[#0d2145]">
+              Pipeline snapshot
+            </h3>
             <p className="mt-1 text-sm text-slate-500">
               Quick distribution of team applications by status.
             </p>
             {statusBars.length === 0 ? (
-              <p className="mt-4 text-sm text-slate-500">No applications yet.</p>
+              <p className="mt-4 text-sm text-slate-500">
+                No applications yet.
+              </p>
             ) : (
               <div className="mt-4 space-y-3">
                 {statusBars.map(([status, count]) => (
@@ -301,7 +317,9 @@ export default async function TeamDetailPage({
                     <div className="mt-1 h-2 rounded-full bg-slate-100">
                       <div
                         className="h-2 rounded-full bg-[#4a52c8]"
-                        style={{ width: `${Math.round((count / maxCount) * 100)}%` }}
+                        style={{
+                          width: `${Math.round((count / maxCount) * 100)}%`,
+                        }}
                       />
                     </div>
                   </div>
@@ -314,7 +332,7 @@ export default async function TeamDetailPage({
             <LeaveTeamButton teamId={team.id} teamName={team.name} />
           ) : null}
 
-          <div className="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-5 text-sm text-slate-600 shadow-sm">
+          <div className="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-5 text-sm text-slate-600 ">
             <p className="font-bold text-[#0d2145]">Team tips</p>
             <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
               <li>Share the invite code with friends to grow your team</li>

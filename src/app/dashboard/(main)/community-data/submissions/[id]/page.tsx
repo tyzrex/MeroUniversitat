@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { getAcceptanceRecordForUser } from "@/modules/community/services/acceptance-record.service";
 import { Container } from "@/modules/shared/components/container";
 import {
@@ -154,9 +155,18 @@ export default async function SubmissionDetailPage({
                   {resultLabel[record.result] ?? record.result}
                 </Badge>
               </div>
-              <h1 className="text-balance text-3xl font-extrabold tracking-tight md:text-4xl">
-                {record.university.name}
-              </h1>
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                <UniversityLogo
+                  name={record.university.name}
+                  logoUrl={record.university.logoUrl}
+                  imageUrl={record.university.imageUrl}
+                  size="lg"
+                  className="shadow-lg shadow-black/10"
+                />
+                <h1 className="text-balance text-3xl font-extrabold tracking-tight md:text-4xl">
+                  {record.university.name}
+                </h1>
+              </div>
               <p className="mt-3 text-lg text-white/80">{programName}</p>
               <p className="mt-2 text-sm font-medium text-white/70">
                 Submitted {formatDate(record.createdAt)} · {record.intake}

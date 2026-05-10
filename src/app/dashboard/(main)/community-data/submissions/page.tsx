@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { listAcceptanceRecordsForUser } from "@/modules/community/services/acceptance-record.service";
 import {
   ArrowRight,
@@ -112,7 +113,7 @@ export default async function MyContributionsPage() {
       </section>
 
       {rows.length === 0 ? (
-        <section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+        <section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
           <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
             <GraduationCap className="size-7" strokeWidth={1.7} />
           </div>
@@ -162,9 +163,13 @@ export default async function MyContributionsPage() {
                   </div>
 
                   <div className="mt-5 flex gap-4">
-                    <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#0d2145] text-lg font-bold text-white shadow-lg shadow-[#0d2145]/15">
-                      {r.university.name.slice(0, 1).toUpperCase()}
-                    </div>
+                    <UniversityLogo
+                      name={r.university.name}
+                      logoUrl={r.university.logoUrl}
+                      imageUrl={r.university.imageUrl}
+                      size="compact"
+                      className="shadow-lg shadow-[#0d2145]/15"
+                    />
                     <div className="min-w-0">
                       <p className="font-bold text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
                         {r.university.name}

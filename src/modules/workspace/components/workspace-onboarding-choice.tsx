@@ -51,7 +51,7 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
           type="button"
           disabled={pending !== null}
           onClick={() => choose("SOLO")}
-          className="group flex flex-col items-start rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm transition-all hover:border-[#4a52c8]/40 hover:shadow-md disabled:opacity-60"
+          className="group flex flex-col items-start rounded-2xl border border-slate-200 bg-white p-6 text-left  transition-all hover:border-[#4a52c8]/40 hover:shadow-md disabled:opacity-60"
         >
           <div className="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-[#4a52c8]">
             {pending === "SOLO" ? (
@@ -60,7 +60,9 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
               <User className="size-6" strokeWidth={1.75} />
             )}
           </div>
-          <h2 className="mt-4 text-lg font-bold text-[#0d2145]">Continue solo</h2>
+          <h2 className="mt-4 text-lg font-bold text-[#0d2145]">
+            Continue solo
+          </h2>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
             Personal application tracker and Kanban. Join a team later if you
             change your mind.
@@ -74,7 +76,7 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
           type="button"
           disabled={pending !== null}
           onClick={() => choose("TEAM")}
-          className="group flex flex-col items-start rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm transition-all hover:border-[#4a52c8]/40 hover:shadow-md disabled:opacity-60"
+          className="group flex flex-col items-start rounded-2xl border border-slate-200 bg-white p-6 text-left  transition-all hover:border-[#4a52c8]/40 hover:shadow-md disabled:opacity-60"
         >
           <div className="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-[#4a52c8]">
             {pending === "TEAM" ? (

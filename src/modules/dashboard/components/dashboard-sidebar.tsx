@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { isDashboardNavActive } from "@/modules/dashboard/lib/dashboard-nav-active";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
@@ -76,19 +77,6 @@ const NAV_ITEMS = [
     icon: Settings,
   },
 ] as const;
-
-function isNavActive(pathname: string, href: string) {
-  if (href === "/dashboard") {
-    return pathname === "/dashboard";
-  }
-  if (href.startsWith("/admin")) {
-    return pathname.startsWith("/admin");
-  }
-  if (href.startsWith("/dashboard")) {
-    return pathname === href || pathname.startsWith(`${href}/`);
-  }
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
 
 function navButtonClass(isActive: boolean) {
   return cn(
@@ -150,7 +138,7 @@ export function DashboardSidebar({
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               {NAV_ITEMS.map((item) => {
-                const active = isNavActive(pathname, item.href);
+                const active = isDashboardNavActive(pathname, item.href);
                 const Icon = item.icon;
                 return (
                   <SidebarMenuItem key={item.href}>
@@ -167,7 +155,7 @@ export function DashboardSidebar({
                 );
               })}
               {staffNav.map((item) => {
-                const active = isNavActive(pathname, item.href);
+                const active = isDashboardNavActive(pathname, item.href);
                 const Icon = item.icon;
                 return (
                   <SidebarMenuItem key={item.href}>

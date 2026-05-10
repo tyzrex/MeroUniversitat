@@ -24,9 +24,9 @@ export function DashboardLayoutClient({
   return (
     <SidebarProvider defaultOpen className="dashboard-shell min-h-svh">
       <DashboardSidebar user={user} />
-      <SidebarInset className="bg-[linear-gradient(180deg,#f8fafc_0%,#eef2ff_45%,#f8fafc_100%)]">
+      <SidebarInset className="min-w-0 bg-[linear-gradient(180deg,#f8fafc_0%,#eef2ff_45%,#f8fafc_100%)]">
         <DashboardHeader user={user} />
-        <div className="flex flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
           {children}
         </div>
       </SidebarInset>

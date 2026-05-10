@@ -1,8 +1,8 @@
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { listApprovedAcceptanceRecordsPublic } from "@/modules/community/services/acceptance-record.service";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Container } from "@/modules/shared/components/container";
 import { ArrowRight, Database } from "lucide-react";
 import Link from "next/link";
 
@@ -20,7 +20,7 @@ export async function PublicAcceptanceFeed() {
   if (rows.length === 0) {
     return (
       <section className="pt-4">
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
           <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
             <Database className="size-7" strokeWidth={1.8} />
           </div>
@@ -96,15 +96,26 @@ export async function PublicAcceptanceFeed() {
                   strokeWidth={1.9}
                 />
               </div>
-              <p className="mt-4 font-bold text-[#0d2145]">
-                <Link
-                  className="hover:text-primary underline-offset-4 hover:underline"
-                  href={`/universities/${r.university.slug}`}
-                >
-                  {r.university.name}
-                </Link>
-              </p>
-              <p className="text-muted-foreground mt-1 text-sm">{program}</p>
+              <div className="mt-4 flex gap-3">
+                <UniversityLogo
+                  name={r.university.name}
+                  logoUrl={r.university.logoUrl}
+                  imageUrl={r.university.imageUrl}
+                  size="md"
+                  className="shadow-md shadow-black/5"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-bold text-[#0d2145]">
+                    <Link
+                      className="hover:text-primary underline-offset-4 hover:underline"
+                      href={`/universities/${r.university.slug}`}
+                    >
+                      {r.university.name}
+                    </Link>
+                  </p>
+                  <p className="text-muted-foreground mt-1 text-sm">{program}</p>
+                </div>
+              </div>
               <div className="text-muted-foreground mt-5 grid grid-cols-2 gap-2 border-t border-slate-100 pt-5 text-xs">
                 <span>GPA: {gpaStr}</span>
                 <span>%: {pctStr}</span>

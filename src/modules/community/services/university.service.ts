@@ -6,6 +6,8 @@ export type UniversitySearchRow = {
   name: string;
   city: string;
   slug: string;
+  logoUrl: string | null;
+  imageUrl: string | null;
 };
 
 export async function searchUniversities(options: {
@@ -26,7 +28,14 @@ export async function searchUniversities(options: {
       : undefined,
     orderBy: { name: "asc" },
     take: limit,
-    select: { id: true, name: true, city: true, slug: true },
+    select: {
+      id: true,
+      name: true,
+      city: true,
+      slug: true,
+      logoUrl: true,
+      imageUrl: true,
+    },
   });
 }
 
@@ -58,6 +67,7 @@ export async function listUniversitiesDirectory(options: {
       ranking: true,
       description: true,
       logoUrl: true,
+      imageUrl: true,
       isPopular: true,
       _count: { select: { programs: true } },
     },

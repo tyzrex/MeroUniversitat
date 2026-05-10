@@ -1,5 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { listUniversitiesDirectory } from "@/modules/community/services/university.service";
 import { Container } from "@/modules/shared/components/container";
 import { ArrowRight, Building2, MapPin, Search } from "lucide-react";
@@ -82,7 +83,7 @@ export default async function UniversitiesDirectoryPage({
         </form>
 
         {universities.length === 0 ? (
-          <section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+          <section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
             <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
               <Search className="size-7" strokeWidth={1.8} />
             </div>
@@ -104,9 +105,13 @@ export default async function UniversitiesDirectoryPage({
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex gap-4">
-                      <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[#0d2145] text-xl font-bold text-white shadow-lg shadow-[#0d2145]/15">
-                        {u.name.slice(0, 1).toUpperCase()}
-                      </div>
+                      <UniversityLogo
+                        name={u.name}
+                        logoUrl={u.logoUrl}
+                        imageUrl={u.imageUrl}
+                        size="md"
+                        className="shadow-lg shadow-[#0d2145]/15"
+                      />
                       <div className="min-w-0">
                         <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
                           {u.name}

@@ -1,9 +1,11 @@
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
+import {
+  dashboardOutlineActionClass,
+  dashboardPrimaryActionClass,
+} from "@/modules/dashboard/lib/dashboard-header-actions";
 import { getDashboardStats } from "@/modules/dashboard/services/dashboard-stats.service";
 import { applicationStatusLabel } from "@/modules/applications/lib/application-status-labels";
-import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -37,25 +39,20 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
         crumbs={[{ label: "Overview" }]}
         title="Your Germany application hub"
         description="Keep your applications, university research, timelines, and community contributions in one workspace. Use the sidebar to jump between tools."
       >
         <Link
-          className={cn(
-            buttonVariants({ size: "lg" }),
-            "h-11 rounded-xl bg-[#0d2145] text-white shadow-md hover:bg-[#1a3461]",
-          )}
+          className={dashboardPrimaryActionClass()}
           href="/dashboard/applications/new"
         >
           <Plus className="size-4" strokeWidth={1.8} />
           New application
         </Link>
         <Link
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            "h-11 rounded-xl border-slate-200 bg-white hover:bg-slate-50",
-          )}
+          className={dashboardOutlineActionClass()}
           href="/dashboard/applications/kanban"
         >
           <Columns3 className="size-4" strokeWidth={1.8} />
@@ -111,7 +108,7 @@ export default async function DashboardPage() {
 
       {/* Status breakdown (if user has applications) */}
       {stats.statusBreakdown.length > 0 ? (
-        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03]">
+        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-[#0d2145]">
@@ -148,10 +145,10 @@ export default async function DashboardPage() {
 
       {/* Team awareness banner */}
       {stats.workspacePreference === "SOLO" && stats.teamCount === 0 ? (
-        <section className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 shadow-sm">
+        <section className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 ring-1 ring-blue-100/80">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white text-[#4a52c8] shadow-sm">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/80 bg-white text-[#4a52c8] ring-1 ring-slate-200/60">
                 <UsersRound className="size-6" strokeWidth={1.8} />
               </div>
               <div>
@@ -168,20 +165,14 @@ export default async function DashboardPage() {
             <div className="flex shrink-0 gap-2">
               <Link
                 href="/dashboard/teams"
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "h-11 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]",
-                )}
+                className={dashboardPrimaryActionClass("gap-2")}
               >
                 <Users className="size-4" strokeWidth={1.8} />
                 Create team
               </Link>
               <Link
                 href="/dashboard/teams"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-11 rounded-xl border-slate-200 bg-white hover:bg-slate-50",
-                )}
+                className={dashboardOutlineActionClass("gap-2")}
               >
                 <KeyRound className="size-4" strokeWidth={1.8} />
                 Join with code
@@ -205,7 +196,7 @@ export default async function DashboardPage() {
           {quickActions.map(({ description, href, icon: Icon, title }) => (
             <Link
               key={href}
-              className="group rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
+              className="group rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 transition-colors hover:border-[#4a52c8]/30 hover:bg-slate-50/50"
               href={href}
             >
               <div className="flex items-start justify-between gap-4">
@@ -298,7 +289,7 @@ function MetricCard({
   hint: string;
 }>) {
   return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.03]">
+    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 ring-1 ring-slate-900/5">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-slate-500">{label}</p>

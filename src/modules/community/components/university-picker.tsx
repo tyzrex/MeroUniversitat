@@ -1,36 +1,52 @@
 "use client";
 
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { FormInput } from "@/modules/shared/components/form-input";
 import { searchUniversitiesAction } from "@/modules/community/actions/search-universities.action";
 import { Building2, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type Uni = { id: string; name: string; city: string };
+type Uni = {
+  id: string;
+  name: string;
+  city: string;
+  logoUrl: string | null;
+  imageUrl: string | null;
+};
+
+type PickMeta = { label: string; logoSrc: string | null };
 
 export function UniversityPicker({
   value,
   onChange,
   initialLabel,
+  initialLogoUrl,
 }: Readonly<{
   value: string;
   onChange: (id: string) => void;
-  /** When `value` is preset (e.g. deep link), show this instead of “University selected”. */
+  /** When `value` is preset (e.g. edit page), show this instead of “University selected”. */
   initialLabel?: string;
+  /** Resolved logo URL when `value` is preset (logo preferred over hero image in callers). */
+  initialLogoUrl?: string | null;
 }>) {
   const [query, setQuery] = useState("");
-  const [pickedLabel, setPickedLabel] = useState(initialLabel ?? "");
+  const [picked, setPicked] = useState<PickMeta | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<Uni[]>([]);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const displayLabel = value ? pickedLabel || "University selected" : "";
+  const displayLabel = value
+    ? picked?.label ?? initialLabel ?? "University selected"
+    : "";
 
-  useEffect(() => {
-    if (value && initialLabel) {
-      setPickedLabel(initialLabel);
-    }
-  }, [value, initialLabel]);
+  const logoSrc =
+    value != null && value !== ""
+      ? (picked?.logoSrc ?? initialLogoUrl ?? null)
+      : null;
+
+  const nameForLogo =
+    displayLabel.split(/\s—\s/)[0]?.trim() || "University";
 
   const fetchList = useCallback(async (q: string) => {
     setLoading(true);
@@ -61,13 +77,21 @@ export function UniversityPicker({
     <div ref={rootRef} className="relative">
       {value ? (
         <div className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm">
-          <span className="font-medium text-slate-900">{displayLabel}</span>
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <UniversityLogo
+              name={nameForLogo}
+              logoUrl={logoSrc}
+              size="xs"
+              className="shadow-md shadow-black/5"
+            />
+            <span className="font-medium text-slate-900">{displayLabel}</span>
+          </div>
           <button
             type="button"
             className="text-primary shrink-0 text-sm font-semibold"
             onClick={() => {
               onChange("");
-              setPickedLabel("");
+              setPicked(null);
               setQuery("");
             }}
           >
@@ -103,18 +127,30 @@ export function UniversityPicker({
                 <li key={u.id} role="option" aria-selected={value === u.id}>
                   <button
                     type="button"
-                    className="hover:bg-muted flex w-full px-3 py-2.5 text-left text-sm"
+                    className="hover:bg-muted flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => {
                       onChange(u.id);
-                      setPickedLabel(`${u.name} — ${u.city}`);
+                      setPicked({
+                        label: `${u.name} — ${u.city}`,
+                        logoSrc: u.logoUrl ?? u.imageUrl ?? null,
+                      });
                       setQuery("");
                       setOpen(false);
                     }}
                   >
-                    <span className="font-medium">{u.name}</span>
-                    <span className="text-muted-foreground ml-2 text-xs">
-                      {u.city}
+                    <UniversityLogo
+                      name={u.name}
+                      logoUrl={u.logoUrl}
+                      imageUrl={u.imageUrl}
+                      size="xs"
+                      className="shadow-sm"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="font-medium">{u.name}</span>
+                      <span className="text-muted-foreground ml-2 text-xs">
+                        {u.city}
+                      </span>
                     </span>
                   </button>
                 </li>

@@ -208,7 +208,7 @@ export function TeamListTable({ rows }: Readonly<{ rows: TeamRow[] }>) {
                         <div className="flex items-center gap-3">
                           <span
                             className={cn(
-                              "flex size-10 items-center justify-center rounded-md text-xs font-extrabold shadow-sm",
+                              "flex size-10 items-center justify-center rounded-md text-xs font-extrabold ",
                               tone.chip,
                             )}
                             aria-hidden

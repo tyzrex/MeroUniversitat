@@ -44,6 +44,7 @@ export function ApplicationForm({
   teamOptions,
   defaultValues,
   universityInitialLabel,
+  universityInitialLogoUrl,
   mirrorTeammateName,
   lockTeam,
 }: Readonly<{
@@ -51,6 +52,7 @@ export function ApplicationForm({
   teamOptions: { id: string; name: string }[];
   defaultValues: Partial<FormValues>;
   universityInitialLabel?: string;
+  universityInitialLogoUrl?: string | null;
   mirrorTeammateName?: string;
   lockTeam?: boolean;
 }>) {
@@ -179,6 +181,7 @@ export function ApplicationForm({
                     <FormControl>
                       <UniversityPicker
                         initialLabel={universityInitialLabel}
+                        initialLogoUrl={universityInitialLogoUrl}
                         value={field.value ?? ""}
                         onChange={field.onChange}
                       />

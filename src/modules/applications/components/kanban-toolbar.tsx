@@ -2,139 +2,137 @@
 
 import type { KanbanViewMode } from "@/modules/applications/components/applications-kanban-board";
 import { cn } from "@/lib/utils";
-import { Layers, LayoutGrid, Filter } from "lucide-react";
+import { Building2, LayoutGrid, SlidersHorizontal, User, Users } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 const BASE = "/dashboard/applications/kanban";
 
 type TeamOption = { id: string; name: string };
 
+const VIEW_TABS: {
+  id: KanbanViewMode;
+  label: string;
+  icon?: React.ReactNode;
+}[] = [
+  {
+    id: "board",
+    label: "Board",
+    icon: <LayoutGrid className="size-4" strokeWidth={1.8} />,
+  },
+  {
+    id: "university",
+    label: "University",
+    icon: <Building2 className="size-4" strokeWidth={1.8} />,
+  },
+  {
+    id: "member",
+    label: "Member",
+    icon: <User className="size-4" strokeWidth={1.8} />,
+  },
+  {
+    id: "team",
+    label: "Team",
+    icon: <Users className="size-4" strokeWidth={1.8} />,
+  },
+  { id: "solo", label: "Solo" },
+];
+
 function buildHref(opts: {
   view: KanbanViewMode;
-  compact: boolean;
   teamId: string;
   nextView?: KanbanViewMode;
-  nextCompact?: boolean;
   nextTeamId?: string;
 }) {
   const view = opts.nextView ?? opts.view;
-  const compact = opts.nextCompact ?? opts.compact;
   const teamId = opts.nextTeamId ?? opts.teamId;
   const params = new URLSearchParams();
   if (view !== "board") params.set("view", view);
-  if (compact) params.set("compact", "1");
-  if (teamId) params.set("team", teamId);
+  if (view !== "solo" && teamId) params.set("team", teamId);
   const q = params.toString();
   return q ? `${BASE}?${q}` : BASE;
 }
 
 export function KanbanToolbar({
-  compact,
   view,
   teamId,
   teamOptions,
-  teamLabel,
 }: Readonly<{
-  compact: boolean;
   view: KanbanViewMode;
   teamId?: string;
   teamOptions?: TeamOption[];
-  teamLabel?: string;
 }>) {
+  const router = useRouter();
+  const [, startTransition] = useTransition();
   const currentTeam = teamId ?? "";
 
   const tabClass = (active: boolean) =>
     cn(
-      "inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors",
+      "inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors sm:px-4",
       active
-        ? "bg-[#0d2145] text-white shadow-md"
-        : "text-muted-foreground hover:bg-slate-50",
+        ? "bg-[#0d2145] text-white hover:bg-[#1a3461]"
+        : "text-slate-600 hover:bg-slate-50",
     );
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-      <div className="flex flex-wrap items-center gap-3">
-        {/* View tabs */}
-        <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+    <div
+      id="kanban-toolbar-panel"
+      className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between"
+    >
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2">
+        {VIEW_TABS.map((tab) => (
           <Link
-            className={tabClass(view === "board")}
-            href={buildHref({ view, compact, teamId: currentTeam, nextView: "board" })}
+            key={tab.id}
+            className={tabClass(view === tab.id)}
+            href={buildHref({
+              view,
+              teamId: currentTeam,
+              nextView: tab.id,
+              nextTeamId: tab.id === "solo" ? "" : currentTeam,
+            })}
+            prefetch={false}
           >
-            <LayoutGrid className="size-4 opacity-90" strokeWidth={1.8} />
-            Board
+            {tab.icon}
+            {tab.label}
           </Link>
-          <Link
-            className={tabClass(view === "university")}
-            href={buildHref({ view, compact, teamId: currentTeam, nextView: "university" })}
+        ))}
+      </div>
+
+      {teamOptions && teamOptions.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+          <SlidersHorizontal
+            className="size-4 shrink-0 text-slate-400"
+            strokeWidth={1.8}
+            aria-hidden
+          />
+          <label className="sr-only" htmlFor="kanban-team-filter">
+            Team filter
+          </label>
+          <select
+            id="kanban-team-filter"
+            value={view === "solo" ? "" : currentTeam}
+            disabled={view === "solo"}
+            onChange={(e) => {
+              const nextTeam = e.target.value;
+              const href = buildHref({
+                view: view === "solo" ? "board" : view,
+                teamId: currentTeam,
+                nextTeamId: nextTeam,
+              });
+              startTransition(() => router.push(href));
+            }}
+            className="h-10 min-w-[200px] rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#4a52c8]/25 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            By university
-          </Link>
-          <Link
-            className={tabClass(view === "member")}
-            href={buildHref({ view, compact, teamId: currentTeam, nextView: "member" })}
-          >
-            By member
-          </Link>
+            <option value="">All teams</option>
+            {teamOptions.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
         </div>
-
-        {/* Team filter */}
-        {teamOptions && teamOptions.length > 0 ? (
-          <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
-            <Filter className="ml-2 size-4 text-slate-400" strokeWidth={1.8} />
-            <select
-              value={currentTeam}
-              onChange={(e) => {
-                const href = buildHref({
-                  view,
-                  compact,
-                  teamId: currentTeam,
-                  nextTeamId: e.target.value,
-                });
-                window.location.href = href;
-              }}
-              className="h-10 rounded-xl border-0 bg-transparent px-2 text-sm font-semibold text-slate-700 outline-none"
-            >
-              <option value="">All applications</option>
-              {teamOptions.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        ) : null}
-      </div>
-
-      {/* Density toggle */}
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
-        <span className="px-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
-          Density
-        </span>
-        <Link
-          className={cn(
-            "inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors",
-            !compact
-              ? "bg-slate-900 text-white shadow-sm"
-              : "text-muted-foreground hover:bg-slate-50",
-          )}
-          href={buildHref({ view, compact, teamId: currentTeam, nextCompact: false })}
-        >
-          Comfortable
-        </Link>
-        <Link
-          className={cn(
-            "inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors",
-            compact
-              ? "bg-slate-900 text-white shadow-sm"
-              : "text-muted-foreground hover:bg-slate-50",
-          )}
-          href={buildHref({ view, compact, teamId: currentTeam, nextCompact: true })}
-          title="Merge same university & program in one lane with avatars"
-        >
-          <Layers className="size-4 opacity-90" strokeWidth={1.8} />
-          Compact / team stack
-        </Link>
-      </div>
+      ) : null}
     </div>
   );
 }

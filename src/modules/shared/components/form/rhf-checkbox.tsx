@@ -48,7 +48,7 @@ export function RHFCheckbox<T extends FieldValues>({
               onBlur={field.onBlur}
               ref={field.ref}
               name={field.name}
-              className="border-input text-primary focus-visible:ring-ring mt-1 size-4 shrink-0 rounded border shadow-sm focus-visible:ring-2 focus-visible:outline-none"
+              className="border-input text-primary focus-visible:ring-ring mt-1 size-4 shrink-0 rounded border  focus-visible:ring-2 focus-visible:outline-none"
             />
           </FormControl>
           <div className="grid gap-1.5 leading-snug">

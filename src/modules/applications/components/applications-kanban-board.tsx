@@ -1,12 +1,10 @@
 "use client";
 
+import { ApplicationStatusPill } from "@/modules/applications/components/application-status-pill";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { updateApplicationStatusAction } from "@/modules/applications/actions/update-application-status.action";
-import {
-  APPLICATION_STATUS_LABELS,
-  applicationStatusLabel,
-} from "@/modules/applications/lib/application-status-labels";
+import { APPLICATION_STATUS_LABELS } from "@/modules/applications/lib/application-status-labels";
 import {
   type KanbanBoardCard,
   type KanbanColumnId,
@@ -18,8 +16,10 @@ import {
   APPLICATION_STATUSES,
   type ApplicationStatusValue,
 } from "@/modules/applications/schema/application-form-schema";
+import { UniversityLogo } from "@/modules/community/components/university-logo";
 import Image from "next/image";
 import Link from "next/link";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   type ReactNode,
@@ -29,65 +29,45 @@ import {
   useTransition,
 } from "react";
 
-export type KanbanViewMode = "board" | "university" | "member";
+export type KanbanViewMode =
+  | "board"
+  | "university"
+  | "member"
+  | "team"
+  | "solo";
 
 type Props = {
   cards: KanbanBoardCard[];
   currentUserId: string;
   view: KanbanViewMode;
-  /** Merge duplicate uni+program rows with avatar strip (board view). */
-  compact: boolean;
 };
 
 const MIME = "application/x-mero-application-id";
 
 const selectClass =
-  "border-input bg-background w-full rounded-lg border px-2 py-1.5 text-[11px] font-medium shadow-xs focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none";
+  "border-input bg-background w-full rounded-lg border px-2 py-1.5 text-[11px] font-medium focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none";
 
 const selectClassMinimal =
-  "border-input bg-background max-w-[140px] rounded-lg border px-2 py-1 text-[10px] font-medium shadow-xs focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none";
+  "border-input bg-background max-w-[160px] rounded-lg border px-2 py-1 text-[10px] font-medium focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none";
 
-function clusterKey(card: KanbanBoardCard) {
-  return `${card.universityName.trim()}\n${card.programLabel.trim()}`;
+const DEFAULT_COUNTRY = "Germany";
+
+function emptyBuckets(): Record<KanbanColumnId, KanbanBoardCard[]> {
+  const next = {} as Record<KanbanColumnId, KanbanBoardCard[]>;
+  for (const col of KANBAN_COLUMNS) {
+    next[col.id] = [];
+  }
+  return next;
 }
 
-function bucketColumnItems(
-  items: KanbanBoardCard[],
-  compact: boolean,
-): { key: string; cards: KanbanBoardCard[] }[] {
-  if (!compact) {
-    return items.map((c) => ({ key: c.id, cards: [c] }));
-  }
-  const m = new Map<string, KanbanBoardCard[]>();
-  for (const c of items) {
-    const k = clusterKey(c);
-    const arr = m.get(k) ?? [];
-    arr.push(c);
-    m.set(k, arr);
-  }
-  return [...m.entries()].map(([key, cards]) => ({ key, cards }));
-}
-
-export function ApplicationsKanbanBoard({
-  cards,
-  currentUserId,
-  view,
-  compact,
-}: Props) {
+export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [dropTarget, setDropTarget] = useState<KanbanColumnId | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const dense = compact;
-
   const buckets = useMemo(() => {
-    const next: Record<KanbanColumnId, KanbanBoardCard[]> = {
-      research: [],
-      prepare: [],
-      pipeline: [],
-      outcome: [],
-    };
+    const next = emptyBuckets();
     for (const c of cards) {
       next[statusToKanbanColumn(c.status)].push(c);
     }
@@ -116,6 +96,26 @@ export function ApplicationsKanbanBoard({
       .map(([userId, items]) => ({
         userId,
         label: items[0]?.ownerName ?? "Member",
+        items,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [cards]);
+
+  const byTeam = useMemo(() => {
+    const m = new Map<string, KanbanBoardCard[]>();
+    for (const c of cards) {
+      const key = c.teamId ?? "__personal__";
+      const arr = m.get(key) ?? [];
+      arr.push(c);
+      m.set(key, arr);
+    }
+    return [...m.entries()]
+      .map(([key, items]) => ({
+        key,
+        label:
+          key === "__personal__"
+            ? "Personal / solo"
+            : (items[0]?.teamLabel ?? "Team"),
         items,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
@@ -166,29 +166,13 @@ export function ApplicationsKanbanBoard({
             <EmptyKanban />
           ) : (
             byUniversity.map(([uni, items]) => (
-              <section
+              <UniversityGroupSection
                 key={uni}
-                className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/5"
-              >
-                <h2 className="border-b border-slate-100 pb-4 text-lg font-bold text-[#0d2145]">
-                  {uni}
-                  <span className="text-muted-foreground ml-2 text-sm font-semibold">
-                    {items.length} application{items.length === 1 ? "" : "s"}
-                  </span>
-                </h2>
-                <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {items.map((a) => (
-                    <KanbanApplicationCard
-                      key={a.id}
-                      card={a}
-                      currentUserId={currentUserId}
-                      draggable={false}
-                      variant={dense ? "minimal" : "full"}
-                      onStatusChange={runStatusUpdate}
-                    />
-                  ))}
-                </div>
-              </section>
+                title={uni}
+                items={items}
+                currentUserId={currentUserId}
+                onStatusChange={runStatusUpdate}
+              />
             ))
           )}
         </div>
@@ -206,22 +190,60 @@ export function ApplicationsKanbanBoard({
             byMember.map(({ userId, label, items }) => (
               <section
                 key={userId}
-                className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/5"
+                className="rounded-2xl border border-slate-200 bg-white p-6"
               >
                 <h2 className="border-b border-slate-100 pb-4 text-lg font-bold text-[#0d2145]">
                   {label}
                   <span className="text-muted-foreground ml-2 text-sm font-semibold">
-                    {items.length} row{items.length === 1 ? "" : "s"}
+                    {items.length} application{items.length === 1 ? "" : "s"}
                   </span>
                 </h2>
-                <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {items.map((a) => (
                     <KanbanApplicationCard
                       key={a.id}
                       card={a}
                       currentUserId={currentUserId}
                       draggable={false}
-                      variant={dense ? "minimal" : "full"}
+                      variant="full"
+                      onStatusChange={runStatusUpdate}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))
+          )}
+        </div>
+      </KanbanShell>
+    );
+  }
+
+  if (view === "team") {
+    return (
+      <KanbanShell error={error}>
+        <div className="flex flex-col gap-8">
+          {byTeam.length === 0 ? (
+            <EmptyKanban />
+          ) : (
+            byTeam.map(({ key, label, items }) => (
+              <section
+                key={key}
+                className="rounded-2xl border border-slate-200 bg-white p-6"
+              >
+                <h2 className="border-b border-slate-100 pb-4 text-lg font-bold text-[#0d2145]">
+                  {label}
+                  <span className="text-muted-foreground ml-2 text-sm font-semibold">
+                    {items.length} application{items.length === 1 ? "" : "s"}
+                  </span>
+                </h2>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {items.map((a) => (
+                    <KanbanApplicationCard
+                      key={a.id}
+                      card={a}
+                      currentUserId={currentUserId}
+                      draggable={false}
+                      variant="full"
                       onStatusChange={runStatusUpdate}
                     />
                   ))}
@@ -236,161 +258,165 @@ export function ApplicationsKanbanBoard({
 
   return (
     <KanbanShell error={error}>
-      <section className="grid gap-4 lg:grid-cols-4">
-        {KANBAN_COLUMNS.map((col) => {
-          const items = buckets[col.id];
-          const isDropTarget = dropTarget === col.id;
-          const groups = bucketColumnItems(items, compact);
+      <div className="w-full min-w-0 max-w-full">
+        <div className="overflow-x-auto overscroll-x-contain pb-2 [-webkit-overflow-scrolling:touch]">
+          <section className="flex w-max gap-4 pb-2">
+            {KANBAN_COLUMNS.map((col) => {
+              const items = buckets[col.id];
+              const isDropTarget = dropTarget === col.id;
 
-          return (
-            <div
-              key={col.id}
-              className={cn(
-                "flex min-h-[280px] flex-col rounded-2xl border bg-white/90 p-3 shadow-sm transition-colors sm:min-h-[320px] sm:p-4",
-                isDropTarget
-                  ? "border-primary ring-primary/30 ring-2"
-                  : "border-slate-200/90",
-              )}
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "move";
-                setDropTarget(col.id);
-              }}
-              onDragLeave={(e) => {
-                const next = e.relatedTarget as Node | null;
-                if (next && e.currentTarget.contains(next)) return;
-                setDropTarget((d) => (d === col.id ? null : d));
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                setDropTarget(null);
-                const id = e.dataTransfer.getData(MIME);
-                if (id) {
-                  runMove(id, col.id);
-                }
-              }}
-            >
-              <div className="mb-3 flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className={cn("size-2 shrink-0 rounded-full", col.dot)} />
-                    <h2 className="font-semibold text-[#0d2145]">{col.title}</h2>
-                  </div>
-                  <p className="text-muted-foreground mt-1 text-[11px] leading-snug">
-                    {col.statusHint}
-                  </p>
-                </div>
-                <span className="text-muted-foreground shrink-0 text-xs font-medium">
-                  {items.length}
-                </span>
-              </div>
-              <ul className="flex flex-1 flex-col gap-2 overflow-y-auto">
-                {items.length === 0 ? (
-                  <li className="text-muted-foreground rounded-xl border border-dashed border-slate-200 bg-slate-50/80 p-4 text-center text-xs">
-                    Drop cards here
-                  </li>
-                ) : (
-                  groups.map(({ key, cards: groupCards }) =>
-                    groupCards.length === 1 ? (
-                      <li key={groupCards[0].id} className="list-none">
-                        <KanbanApplicationCard
-                          card={groupCards[0]}
-                          currentUserId={currentUserId}
-                          draggable
-                          variant={compact ? "minimal" : "full"}
-                          onStatusChange={runStatusUpdate}
+              return (
+                <div
+                  key={col.id}
+                  className={cn(
+                    "flex min-h-[400px] max-h-[min(86vh,920px)] w-[min(94vw,340px)] shrink-0 flex-col overflow-hidden rounded-xl border bg-white p-3 transition-colors sm:w-[310px] lg:w-[328px] xl:w-[360px]",
+                    isDropTarget
+                      ? "border-[#4a52c8] ring-2 ring-[#4a52c8]/25"
+                      : "border-slate-200",
+                  )}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                    setDropTarget(col.id);
+                  }}
+                  onDragLeave={(e) => {
+                    const next = e.relatedTarget as Node | null;
+                    if (next && e.currentTarget.contains(next)) return;
+                    setDropTarget((d) => (d === col.id ? null : d));
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setDropTarget(null);
+                    const id = e.dataTransfer.getData(MIME);
+                    if (id) {
+                      runMove(id, col.id);
+                    }
+                  }}
+                >
+                  <div className="mb-3 shrink-0 flex items-start justify-between gap-2 border-b border-slate-100 pb-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={cn(
+                            "size-2 shrink-0 rounded-full",
+                            col.dot,
+                          )}
                         />
+                        <h2 className="text-sm font-semibold text-[#0d2145]">
+                          {col.title}
+                        </h2>
+                      </div>
+                      <p className="text-muted-foreground mt-1 text-[10px] leading-snug">
+                        {col.statusHint}
+                      </p>
+                    </div>
+                    <span className="text-muted-foreground shrink-0 text-xs font-semibold tabular-nums">
+                      {items.length}
+                    </span>
+                  </div>
+                  <ul className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch]">
+                    {items.length === 0 ? (
+                      <li className="text-muted-foreground rounded-lg border border-dashed border-slate-200 bg-slate-50/50 p-4 text-center text-xs">
+                        Drop cards here
                       </li>
                     ) : (
-                      <li key={key} className="list-none">
-                        <KanbanCluster
-                          cards={groupCards}
-                          currentUserId={currentUserId}
-                          onStatusChange={runStatusUpdate}
-                        />
-                      </li>
-                    ),
-                  )
-                )}
-              </ul>
-            </div>
-          );
-        })}
-      </section>
+                      items.map((card) => (
+                        <li key={card.id} className="list-none">
+                          <KanbanApplicationCard
+                            boardCard
+                            card={card}
+                            currentUserId={currentUserId}
+                            draggable
+                            variant="full"
+                            onStatusChange={runStatusUpdate}
+                          />
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+              );
+            })}
+          </section>
+        </div>
+      </div>
     </KanbanShell>
   );
 }
 
-function KanbanCluster({
-  cards,
+function UniversityGroupSection({
+  title,
+  items,
   currentUserId,
   onStatusChange,
 }: Readonly<{
-  cards: KanbanBoardCard[];
+  title: string;
+  items: KanbanBoardCard[];
   currentUserId: string;
   onStatusChange: (id: string, status: ApplicationStatusValue) => void;
 }>) {
   const owners = useMemo(() => {
     const map = new Map<string, KanbanBoardCard>();
-    for (const c of cards) {
+    for (const c of items) {
       if (!map.has(c.userId)) map.set(c.userId, c);
     }
     return [...map.values()].sort((a, b) =>
       a.ownerName.localeCompare(b.ownerName),
     );
-  }, [cards]);
+  }, [items]);
 
-  const statuses = useMemo(() => new Set(cards.map((c) => c.status)), [cards]);
-  const statusSummary =
-    statuses.size === 1
-      ? applicationStatusLabel([...statuses][0])
-      : `${statuses.size} stages`;
-
-  const first = cards[0];
+  const leadLogo = items[0]?.logoUrl ?? null;
+  const leadName = title;
 
   return (
-    <div className="rounded-xl border border-slate-200/90 bg-gradient-to-b from-slate-50/90 to-white p-2 shadow-sm">
-      <div className="flex items-start justify-between gap-2 border-b border-slate-100/90 pb-2">
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold text-[#0d2145]">
-            {first.universityName}
-          </p>
-          <p className="truncate text-[11px] text-muted-foreground">
-            {first.programLabel}
-          </p>
+    <section className="rounded-2xl border border-slate-200 bg-white p-6">
+      <div className="flex flex-col gap-4 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <UniversityLogo
+            name={leadName}
+            logoUrl={leadLogo}
+            size="compact"
+          />
+          <div className="min-w-0">
+            <h2 className="text-lg font-bold text-[#0d2145]">{title}</h2>
+            <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+              <span aria-hidden>🇩🇪</span>
+              {DEFAULT_COUNTRY}
+              <span className="text-muted-foreground/80">
+                · {items.length} application{items.length === 1 ? "" : "s"}
+              </span>
+            </p>
+          </div>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-1.5">
+        <div className="flex shrink-0 items-center gap-1">
+          <span className="text-muted-foreground mr-2 text-xs font-semibold uppercase tracking-wide">
+            Applicants
+          </span>
           <div className="flex -space-x-2">
-            {owners.slice(0, 5).map((o) => (
-              <OwnerAvatar key={o.userId} card={o} className="z-0" />
+            {owners.slice(0, 6).map((o) => (
+              <OwnerAvatar key={o.userId} card={o} />
             ))}
-            {owners.length > 5 ? (
-              <span className="z-10 flex size-7 items-center justify-center rounded-full border border-white bg-slate-200 text-[10px] font-bold text-slate-700 ring-2 ring-white">
-                +{owners.length - 5}
+            {owners.length > 6 ? (
+              <span className="z-10 flex size-8 items-center justify-center rounded-full border border-white bg-slate-100 text-[10px] font-bold text-slate-700 ring-2 ring-white">
+                +{owners.length - 6}
               </span>
             ) : null}
           </div>
-          <Badge variant="outline" className="h-6 text-[10px] font-semibold">
-            {statusSummary}
-          </Badge>
         </div>
       </div>
-      <ul className="mt-2 space-y-1.5">
-        {[...cards]
-          .sort((a, b) => a.ownerName.localeCompare(b.ownerName))
-          .map((c) => (
-            <li key={c.id}>
-              <KanbanApplicationCard
-                card={c}
-                currentUserId={currentUserId}
-                draggable
-                variant="minimal"
-                onStatusChange={onStatusChange}
-              />
-            </li>
-          ))}
-      </ul>
-    </div>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {items.map((a) => (
+          <KanbanApplicationCard
+            key={a.id}
+            card={a}
+            currentUserId={currentUserId}
+            draggable={false}
+            variant="full"
+            onStatusChange={onStatusChange}
+          />
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -418,7 +444,7 @@ function KanbanShell({
 
 function EmptyKanban() {
   return (
-    <div className="text-muted-foreground rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center text-sm shadow-sm">
+    <div className="text-muted-foreground rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center text-sm">
       No applications visible yet.
     </div>
   );
@@ -441,11 +467,11 @@ function OwnerAvatar({
     return (
       <Image
         src={card.ownerImage}
-        alt={card.ownerName}
-        width={28}
-        height={28}
+        alt=""
+        width={32}
+        height={32}
         className={cn(
-          "size-7 rounded-full border border-white object-cover ring-2 ring-white",
+          "size-8 rounded-full border border-white object-cover ring-2 ring-white",
           className,
         )}
         title={card.ownerName}
@@ -456,7 +482,7 @@ function OwnerAvatar({
   return (
     <span
       className={cn(
-        "flex size-7 items-center justify-center rounded-full border border-white bg-gradient-to-br from-slate-100 to-slate-200 text-[10px] font-bold text-slate-700 ring-2 ring-white",
+        "flex size-8 items-center justify-center rounded-full border border-white bg-slate-100 text-[10px] font-bold text-slate-700 ring-2 ring-white",
         className,
       )}
       title={card.ownerName}
@@ -472,12 +498,15 @@ function KanbanApplicationCard({
   draggable,
   onStatusChange,
   variant = "full",
+  boardCard = false,
 }: Readonly<{
   card: KanbanBoardCard;
   currentUserId: string;
   draggable: boolean;
   onStatusChange: (id: string, status: ApplicationStatusValue) => void;
   variant?: "full" | "minimal";
+  /** Board view: drag between columns updates status; compact edit control. */
+  boardCard?: boolean;
 }>) {
   const isOwner = card.userId === currentUserId;
   const canDrag = draggable && isOwner;
@@ -495,18 +524,16 @@ function KanbanApplicationCard({
           e.dataTransfer.effectAllowed = "move";
         }}
         className={cn(
-          "flex gap-2 rounded-lg border border-slate-100 bg-white p-2 text-sm shadow-sm",
+          "flex gap-2 rounded-lg border border-slate-200 bg-white p-2 text-sm",
           canDrag ? "cursor-grab active:cursor-grabbing" : "",
         )}
       >
         <OwnerAvatar card={card} className="shrink-0" />
         <div className="min-w-0 flex-1">
           {!isOwner ? (
-            <Badge variant="outline" className="mb-1 h-5 border-slate-200 px-1.5 text-[10px] font-semibold">
-              {applicationStatusLabel(card.status)}
-            </Badge>
+            <ApplicationStatusPill className="mb-1" status={card.status} />
           ) : null}
-          <p className="truncate font-semibold text-[#0d2145] leading-tight">
+          <p className="truncate font-semibold leading-tight text-[#0d2145]">
             {card.universityName}
           </p>
           <p className="truncate text-[11px] text-muted-foreground">
@@ -517,13 +544,19 @@ function KanbanApplicationCard({
             {card.teamLabel ? ` · ${card.teamLabel}` : ""}
           </p>
           {isOwner ? (
-            <div className="mt-1.5 flex flex-wrap items-center gap-2" onMouseDown={(e) => e.stopPropagation()}>
+            <div
+              className="mt-1.5 flex flex-wrap items-center gap-2"
+              onMouseDown={(e) => e.stopPropagation()}
+            >
               <select
                 className={selectClassMinimal}
                 value={card.status}
                 aria-label="Status"
                 onChange={(e) =>
-                  onStatusChange(card.id, e.target.value as ApplicationStatusValue)
+                  onStatusChange(
+                    card.id,
+                    e.target.value as ApplicationStatusValue,
+                  )
                 }
               >
                 {APPLICATION_STATUSES.map((s) => (
@@ -533,14 +566,16 @@ function KanbanApplicationCard({
                 ))}
               </select>
               <Link
-                className="text-primary text-[10px] font-semibold"
+                className="text-[10px] font-semibold text-[#2563eb]"
                 href={`/dashboard/applications/${card.id}/edit`}
               >
                 Edit
               </Link>
             </div>
           ) : (
-            <p className="text-muted-foreground mt-1 text-[10px] italic">View only</p>
+            <p className="text-muted-foreground mt-1 text-[10px] italic">
+              View only
+            </p>
           )}
         </div>
       </div>
@@ -559,51 +594,96 @@ function KanbanApplicationCard({
         e.dataTransfer.effectAllowed = "move";
       }}
       className={cn(
-        "rounded-xl border border-slate-100 bg-white p-3 text-sm shadow-sm",
+        "relative rounded-xl border border-slate-200 bg-white p-3 text-sm",
         canDrag ? "cursor-grab active:cursor-grabbing" : "",
       )}
     >
-      <div className="flex gap-3">
-        <OwnerAvatar card={card} className="mt-0.5 shrink-0" />
+      {boardCard && isOwner ? (
+        <Link
+          href={`/dashboard/applications/${card.id}/edit`}
+          className="absolute top-2 right-2 z-10 inline-flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#0d2145]"
+          title="Edit application"
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <Pencil className="size-4" strokeWidth={2} />
+          <span className="sr-only">Edit application</span>
+        </Link>
+      ) : null}
+
+      <div className={cn("flex gap-3", boardCard && isOwner && "pr-9")}>
+        <UniversityLogo
+          name={card.universityName}
+          logoUrl={card.logoUrl}
+          size="compact"
+        />
         <div className="min-w-0 flex-1">
           {!isOwner ? (
-            <Badge variant="outline" className="mb-2 border-slate-200 font-semibold">
-              {applicationStatusLabel(card.status)}
-            </Badge>
+            <div className="mb-2">
+              <ApplicationStatusPill status={card.status} />
+            </div>
           ) : null}
-          <p className="font-semibold text-[#0d2145]">{card.universityName}</p>
-          <p className="text-muted-foreground mt-0.5 text-xs">{card.programLabel}</p>
-          <p className="text-muted-foreground mt-2 text-xs">
-            {card.ownerName}
-            {card.teamLabel ? ` · ${card.teamLabel}` : ""}
+          <p className="font-semibold leading-snug text-[#0d2145]">
+            {card.universityName}
+          </p>
+          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-500">
+            <span aria-hidden>🇩🇪</span>
+            {card.city ? `${card.city}, ${DEFAULT_COUNTRY}` : DEFAULT_COUNTRY}
+          </p>
+          <p className="mt-1 text-xs text-slate-600">{card.programLabel}</p>
+          <p className="mt-1 text-[11px] font-medium text-slate-500">
+            {card.intakeSemester?.trim()
+              ? `${card.intakeSemester}`
+              : "Intake TBD"}
           </p>
 
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+            <OwnerAvatar card={card} />
+            <Badge
+              variant="outline"
+              className={cn(
+                "border-slate-200 font-semibold",
+                !card.teamLabel && "bg-slate-50 text-slate-600",
+                card.teamLabel && "border-blue-200 bg-blue-50 text-blue-900",
+              )}
+            >
+              {card.teamLabel ?? "Personal"}
+            </Badge>
+          </div>
+
           {isOwner ? (
-            <div className="mt-2 space-y-2" onMouseDown={(e) => e.stopPropagation()}>
-              <label className="text-muted-foreground block text-[10px] font-bold uppercase tracking-[0.16em]">
-                Status
-              </label>
-              <select
-                className={selectClass}
-                value={card.status}
-                aria-label="Application pipeline status"
-                onChange={(e) =>
-                  onStatusChange(card.id, e.target.value as ApplicationStatusValue)
-                }
+            boardCard ? null : (
+              <div
+                className="mt-3 space-y-2"
+                onMouseDown={(e) => e.stopPropagation()}
               >
-                {APPLICATION_STATUSES.map((s) => (
-                  <option key={s} value={s}>
-                    {APPLICATION_STATUS_LABELS[s]}
-                  </option>
-                ))}
-              </select>
-              <Link
-                className="text-primary inline-block text-xs font-semibold"
-                href={`/dashboard/applications/${card.id}/edit`}
-              >
-                Full edit
-              </Link>
-            </div>
+                <label className="text-muted-foreground block text-[10px] font-bold uppercase tracking-[0.14em]">
+                  Status
+                </label>
+                <select
+                  className={selectClass}
+                  value={card.status}
+                  aria-label="Application pipeline status"
+                  onChange={(e) =>
+                    onStatusChange(
+                      card.id,
+                      e.target.value as ApplicationStatusValue,
+                    )
+                  }
+                >
+                  {APPLICATION_STATUSES.map((s) => (
+                    <option key={s} value={s}>
+                      {APPLICATION_STATUS_LABELS[s]}
+                    </option>
+                  ))}
+                </select>
+                <Link
+                  className="inline-block text-xs font-semibold text-[#2563eb]"
+                  href={`/dashboard/applications/${card.id}/edit`}
+                >
+                  Full edit
+                </Link>
+              </div>
+            )
           ) : (
             <p className="text-muted-foreground mt-3 text-xs italic">
               View only — not your row

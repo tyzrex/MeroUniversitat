@@ -27,6 +27,7 @@ export default async function NewApplicationPage({
 
   let mirrorTeammateName: string | undefined;
   let universityInitialLabel: string | undefined;
+  let universityInitialLogoUrl: string | null | undefined;
   const defaultValues: Partial<ApplicationCreateInput> = {};
 
   if (mirrorId) {
@@ -37,6 +38,9 @@ export default async function NewApplicationPage({
         defaultValues.universityId = mirror.universityId;
         universityInitialLabel = mirror.university
           ? `${mirror.university.name} — ${mirror.university.city}`
+          : undefined;
+        universityInitialLogoUrl = mirror.university
+          ? mirror.university.logoUrl ?? mirror.university.imageUrl ?? null
           : undefined;
       }
       defaultValues.intakeSemester = mirror.intakeSemester ?? "";
@@ -60,7 +64,7 @@ export default async function NewApplicationPage({
         description={`Add a program row. Team members see shared boards; use "Me too" on the list to link your row to someone else's.`}
       >
         <Link
-          className="inline-flex h-11 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-[#0d2145] shadow-sm hover:bg-slate-50"
+          className="inline-flex h-11 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-[#0d2145]  hover:bg-slate-50"
           href="/dashboard/applications"
         >
           ← Back to list
@@ -74,6 +78,7 @@ export default async function NewApplicationPage({
         mode="create"
         teamOptions={teamOptions}
         universityInitialLabel={universityInitialLabel}
+        universityInitialLogoUrl={universityInitialLogoUrl}
       />
     </div>
   );

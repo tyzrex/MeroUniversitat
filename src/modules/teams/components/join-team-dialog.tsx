@@ -1,5 +1,7 @@
 "use client";
 
+import { dashboardOutlineActionClass } from "@/modules/dashboard/lib/dashboard-header-actions";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -51,8 +53,7 @@ export function JoinTeamDialog() {
       <DialogTrigger
         render={
           <Button
-            variant="outline"
-            className="h-10 rounded-xl border-slate-200 bg-white hover:bg-slate-50"
+            className={cn(dashboardOutlineActionClass(), "gap-2 shadow-none")}
           >
             <KeyRound className="size-4" strokeWidth={1.8} />
             Join team

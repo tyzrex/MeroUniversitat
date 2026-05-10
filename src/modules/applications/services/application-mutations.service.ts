@@ -130,7 +130,7 @@ export async function getApplicationForEditor(userId: string, applicationId: str
   const app = await db.application.findUnique({
     where: { id: applicationId },
     include: {
-      university: { select: { id: true, name: true, city: true } },
+      university: { select: { id: true, name: true, city: true, logoUrl: true, imageUrl: true } },
     },
   });
 
@@ -257,7 +257,7 @@ export async function getMirrorPrefill(mirrorApplicationId: string, userId: stri
       universityId: true,
       teamId: true,
       intakeSemester: true,
-      university: { select: { id: true, name: true, city: true } },
+      university: { select: { id: true, name: true, city: true, logoUrl: true, imageUrl: true } },
       team: { select: { id: true, name: true } },
       user: { select: { name: true } },
     },

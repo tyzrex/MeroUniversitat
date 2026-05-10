@@ -22,7 +22,7 @@ export function DashboardPageIntro({
 }: Readonly<{
   crumbs: DashboardCrumb[];
   title: string;
-  description?: string;
+  description?: React.ReactNode;
   className?: string;
   /** Actions aligned on large screens (e.g. primary buttons). */
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ export function DashboardPageIntro({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/5 md:p-7",
+        "rounded-2xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 md:p-7",
         className,
       )}
     >

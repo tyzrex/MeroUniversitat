@@ -1,18 +1,30 @@
 import type { ApplicationStatusValue } from "@/modules/applications/schema/application-form-schema";
 
-export type KanbanColumnId = "research" | "prepare" | "pipeline" | "outcome";
+/** Seven-stage pipeline aligned with the Kanban mock (research → archived). */
+export type KanbanColumnId =
+  | "research"
+  | "prepare"
+  | "submitted"
+  | "decision"
+  | "results"
+  | "enrolled"
+  | "archived";
 
 /** Minimal card payload for the Kanban client (serializable). */
 export type KanbanBoardCard = {
   id: string;
   userId: string;
+  teamId: string | null;
   status: string;
   universityName: string;
   programLabel: string;
   ownerName: string;
-  /** Profile image URL when available (e.g. OAuth avatar). */
   ownerImage: string | null;
   teamLabel: string | null;
+  /** University directory logo when linked. */
+  logoUrl: string | null;
+  city: string | null;
+  intakeSemester: string | null;
 };
 
 /** Default status when a card is dropped on a column (owners only). */
@@ -24,14 +36,20 @@ export function kanbanColumnToDefaultStatus(
       return "RESEARCHING";
     case "prepare":
       return "PREPARING_DOCS";
-    case "pipeline":
+    case "submitted":
       return "APPLIED";
-    case "outcome":
+    case "decision":
+      return "INTERVIEW";
+    case "results":
       return "OFFER_LETTER";
+    case "enrolled":
+      return "ENROLLED";
+    case "archived":
+      return "WITHDRAWN";
   }
 }
 
-/** Maps pipeline enum → one of four board columns (until drag-and-drop refines this). */
+/** Maps pipeline enum → Kanban column. */
 export function statusToKanbanColumn(status: string): KanbanColumnId {
   switch (status) {
     case "INTERESTED":
@@ -42,10 +60,18 @@ export function statusToKanbanColumn(status: string): KanbanColumnId {
       return "prepare";
     case "APPLIED":
     case "UNDER_REVIEW":
+      return "submitted";
     case "INTERVIEW":
-      return "pipeline";
+      return "decision";
+    case "OFFER_LETTER":
+      return "results";
+    case "ENROLLED":
+      return "enrolled";
+    case "REJECTED":
+    case "WITHDRAWN":
+      return "archived";
     default:
-      return "outcome";
+      return "submitted";
   }
 }
 
@@ -53,31 +79,48 @@ export const KANBAN_COLUMNS: {
   id: KanbanColumnId;
   title: string;
   dot: string;
-  /** Which ApplicationStatus values land here (use card dropdown for exact value). */
   statusHint: string;
 }[] = [
   {
     id: "research",
     title: "Researching",
-    dot: "bg-amber-400",
+    dot: "bg-sky-500",
     statusHint: "Interested · Researching",
   },
   {
     id: "prepare",
     title: "Preparing",
-    dot: "bg-orange-400",
+    dot: "bg-amber-400",
     statusHint: "Preparing docs · Ready to apply",
   },
   {
-    id: "pipeline",
+    id: "submitted",
     title: "Submitted / active",
-    dot: "bg-blue-500",
-    statusHint: "Applied · Under review · Interview",
+    dot: "bg-violet-500",
+    statusHint: "Applied · Under review",
   },
   {
-    id: "outcome",
-    title: "Outcomes",
+    id: "decision",
+    title: "Decision",
+    dot: "bg-orange-500",
+    statusHint: "Interview · decision phase",
+  },
+  {
+    id: "results",
+    title: "Results",
     dot: "bg-emerald-500",
-    statusHint: "Offer · Rejected · Enrolled · Withdrawn",
+    statusHint: "Offer letter",
+  },
+  {
+    id: "enrolled",
+    title: "Enrolled",
+    dot: "bg-teal-500",
+    statusHint: "Enrolled",
+  },
+  {
+    id: "archived",
+    title: "Archived",
+    dot: "bg-slate-400",
+    statusHint: "Rejected · Withdrawn",
   },
 ];

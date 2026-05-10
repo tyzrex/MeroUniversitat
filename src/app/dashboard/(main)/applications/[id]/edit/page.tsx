@@ -35,6 +35,11 @@ export default async function EditApplicationPage({
       ? `${app.university.name} — ${app.university.city}`
       : `${app.universityName} — ${app.city}`;
 
+  const universityInitialLogoUrl =
+    app.university != null
+      ? app.university.logoUrl ?? app.university.imageUrl ?? null
+      : null;
+
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
@@ -46,7 +51,7 @@ export default async function EditApplicationPage({
         description={`Changes stay on your row. Linked "me too" applications keep their team context.`}
       >
         <Link
-          className="inline-flex h-11 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-[#0d2145] shadow-sm hover:bg-slate-50"
+          className="inline-flex h-11 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-[#0d2145]  hover:bg-slate-50"
           href="/dashboard/applications"
         >
           ← Back to list
@@ -62,14 +67,13 @@ export default async function EditApplicationPage({
           teamId: app.teamId ?? undefined,
           status: app.status,
           notes: app.notes ?? "",
-          deadline: app.deadline
-            ? app.deadline.toISOString().slice(0, 10)
-            : "",
+          deadline: app.deadline ? app.deadline.toISOString().slice(0, 10) : "",
         }}
         lockTeam={Boolean(app.mirrorsApplicationId)}
         mode="edit"
         teamOptions={teamOptions}
         universityInitialLabel={universityInitialLabel}
+        universityInitialLogoUrl={universityInitialLogoUrl}
       />
 
       <div className="rounded-2xl border border-slate-200 bg-white p-6">

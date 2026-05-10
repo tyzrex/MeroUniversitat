@@ -55,7 +55,7 @@ export function TeamInviteCodeCard({
         <button
           type="button"
           onClick={copyCode}
-          className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-[#0d2145]"
+          className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600  transition-all hover:bg-slate-50 hover:text-[#0d2145]"
           title="Copy invite code"
         >
           {copied ? (
@@ -71,7 +71,7 @@ export function TeamInviteCodeCard({
           type="button"
           onClick={regenerate}
           disabled={isPending}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-[#0d2145] disabled:opacity-60"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-600  transition-all hover:bg-slate-50 hover:text-[#0d2145] disabled:opacity-60"
         >
           <RefreshCw
             className={`size-3.5 ${isPending ? "animate-spin" : ""}`}

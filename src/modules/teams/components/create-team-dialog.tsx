@@ -1,5 +1,7 @@
 "use client";
 
+import { dashboardPrimaryActionClass } from "@/modules/dashboard/lib/dashboard-header-actions";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -38,7 +40,9 @@ export function CreateTeamDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button className="h-10 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]">
+          <Button
+            className={cn(dashboardPrimaryActionClass(), "gap-2 shadow-none")}
+          >
             <Plus className="size-4" strokeWidth={1.8} />
             Create new team
           </Button>
