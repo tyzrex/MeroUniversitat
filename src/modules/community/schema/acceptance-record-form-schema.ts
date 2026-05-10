@@ -50,8 +50,8 @@ export const acceptanceRecordFormSchema = z
 
     intake: z
       .string()
-      .min(2, { error: "Enter a valid intake year" })
-      .max(32, { error: "Enter a valid intake year" }),
+      .min(2, { message: "Enter a valid intake year" })
+      .max(32, { message: "Enter a valid intake year" }),
     result: z.enum(admissionResults),
 
     appliedDate: z.string().optional().or(z.literal("")),
