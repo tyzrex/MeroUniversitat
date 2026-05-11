@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "NODE_OPTIONS=--experimental-require-module prisma generate",
+    "postinstall": "prisma generate",
     "db:generate": "NODE_OPTIONS=--experimental-require-module prisma generate",
     "seed:universities": "bun run scripts/seed-universities.ts",
     "seed:university-logos": "bun run scripts/seed-university-logos.ts",
