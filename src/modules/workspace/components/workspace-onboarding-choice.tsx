@@ -3,7 +3,6 @@
 import { completeWorkspaceOnboardingAction } from "@/modules/workspace/actions/complete-workspace-onboarding.action";
 import { Button } from "@/components/ui/button";
 import { Loader2, User, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type Props = Readonly<{
@@ -12,7 +11,6 @@ type Props = Readonly<{
 }>;
 
 export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
-  const router = useRouter();
   const [pending, setPending] = useState<"SOLO" | "TEAM" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,14 +18,16 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
     setError(null);
     setPending(preference);
     const res = await completeWorkspaceOnboardingAction({ preference });
-    setPending(null);
+
     if (!res.ok) {
       setError(res.error);
       return;
     }
     onCompleted?.();
-    router.push("/dashboard");
-    router.refresh();
+    setTimeout(() => {
+      setPending(null);
+      window.location.assign("/dashboard");
+    }, 1000);
   }
 
   return (

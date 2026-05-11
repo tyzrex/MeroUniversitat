@@ -85,7 +85,7 @@ export function SignUpForm() {
               },
               {
                 onSuccess: () => {
-                  router.push("/");
+                  router.push("/dashboard");
                 },
               },
             );

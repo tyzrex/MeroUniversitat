@@ -19,7 +19,7 @@ export async function PublicAcceptanceFeed() {
 
   if (rows.length === 0) {
     return (
-      <section className="pt-4">
+      <section className="pt-2">
         <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
           <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
             <Database className="size-7" strokeWidth={1.8} />
@@ -46,29 +46,98 @@ export async function PublicAcceptanceFeed() {
   }
 
   return (
-    <section className="pt-4">
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-[#0d2145]">
-            Approved submissions
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">
-            Public records are moderated and respect each contributor’s
-            anonymity setting.
-          </p>
+    <section className="pt-2">
+      <p className="text-muted-foreground mb-6 max-w-3xl text-sm leading-relaxed">
+        Records respect each contributor&apos;s anonymity setting. Universities
+        link to our directory for deeper context.
+      </p>
+
+      <div className="hidden md:block">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white  ring-1 ring-slate-900/5">
+          <table className="w-full min-w-[880px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50/95 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <th className="px-4 py-3.5 pl-5">Outcome</th>
+                <th className="px-3 py-3.5">Intake</th>
+                <th className="min-w-[200px] px-3 py-3.5">University</th>
+                <th className="min-w-[160px] px-3 py-3.5">Program</th>
+                <th className="px-3 py-3.5">GPA</th>
+                <th className="px-3 py-3.5">%</th>
+                <th className="px-3 py-3.5">Contributor</th>
+                <th className="px-4 pr-5 py-3.5">City</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => {
+                const displayName =
+                  r.isAnonymous || !r.contributorName?.trim()
+                    ? "Anonymous"
+                    : r.contributorName;
+                const program =
+                  r.programNameSnapshot?.trim() || "Program not specified";
+                const gpaStr = r.gpa != null ? String(r.gpa) : "—";
+                const pctStr =
+                  r.percentage != null ? String(r.percentage) : "—";
+
+                return (
+                  <tr
+                    key={r.id}
+                    className="border-b border-slate-100 transition-colors last:border-0 hover:bg-slate-50/70"
+                  >
+                    <td className="px-4 py-3.5 pl-5 align-middle">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-md font-semibold"
+                      >
+                        {resultLabel[r.result] ?? r.result}
+                      </Badge>
+                    </td>
+                    <td className="text-muted-foreground px-3 py-3.5 align-middle tabular-nums">
+                      {r.intake}
+                    </td>
+                    <td className="px-3 py-3.5 align-middle">
+                      <div className="flex items-center gap-3">
+                        <UniversityLogo
+                          name={r.university.name}
+                          logoUrl={r.university.logoUrl}
+                          imageUrl={r.university.imageUrl}
+                          size="sm"
+                          className=" shadow-black/5"
+                        />
+                        <Link
+                          className="font-semibold text-[#0d2145] underline-offset-4 hover:text-[#1238da] hover:underline"
+                          href={`/universities/${r.university.slug}`}
+                        >
+                          {r.university.name}
+                        </Link>
+                      </div>
+                    </td>
+                    <td className="text-muted-foreground max-w-[240px] px-3 py-3.5 align-middle">
+                      <span className="line-clamp-2" title={program}>
+                        {program}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3.5 align-middle tabular-nums">
+                      {gpaStr}
+                    </td>
+                    <td className="px-3 py-3.5 align-middle tabular-nums">
+                      {pctStr}
+                    </td>
+                    <td className="text-muted-foreground px-3 py-3.5 align-middle">
+                      {displayName}
+                    </td>
+                    <td className="text-muted-foreground px-4 py-3.5 pr-5 align-middle">
+                      {r.university.city}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-        <Link
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            "h-11 rounded-xl bg-white font-semibold",
-          )}
-          href="/community-data"
-        >
-          Add yours
-        </Link>
       </div>
 
-      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-5 md:hidden sm:grid-cols-2">
         {rows.map((r) => {
           const displayName =
             r.isAnonymous || !r.contributorName?.trim()
@@ -113,7 +182,9 @@ export async function PublicAcceptanceFeed() {
                       {r.university.name}
                     </Link>
                   </p>
-                  <p className="text-muted-foreground mt-1 text-sm">{program}</p>
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    {program}
+                  </p>
                 </div>
               </div>
               <div className="text-muted-foreground mt-5 grid grid-cols-2 gap-2 border-t border-slate-100 pt-5 text-xs">
@@ -127,6 +198,18 @@ export async function PublicAcceptanceFeed() {
           );
         })}
       </ul>
+
+      <div className="mt-8 flex justify-center md:justify-end">
+        <Link
+          className={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            "h-11 rounded-xl bg-white font-semibold",
+          )}
+          href="/community-data"
+        >
+          Add yours
+        </Link>
+      </div>
     </section>
   );
 }

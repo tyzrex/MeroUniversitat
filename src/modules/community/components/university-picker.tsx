@@ -37,7 +37,7 @@ export function UniversityPicker({
   const rootRef = useRef<HTMLDivElement>(null);
 
   const displayLabel = value
-    ? picked?.label ?? initialLabel ?? "University selected"
+    ? (picked?.label ?? initialLabel ?? "University selected")
     : "";
 
   const logoSrc =
@@ -45,8 +45,7 @@ export function UniversityPicker({
       ? (picked?.logoSrc ?? initialLogoUrl ?? null)
       : null;
 
-  const nameForLogo =
-    displayLabel.split(/\s—\s/)[0]?.trim() || "University";
+  const nameForLogo = displayLabel.split(/\s—\s/)[0]?.trim() || "University";
 
   const fetchList = useCallback(async (q: string) => {
     setLoading(true);
@@ -144,7 +143,7 @@ export function UniversityPicker({
                       logoUrl={u.logoUrl}
                       imageUrl={u.imageUrl}
                       size="xs"
-                      className="shadow-sm"
+                      className=""
                     />
                     <span className="min-w-0 flex-1">
                       <span className="font-medium">{u.name}</span>

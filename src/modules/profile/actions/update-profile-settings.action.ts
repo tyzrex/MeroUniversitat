@@ -88,6 +88,7 @@ export async function updateProfileSettingsAction(
 
     revalidatePath("/dashboard/profile");
     revalidatePath("/dashboard/timelines");
+    revalidatePath("/dashboard/visa-journey");
 
     return { ok: true, data: undefined };
   } catch {

@@ -1,4 +1,5 @@
 import { ConsularTimelineView } from "@/modules/visa/components/consular-timeline-view";
+import { ConsularTimelineSkeleton } from "@/modules/dashboard/components/dashboard-route-skeletons";
 import {
   consularCommunityStats,
   countCspSubmissionsByMonth,
@@ -8,6 +9,7 @@ import {
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Consular timeline | MeroUniversität",
@@ -19,8 +21,16 @@ export default async function TimelinesPage() {
     redirect("/sign-in");
   }
 
-  const userId = session.user.id;
+  return (
+    <Suspense fallback={<ConsularTimelineSkeleton />}>
+      <ConsularTimelineBody userId={session.user.id} />
+    </Suspense>
+  );
+}
 
+async function ConsularTimelineBody({
+  userId,
+}: Readonly<{ userId: string }>) {
   const [personalCheckpoints, stats, communityRows, heatmapBuckets] =
     await Promise.all([
       listVisaCheckpointsForUser(userId),

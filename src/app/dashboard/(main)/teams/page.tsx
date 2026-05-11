@@ -2,22 +2,33 @@ import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-pag
 import {
   dashboardOutlineActionClass,
 } from "@/modules/dashboard/lib/dashboard-header-actions";
+import { TeamsPageSkeleton } from "@/modules/dashboard/components/dashboard-route-skeletons";
 import { CreateTeamDialog } from "@/modules/teams/components/create-team-dialog";
 import { JoinTeamDialog } from "@/modules/teams/components/join-team-dialog";
 import { TeamListTable } from "@/modules/teams/components/team-list-table";
+import { TeamActivityPanel } from "@/modules/teams/components/team-activity-panel";
 import { listTeamsForUser } from "@/modules/teams/services/team.service";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Columns3, FileText, Users, UsersRound } from "lucide-react";
-import { TeamActivityPanel } from "@/modules/teams/components/team-activity-panel";
+import type * as React from "react";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Team management | MeroUniversität",
 };
 
-export default async function TeamsPage() {
+export default function TeamsPage() {
+  return (
+    <Suspense fallback={<TeamsPageSkeleton />}>
+      <TeamsPageBody />
+    </Suspense>
+  );
+}
+
+async function TeamsPageBody() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
     redirect("/sign-in");

@@ -17,10 +17,7 @@ export default async function AdminUsersPage() {
     <div className="flex flex-col gap-8">
       <DashboardPageIntro
         className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
-        crumbs={[
-          { label: "Admin", href: "/admin" },
-          { label: "Users" },
-        ]}
+        crumbs={[{ label: "Admin", href: "/admin" }, { label: "Users" }]}
         title="Users & safety"
         description="Suspend abusive or spam accounts. Admins only — moderators should escalate instead of suspending."
       >
@@ -33,7 +30,7 @@ export default async function AdminUsersPage() {
         </Link>
       </DashboardPageIntro>
 
-      <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/5">
+      <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white  ring-1 ring-slate-900/5">
         <table className="w-full min-w-[720px] text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50/90">
             <tr>

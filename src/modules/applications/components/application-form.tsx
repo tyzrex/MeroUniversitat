@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
+import { toast } from "sonner";
 
 const formPanel =
   "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35";
@@ -110,11 +111,9 @@ export function ApplicationForm({
         ? {
             ...values,
             mirrorsApplicationId:
-              values.mirrorsApplicationId ??
-              defaultValues.mirrorsApplicationId,
+              values.mirrorsApplicationId ?? defaultValues.mirrorsApplicationId,
             applicationGroupId:
-              values.applicationGroupId ??
-              defaultValues.applicationGroupId,
+              values.applicationGroupId ?? defaultValues.applicationGroupId,
           }
         : values;
 
@@ -127,7 +126,12 @@ export function ApplicationForm({
       setSubmitError(res.error);
       return;
     }
-    router.push("/dashboard/applications");
+    if (mode === "create" && res.data?.id) {
+      toast.success("Application created successfully");
+      window.location.assign(`/dashboard/applications`);
+      return;
+    }
+    router.replace("/dashboard/applications");
     router.refresh();
   }
 
@@ -144,8 +148,8 @@ export function ApplicationForm({
             <AlertTitle>Linking to a teammate</AlertTitle>
             <AlertDescription>
               You&apos;re adding your own program row alongside{" "}
-              <strong>{mirrorTeammateName}</strong>&apos;s application on this team.
-              Choose your program / subject below.
+              <strong>{mirrorTeammateName}</strong>&apos;s application on this
+              team. Choose your program / subject below.
             </AlertDescription>
           </Alert>
         ) : null}
@@ -175,8 +179,8 @@ export function ApplicationForm({
                       Institution
                     </FormLabel>
                     <FormDescription>
-                      Search the directory — pick the university you applied or plan to
-                      apply to.
+                      Search the directory — pick the university you applied or
+                      plan to apply to.
                     </FormDescription>
                     <FormControl>
                       <UniversityPicker
@@ -225,8 +229,8 @@ export function ApplicationForm({
                       Team (optional)
                     </FormLabel>
                     <FormDescription>
-                      Attach to a team you belong to for shared Kanban. Leave empty for
-                      a solo-only row.
+                      Attach to a team you belong to for shared Kanban. Leave
+                      empty for a solo-only row.
                     </FormDescription>
                     <FormControl>
                       <select

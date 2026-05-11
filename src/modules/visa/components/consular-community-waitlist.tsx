@@ -25,7 +25,10 @@ function stageShort(k: (typeof STAGE_KEYS)[number]): string {
   }
 }
 
-function statusFor(row: CommunityWaitlistRow): { label: string; className: string } {
+function statusFor(row: CommunityWaitlistRow): {
+  label: string;
+  className: string;
+} {
   if (row.stages.PASSPORT_COLLECTED) {
     return { label: "Collected", className: "bg-emerald-100 text-emerald-900" };
   }
@@ -52,15 +55,15 @@ export function ConsularCommunityWaitlist({
       <section className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
         <p className="font-semibold text-[#0d2145]">No community rows yet</p>
         <p className="text-muted-foreground mt-2 text-sm">
-          Opt in on your profile and add embassy milestones — anonymized rows appear
-          here for peers.
+          Opt in on your profile and add embassy milestones — anonymized rows
+          appear here for peers.
         </p>
       </section>
     );
   }
 
   return (
-    <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-900/5 md:p-8">
+    <section className="rounded-3xl border h-full border-slate-200/80 bg-white p-6  ring-1 ring-slate-900/5 md:p-8">
       <h2 className="text-lg font-bold text-[#0d2145]">
         Waitlist tracker (community)
       </h2>
