@@ -7,7 +7,7 @@ export const dashboardColors = {
 } as const;
 
 export const dashboardInsightShell =
-  "rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-indigo-50/25 p-6 ring-1 ring-slate-900/5 md:p-7";
+  "rounded-3xl border border-border bg-gradient-to-br from-background via-muted/50 to-primary/5 p-6 ring-1 ring-border/40 md:p-7";
 
 export const dashboardInsightShellAlt =
-  "rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-indigo-50/40 to-sky-50/30 p-6 ring-1 ring-slate-900/5 md:p-7";
+  "rounded-3xl border border-border bg-gradient-to-br from-background via-primary/10 to-sky-500/10 p-6 ring-1 ring-border/40 md:p-7";

@@ -71,8 +71,8 @@ export function KanbanToolbar({
     cn(
       "inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors sm:px-4",
       active
-        ? "bg-[#0d2145] text-white hover:bg-[#1a3461]"
-        : "text-slate-600 hover:bg-slate-50",
+        ? "bg-foreground text-background hover:bg-foreground/90"
+        : "text-muted-foreground hover:bg-muted hover:text-foreground",
     );
 
   return (
@@ -80,7 +80,7 @@ export function KanbanToolbar({
       id="kanban-toolbar-panel"
       className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between"
     >
-      <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2">
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-2">
         {VIEW_TABS.map((tab) => (
           <Link
             key={tab.id}
@@ -100,9 +100,9 @@ export function KanbanToolbar({
       </div>
 
       {teamOptions && teamOptions.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-card px-3 py-2">
           <SlidersHorizontal
-            className="size-4 shrink-0 text-slate-400"
+            className="size-4 shrink-0 text-muted-foreground"
             strokeWidth={1.8}
             aria-hidden
           />
@@ -122,7 +122,7 @@ export function KanbanToolbar({
               });
               startTransition(() => router.push(href));
             }}
-            className="h-10 min-w-[200px] rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#4a52c8]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-10 min-w-[200px] rounded-xl border border-input bg-background px-3 text-sm font-semibold text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <option value="">All teams</option>
             {teamOptions.map((t) => (

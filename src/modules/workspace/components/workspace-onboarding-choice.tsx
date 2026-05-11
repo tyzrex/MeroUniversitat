@@ -31,7 +31,7 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
   }
 
   return (
-    <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5">
+    <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-border bg-card shadow-[0_24px_80px_rgba(15,23,42,0.12)] ring-1 ring-border/40">
       <div className="bg-gradient-to-br from-[#0d2145] via-[#1e3a6e] to-[#4a52c8] px-8 py-10 text-white md:px-12 md:py-12">
         <p className="text-xs font-bold tracking-[0.2em] text-blue-100">
           Welcome
@@ -46,21 +46,21 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
         </p>
       </div>
 
-      <div className="grid gap-4 bg-slate-50 p-6 md:grid-cols-2 md:p-8">
+      <div className="grid gap-4 bg-muted p-6 md:grid-cols-2 md:p-8">
         <button
           type="button"
           disabled={pending !== null}
           onClick={() => choose("SOLO")}
-          className="group flex flex-col items-start rounded-2xl border border-slate-200 bg-white p-6 text-left  transition-all hover:border-[#4a52c8]/40 hover:shadow-md disabled:opacity-60"
+          className="group flex flex-col items-start rounded-2xl border border-border bg-card p-6 text-left transition-all hover:border-primary/40 hover:shadow-md disabled:opacity-60"
         >
-          <div className="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-[#4a52c8]">
+          <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
             {pending === "SOLO" ? (
               <Loader2 className="size-6 animate-spin" />
             ) : (
               <User className="size-6" strokeWidth={1.75} />
             )}
           </div>
-          <h2 className="mt-4 text-lg font-bold text-[#0d2145]">
+          <h2 className="mt-4 text-lg font-bold text-foreground">
             Continue solo
           </h2>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
@@ -76,16 +76,16 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
           type="button"
           disabled={pending !== null}
           onClick={() => choose("TEAM")}
-          className="group flex flex-col items-start rounded-2xl border border-slate-200 bg-white p-6 text-left  transition-all hover:border-[#4a52c8]/40 hover:shadow-md disabled:opacity-60"
+          className="group flex flex-col items-start rounded-2xl border border-border bg-card p-6 text-left transition-all hover:border-primary/40 hover:shadow-md disabled:opacity-60"
         >
-          <div className="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-[#4a52c8]">
+          <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
             {pending === "TEAM" ? (
               <Loader2 className="size-6 animate-spin" />
             ) : (
               <Users className="size-6" strokeWidth={1.75} />
             )}
           </div>
-          <h2 className="mt-4 text-lg font-bold text-[#0d2145]">
+          <h2 className="mt-4 text-lg font-bold text-foreground">
             Work with a team
           </h2>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
@@ -99,7 +99,7 @@ export function WorkspaceOnboardingChoice({ onCompleted }: Props) {
       </div>
 
       {error ? (
-        <div className="border-t border-slate-200 px-8 pb-6">
+        <div className="border-t border-border px-8 pb-6">
           <p className="text-destructive text-center text-sm">{error}</p>
           <Button
             variant="outline"

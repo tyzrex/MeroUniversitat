@@ -33,12 +33,12 @@ export function ApplicationsPagination({
   for (let i = from; i <= to; i++) numbers.push(i);
 
   return (
-    <div className="flex flex-col gap-3 border-t border-slate-100 px-5 py-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-slate-600">
+    <div className="flex flex-col gap-3 border-t border-border/60 px-5 py-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-muted-foreground">
         Showing{" "}
-        <span className="font-semibold text-[#0d2145]">{start}</span> to{" "}
-        <span className="font-semibold text-[#0d2145]">{end}</span> of{" "}
-        <span className="font-semibold text-[#0d2145]">{total}</span>{" "}
+        <span className="font-semibold text-foreground">{start}</span> to{" "}
+        <span className="font-semibold text-foreground">{end}</span> of{" "}
+        <span className="font-semibold text-foreground">{total}</span>{" "}
         applications.
       </p>
 
@@ -46,7 +46,7 @@ export function ApplicationsPagination({
         <Link
           aria-disabled={page <= 1}
           className={cn(
-            "inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50",
+            "inline-flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-muted",
             page <= 1 && "pointer-events-none opacity-40",
           )}
           href={hrefForPage(page - 1)}
@@ -61,7 +61,7 @@ export function ApplicationsPagination({
               1
             </PageNum>
             {from > 2 ? (
-              <span className="px-1 text-slate-400">…</span>
+              <span className="px-1 text-muted-foreground">…</span>
             ) : null}
           </>
         ) : null}
@@ -75,7 +75,7 @@ export function ApplicationsPagination({
         {to < totalPages ? (
           <>
             {to < totalPages - 1 ? (
-              <span className="px-1 text-slate-400">…</span>
+              <span className="px-1 text-muted-foreground">…</span>
             ) : null}
             <PageNum href={hrefForPage(totalPages)} active={false}>
               {totalPages}
@@ -86,7 +86,7 @@ export function ApplicationsPagination({
         <Link
           aria-disabled={page >= totalPages}
           className={cn(
-            "inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50",
+            "inline-flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-muted",
             page >= totalPages && "pointer-events-none opacity-40",
           )}
           href={hrefForPage(page + 1)}
@@ -111,8 +111,8 @@ function PageNum({
       className={cn(
         "inline-flex min-w-9 items-center justify-center rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
         active
-          ? "bg-[#0d2145] text-white"
-          : "border border-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50",
+          ? "bg-foreground text-background"
+          : "border border-transparent text-muted-foreground hover:border-border hover:bg-muted",
       )}
     >
       {children}

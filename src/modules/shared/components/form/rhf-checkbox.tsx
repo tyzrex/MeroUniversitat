@@ -52,7 +52,7 @@ export function RHFCheckbox<T extends FieldValues>({
             />
           </FormControl>
           <div className="grid gap-1.5 leading-snug">
-            <FormLabel className="block! cursor-pointer font-medium text-slate-800">
+            <FormLabel className="block! cursor-pointer font-medium text-foreground">
               {label}
             </FormLabel>
             {description ? (

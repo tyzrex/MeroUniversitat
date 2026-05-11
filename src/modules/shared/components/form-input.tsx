@@ -15,7 +15,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         {Icon ? (
           <Icon
             aria-hidden
-            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-slate-400"
+            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
             strokeWidth={1.75}
           />
         ) : null}

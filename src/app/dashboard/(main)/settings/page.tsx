@@ -49,14 +49,14 @@ export default async function SettingsPage() {
         description="Profile, community sharing, and discovery preferences."
       />
 
-      <section className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/60 to-indigo-50/25 p-6 ring-1 ring-slate-900/5 md:p-8">
+      <section className="rounded-3xl border border-border bg-gradient-to-br from-background via-muted/60 to-primary/5 p-6 ring-1 ring-border/40 md:p-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="flex gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#0d2145]/90 text-white shadow-md">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background shadow-md">
               <UserRound className="size-6" strokeWidth={1.8} />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-[#0d2145] md:text-xl">
+              <h2 className="text-lg font-bold text-foreground md:text-xl">
                 Academic profile
               </h2>
               <p className="text-muted-foreground mt-2 max-w-xl text-sm leading-relaxed">
@@ -64,7 +64,7 @@ export default async function SettingsPage() {
                 insights and optional peer matching.
               </p>
               {!hasAcademicHint ? (
-                <p className="mt-3 text-sm font-medium text-amber-800">
+                <p className="mt-3 text-sm font-medium text-amber-700 dark:text-amber-300">
                   Add GPA or percentage so your stats and community submissions stay
                   consistent.
                 </p>
@@ -80,26 +80,26 @@ export default async function SettingsPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 md:p-8">
+      <section className="rounded-3xl border border-border bg-card p-6 ring-1 ring-border/40 md:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#4a52c8]/15 text-[#4a52c8]">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <Shield className="size-6" strokeWidth={1.8} />
             </div>
             <div className="max-w-xl">
-              <h2 className="text-lg font-bold text-[#0d2145]">
+              <h2 className="text-lg font-bold text-foreground">
                 Similar applicants &amp; data sharing
               </h2>
               <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                 Peer discovery is{" "}
-                <strong className="text-[#0d2145]">off by default</strong>. Turn it
+                <strong className="text-foreground">off by default</strong>. Turn it
                 on from your profile to let opted-in users near your GPA see which
                 universities you track — never your documents or private Kanban
                 notes.
               </p>
               <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
                 Current opt-in:{" "}
-                <span className="font-semibold text-[#0d2145]">
+                <span className="font-semibold text-foreground">
                   {profile?.peerMatchingOptIn ? "On" : "Off"}
                 </span>
               </p>
@@ -114,21 +114,21 @@ export default async function SettingsPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 md:p-8">
+      <section className="rounded-3xl border border-border bg-card p-6 ring-1 ring-border/40 md:p-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="flex gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
               <Database className="size-6" strokeWidth={1.8} />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-[#0d2145]">
+              <h2 className="text-lg font-bold text-foreground">
                 Community acceptance data
               </h2>
               <p className="text-muted-foreground mt-2 max-w-xl text-sm leading-relaxed">
                 Submit outcomes or review moderation status. Forms pre-fill GPA and
                 scores from your profile when you&apos;re signed in.
               </p>
-              <p className="mt-3 text-sm font-semibold text-[#0d2145]">
+              <p className="mt-3 text-sm font-semibold text-foreground">
                 Your submissions: {submissionCount}
               </p>
             </div>

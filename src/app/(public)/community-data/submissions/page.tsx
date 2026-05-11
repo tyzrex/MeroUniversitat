@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function CommunitySubmissionsPublicPage() {
   return (
-    <main className="from-slate-50 via-white to-slate-50/80 bg-gradient-to-b pb-24 pt-6">
+    <main className="from-slate-50 via-white to-slate-50/80 bg-gradient-to-b pb-24 pt-6 dark:from-slate-950 dark:via-background dark:to-slate-950/80">
       <Container>
         <CommunityDataPageWrap>
           <CommunityDataHero variant="submissions" />

@@ -2,9 +2,9 @@ import { WorkspaceOnboardingChoice } from "@/modules/workspace/components/worksp
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { headers } from "next/headers";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { OnboardingLogo } from "@/modules/shared/components/onboarding-logo";
 
 export const metadata = {
   title: "Welcome | MeroUniversität",
@@ -30,17 +30,11 @@ export default async function DashboardOnboardingPage() {
     <div className="flex min-h-svh flex-col items-center justify-center px-4 py-12">
       <Link
         href="/"
-        className="mb-10 flex items-center gap-2 text-[#0d2145] opacity-90 hover:opacity-100"
+        className="mb-10 flex items-center gap-2 text-foreground opacity-90 hover:opacity-100"
       >
-        <Image
-          alt="MeroUniversität"
-          className="size-10 object-contain"
-          height={40}
-          src="/merounilogo.png"
-          width={40}
-        />
+        <OnboardingLogo />
         <span className="text-lg font-black tracking-tight">
-          Mero<span className="text-blue-500">Universität</span>
+          Mero<span className="text-primary">Universität</span>
         </span>
       </Link>
 

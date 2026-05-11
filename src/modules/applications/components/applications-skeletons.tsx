@@ -6,7 +6,7 @@ export function ApplicationsStatsSkeleton() {
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
-          className="rounded-2xl border border-slate-200/80 bg-white p-5 ring-1 ring-slate-900/5"
+          className="rounded-2xl border border-border/80 bg-card p-5 ring-1 ring-border/60"
         >
           <Skeleton className="size-10 rounded-xl" />
           <Skeleton className="mt-4 h-9 w-16" />
@@ -19,7 +19,7 @@ export function ApplicationsStatsSkeleton() {
 
 export function ApplicationsFiltersSkeleton() {
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-4 ring-1 ring-slate-900/5">
+    <div className="rounded-2xl border border-border/80 bg-card p-4 ring-1 ring-border/60">
       <div className="flex flex-col gap-3 lg:flex-row lg:flex-wrap">
         <Skeleton className="h-10 min-h-[40px] flex-1 rounded-xl" />
         <Skeleton className="h-10 w-full rounded-xl sm:w-36" />
@@ -32,10 +32,10 @@ export function ApplicationsFiltersSkeleton() {
 
 export function ApplicationsTableSkeleton() {
   return (
-    <div className="min-w-0 max-w-full overflow-hidden rounded-3xl border border-slate-200/80 bg-white ring-1 ring-slate-900/3">
+    <div className="min-w-0 max-w-full overflow-hidden rounded-3xl border border-border/80 bg-card ring-1 ring-border/40">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1020px] text-left text-sm">
-          <thead className="border-b border-slate-100 bg-slate-50/90">
+          <thead className="border-b border-border/60 bg-muted/40">
             <tr>
               {["University", "Program", "Intake", "Owner", "Team", "Status", "Actions"].map(
                 (h) => (
@@ -48,7 +48,7 @@ export function ApplicationsTableSkeleton() {
           </thead>
           <tbody>
             {Array.from({ length: 8 }).map((_, i) => (
-              <tr key={i} className="border-b border-slate-50">
+              <tr key={i} className="border-b border-border/40">
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-3">
                     <Skeleton className="size-11 shrink-0 rounded-xl" />
@@ -84,7 +84,7 @@ export function ApplicationsTableSkeleton() {
           </tbody>
         </table>
       </div>
-      <div className="flex flex-col gap-3 border-t border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-t border-border/60 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <Skeleton className="h-4 w-56" />
         <div className="flex gap-2">
           <Skeleton className="size-9 rounded-lg" />
@@ -117,8 +117,8 @@ export function DashboardIntroSkeleton() {
       <Skeleton className="mt-3 h-4 w-full max-w-2xl" />
       <Skeleton className="mt-2 h-4 w-full max-w-xl" />
       <div className="mt-5 flex flex-wrap gap-2">
-        <Skeleton className="h-11 w-[8.5rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
-        <Skeleton className="h-11 w-[10rem] rounded-xl border border-slate-200/60 bg-slate-100/90" />
+        <Skeleton className="h-11 w-[8.5rem] rounded-xl border border-border/60 bg-muted/60" />
+        <Skeleton className="h-11 w-[10rem] rounded-xl border border-border/60 bg-muted/60" />
       </div>
     </div>
   );
@@ -142,7 +142,7 @@ export function ApplicationsPageSkeleton() {
 export function KanbanToolbarSkeleton() {
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2">
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-2">
         {Array.from({ length: 5 }).map((_, i) => (
           <Skeleton key={i} className="h-10 w-24 rounded-xl" />
         ))}
@@ -160,9 +160,9 @@ export function KanbanBoardSkeleton() {
           {Array.from({ length: 7 }).map((_, i) => (
             <div
               key={i}
-              className="flex min-h-[520px] max-h-[min(86vh,920px)] w-[min(94vw,340px)] shrink-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-3 sm:w-[310px] lg:w-[328px] xl:w-[360px]"
+              className="flex min-h-[520px] max-h-[min(86vh,920px)] w-[min(94vw,340px)] shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-3 sm:w-[310px] lg:w-[328px] xl:w-[360px]"
             >
-              <div className="mb-3 space-y-2 border-b border-slate-100 pb-2">
+              <div className="mb-3 space-y-2 border-b border-border/60 pb-2">
                 <Skeleton className="h-5 w-36" />
                 <Skeleton className="h-3 w-full max-w-[180px]" />
               </div>
@@ -170,7 +170,7 @@ export function KanbanBoardSkeleton() {
                 {Array.from({ length: 3 }).map((_, j) => (
                   <div
                     key={j}
-                    className="rounded-xl border border-slate-100 p-3"
+                    className="rounded-xl border border-border/60 p-3"
                   >
                     <div className="flex gap-3">
                       <Skeleton className="size-12 shrink-0 rounded-xl" />

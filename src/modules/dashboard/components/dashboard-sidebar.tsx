@@ -96,9 +96,9 @@ function navButtonClass(isActive: boolean) {
   return cn(
     "h-10 gap-3 px-3 font-medium transition-colors",
     !isActive &&
-      "text-sidebar-foreground/75 hover:bg-white/10 hover:text-sidebar-foreground",
+      "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
     isActive &&
-      "!bg-blue-500 !text-white hover:!bg-blue-600 hover:!text-white data-active:!bg-blue-500 data-active:!text-white",
+      "!bg-sidebar-primary !text-sidebar-primary-foreground hover:!bg-sidebar-primary/90 hover:!text-sidebar-primary-foreground data-active:!bg-sidebar-primary data-active:!text-sidebar-primary-foreground",
   );
 }
 
@@ -203,13 +203,13 @@ export function DashboardSidebar({
             {user?.image ? (
               <Image
                 alt=""
-                className="size-10 shrink-0 rounded-full object-cover ring-2 ring-white/10 group-data-[collapsible=icon]:size-8"
+                className="size-10 shrink-0 rounded-full object-cover ring-2 ring-sidebar-border group-data-[collapsible=icon]:size-8"
                 height={40}
                 src={user.image}
                 width={40}
               />
             ) : (
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-white ring-2 ring-white/10 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:text-xs">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-sm font-semibold text-sidebar-foreground ring-2 ring-sidebar-border group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:text-xs">
                 {displayName.slice(0, 1).toUpperCase()}
               </div>
             )}

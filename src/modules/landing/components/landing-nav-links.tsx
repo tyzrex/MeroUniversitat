@@ -30,14 +30,14 @@ export function LandingNavLinks() {
             key={item.href + item.label}
             href={item.href}
             className={cn(
-              "relative flex h-20 items-center text-sm font-semibold text-slate-900 transition-colors hover:text-[#1238da]",
-              active && "text-[#1238da]",
+              "relative flex h-20 items-center text-sm font-semibold text-foreground transition-colors hover:text-primary",
+              active && "text-primary",
             )}
           >
             {item.label}
             <span
               className={cn(
-                "absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-[#1238da] transition-opacity",
+                "absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-primary transition-opacity",
                 active ? "opacity-100" : "opacity-0",
               )}
             />

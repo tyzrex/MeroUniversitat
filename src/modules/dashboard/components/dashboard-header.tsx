@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { DashboardUser } from "@/modules/dashboard/components/dashboard-layout-client";
 import { UserAccountMenu } from "@/modules/shared/components/user-account-menu";
+import { ThemeToggle } from "@/modules/shared/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { Database, LayoutDashboard, Search } from "lucide-react";
 import Link from "next/link";
@@ -28,8 +29,8 @@ export function DashboardHeader({
   const pathname = usePathname();
 
   return (
-    <header className="flex h-14 shrink-0 flex-wrap items-center gap-3 border-b border-slate-200/80 bg-white px-4 py-2 sm:flex-nowrap">
-      <SidebarTrigger className="-ml-1 text-slate-600" />
+    <header className="flex h-14 shrink-0 flex-wrap items-center gap-3 border-b border-border bg-background px-4 py-2 sm:flex-nowrap">
+      <SidebarTrigger className="-ml-1 text-muted-foreground" />
       <Separator className="mr-1 h-6 bg-border" orientation="vertical" />
       <nav className="hidden items-center gap-0.5 lg:flex">
         {TOP_LINKS.map(({ label, href, icon: Icon }) => {
@@ -44,8 +45,8 @@ export function DashboardHeader({
               className={cn(
                 "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
                 active
-                  ? "bg-slate-100 text-[#0d2145]"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+                  ? "bg-muted text-foreground"
+                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
               )}
             >
               <Icon className="size-4" strokeWidth={1.75} />
@@ -56,6 +57,7 @@ export function DashboardHeader({
       </nav>
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
+        <ThemeToggle />
         {user ? (
           <UserAccountMenu user={user} variant="compact" />
         ) : (

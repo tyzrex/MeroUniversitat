@@ -43,9 +43,9 @@ const resultLabel: Record<string, string> = {
 };
 
 const moderationStyles: Record<string, string> = {
-  PENDING: "border-amber-200 bg-amber-50 text-amber-800",
-  APPROVED: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  REJECTED: "border-rose-200 bg-rose-50 text-rose-800",
+  PENDING: "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+  APPROVED: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  REJECTED: "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300",
 };
 
 export function MyContributionsView({
@@ -76,17 +76,17 @@ export function MyContributionsView({
   return (
     <div className="mt-8 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-muted-foreground">
           {rows.length} submission{rows.length === 1 ? "" : "s"}
         </p>
-        <div className="flex rounded-xl border border-slate-200 bg-slate-50/80 p-1">
+        <div className="flex rounded-xl border border-border bg-muted/60 p-1">
           <Button
             type="button"
             variant={view === "table" ? "default" : "ghost"}
             size="sm"
             className={cn(
               "gap-1.5 rounded-lg",
-              view === "table" && "bg-[#0d2145] text-white hover:bg-[#1a3461]",
+              view === "table" && "bg-foreground text-background hover:bg-foreground/90",
             )}
             onClick={() => setView("table")}
           >
@@ -99,7 +99,7 @@ export function MyContributionsView({
             size="sm"
             className={cn(
               "gap-1.5 rounded-lg",
-              view === "cards" && "bg-[#0d2145] text-white hover:bg-[#1a3461]",
+              view === "cards" && "bg-foreground text-background hover:bg-foreground/90",
             )}
             onClick={() => setView("cards")}
           >
@@ -110,30 +110,30 @@ export function MyContributionsView({
       </div>
 
       {view === "table" ? (
-        <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/3">
+        <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-border/40">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-sm">
-              <thead className="border-b border-slate-100 bg-slate-50/90">
+              <thead className="border-b border-border bg-muted/60">
                 <tr>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]">
+                  <th className="px-5 py-3 font-semibold text-foreground">
                     University
                   </th>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]">
+                  <th className="px-5 py-3 font-semibold text-foreground">
                     Program
                   </th>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]">
+                  <th className="px-5 py-3 font-semibold text-foreground">
                     Status
                   </th>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]">
+                  <th className="px-5 py-3 font-semibold text-foreground">
                     Result
                   </th>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]">
+                  <th className="px-5 py-3 font-semibold text-foreground">
                     Intake
                   </th>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]">
+                  <th className="px-5 py-3 font-semibold text-foreground">
                     Submitted
                   </th>
-                  <th className="px-5 py-3 font-semibold text-[#0d2145]" />
+                  <th className="px-5 py-3 font-semibold text-foreground" />
                 </tr>
               </thead>
               <tbody>
@@ -143,7 +143,7 @@ export function MyContributionsView({
                   return (
                     <tr
                       key={r.id}
-                      className="border-b border-slate-50 transition-colors last:border-0 hover:bg-slate-50/60"
+                      className="border-b border-border transition-colors last:border-0 hover:bg-muted/60"
                     >
                       <td className="px-5 py-4">
                         <Link
@@ -156,12 +156,12 @@ export function MyContributionsView({
                             imageUrl={r.university.imageUrl}
                             size="xs"
                           />
-                          <span className="font-semibold text-[#0d2145] hover:text-[#4a52c8]">
+                          <span className="font-semibold text-foreground hover:text-primary">
                             {r.university.name}
                           </span>
                         </Link>
                       </td>
-                      <td className="max-w-[220px] px-5 py-4 text-slate-600">
+                      <td className="max-w-[220px] px-5 py-4 text-muted-foreground">
                         <span className="line-clamp-2">{program}</span>
                       </td>
                       <td className="px-5 py-4">
@@ -176,13 +176,13 @@ export function MyContributionsView({
                             r.moderationStatus}
                         </Badge>
                       </td>
-                      <td className="px-5 py-4 text-slate-700">
+                      <td className="px-5 py-4 text-foreground">
                         {resultLabel[r.result] ?? r.result}
                       </td>
-                      <td className="px-5 py-4 font-medium text-slate-800">
+                      <td className="px-5 py-4 font-medium text-foreground">
                         {r.intake}
                       </td>
-                      <td className="whitespace-nowrap px-5 py-4 text-slate-500">
+                      <td className="whitespace-nowrap px-5 py-4 text-muted-foreground">
                         {new Intl.DateTimeFormat("en", {
                           dateStyle: "medium",
                         }).format(new Date(r.createdAt))}
@@ -190,7 +190,7 @@ export function MyContributionsView({
                       <td className="px-5 py-4 text-right">
                         <Link
                           href={`/dashboard/community-data/submissions/${r.id}`}
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-[#4a52c8] hover:underline"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
                         >
                           Open
                           <ArrowRight className="size-3" strokeWidth={2} />
@@ -211,7 +211,7 @@ export function MyContributionsView({
             return (
               <li key={r.id}>
                 <Link
-                  className="group flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
+                  className="group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-border/40 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
                   href={`/dashboard/community-data/submissions/${r.id}`}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -226,7 +226,7 @@ export function MyContributionsView({
                         r.moderationStatus}
                     </Badge>
                     <ArrowRight
-                      className="size-4 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-[#4a52c8]"
+                      className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
                       strokeWidth={1.9}
                     />
                   </div>
@@ -240,7 +240,7 @@ export function MyContributionsView({
                       className="shadow-lg shadow-[#0d2145]/15"
                     />
                     <div className="min-w-0">
-                      <p className="font-bold text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
+                      <p className="font-bold text-foreground transition-colors group-hover:text-primary">
                         {r.university.name}
                       </p>
                       <p className="text-muted-foreground mt-1 line-clamp-2 text-sm">
@@ -249,20 +249,20 @@ export function MyContributionsView({
                     </div>
                   </div>
 
-                  <div className="mt-6 grid grid-cols-2 gap-3 border-t border-slate-100 pt-5 text-sm">
+                  <div className="mt-6 grid grid-cols-2 gap-3 border-t border-border pt-5 text-sm">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                         Intake
                       </p>
-                      <p className="mt-1 font-semibold text-slate-800">
+                      <p className="mt-1 font-semibold text-foreground">
                         {r.intake}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                         Result
                       </p>
-                      <p className="mt-1 font-semibold text-slate-800">
+                      <p className="mt-1 font-semibold text-foreground">
                         {resultLabel[r.result] ?? r.result}
                       </p>
                     </div>

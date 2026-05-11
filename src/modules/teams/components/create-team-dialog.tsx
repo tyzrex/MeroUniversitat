@@ -92,7 +92,7 @@ export function CreateTeamDialog() {
             </Button>
             <Button
               type="submit"
-              className="h-10 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]"
+              className="h-10 rounded-xl bg-foreground text-background hover:bg-foreground/90"
               disabled={pending}
             >
               {pending ? (

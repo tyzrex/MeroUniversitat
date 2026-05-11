@@ -83,7 +83,9 @@ export function JoinTeamDialog() {
 
           {error ? <p className="text-destructive text-sm">{error}</p> : null}
           {info ? (
-            <p className="text-emerald-700 text-sm font-medium">{info}</p>
+            <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+              {info}
+            </p>
           ) : null}
 
           <div className="flex justify-end gap-2 pt-2">
@@ -98,7 +100,7 @@ export function JoinTeamDialog() {
             </Button>
             <Button
               type="submit"
-              className="h-10 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]"
+              className="h-10 rounded-xl bg-foreground text-background hover:bg-foreground/90"
               disabled={pending}
             >
               {pending ? (

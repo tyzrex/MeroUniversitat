@@ -83,22 +83,22 @@ export default async function TeamsPage() {
         <SummaryCard
           label="Your teams"
           value={rows.length}
-          icon={<UsersRound className="size-5 text-[#4a52c8]" strokeWidth={1.8} />}
+          icon={<UsersRound className="size-5 text-primary" strokeWidth={1.8} />}
         />
         <SummaryCard
           label="Total members"
           value={totalMembersAcross}
-          icon={<Users className="size-5 text-[#4a52c8]" strokeWidth={1.8} />}
+          icon={<Users className="size-5 text-primary" strokeWidth={1.8} />}
         />
         <SummaryCard
           label="Shared applications"
           value={totalApps}
-          icon={<FileText className="size-5 text-[#4a52c8]" strokeWidth={1.8} />}
+          icon={<FileText className="size-5 text-primary" strokeWidth={1.8} />}
         />
         <SummaryCard
           label="Active teams"
           value={rows.length}
-          icon={<Columns3 className="size-5 text-[#4a52c8]" strokeWidth={1.8} />}
+          icon={<Columns3 className="size-5 text-primary" strokeWidth={1.8} />}
         />
       </section>
 
@@ -121,16 +121,16 @@ function SummaryCard({
   icon,
 }: Readonly<{ label: string; value: number | string; icon?: React.ReactNode }>) {
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-5 ring-1 ring-slate-900/5">
+    <div className="rounded-2xl border border-border bg-card p-5 ring-1 ring-border/40">
       <div className="flex items-center gap-4">
         {icon ? (
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-50">
+          <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10">
             {icon}
           </div>
         ) : null}
         <div className="min-w-0">
-          <p className="text-xs font-semibold text-slate-500">{label}</p>
-          <p className="mt-1 text-3xl font-extrabold tracking-tight text-[#0d2145]">
+          <p className="text-xs font-semibold text-muted-foreground">{label}</p>
+          <p className="mt-1 text-3xl font-extrabold tracking-tight text-foreground">
             {value}
           </p>
         </div>

@@ -120,7 +120,7 @@ export const KANBAN_COLUMNS: {
   {
     id: "archived",
     title: "Archived",
-    dot: "bg-slate-400",
+    dot: "bg-muted-foreground",
     statusHint: "Rejected · Withdrawn",
   },
 ];

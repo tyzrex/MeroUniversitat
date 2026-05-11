@@ -67,10 +67,10 @@ export default async function ProfilePage() {
 
       <ProfileSettingsForm defaultValues={defaults} />
 
-      <section className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-[#0d2145]/[0.03] via-white to-indigo-50/40 p-6 shadow-sm ring-1 ring-slate-900/5 md:p-8">
+      <section className="rounded-3xl border border-border bg-gradient-to-br from-foreground/5 via-background to-primary/5 p-6 shadow-sm ring-1 ring-border/40 md:p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <h2 className="text-lg font-bold text-[#0d2145]">
+            <h2 className="text-lg font-bold text-foreground">
               Visa &amp; embassy journey
             </h2>
             <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">
@@ -82,7 +82,7 @@ export default async function ProfilePage() {
           </div>
           <Link
             href="/dashboard/timelines"
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#0d2145] shadow-sm hover:bg-slate-50"
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm hover:bg-muted"
           >
             <CalendarClock className="size-4" strokeWidth={1.75} />
             Consular timeline

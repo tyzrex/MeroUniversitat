@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![MeroUniversitat logo](public/merounilogo.png)
 
-## Getting Started
+# MeroUniversitat
 
-First, run the development server:
+MeroUniversitat is a community-driven platform that makes Germany applications transparent, organized, and collaborative for Nepali students. Discover universities, benchmark with anonymized student outcomes, track your application pipeline, and plan visa timelines with real community data.
+
+## Why it exists
+
+Applying to Germany can feel opaque and fragmented. MeroUniversitat brings the process into one place so students can make informed decisions and move together with confidence.
+
+## Product highlights
+
+- University Explorer with 150+ German universities and program search
+- Community acceptance data and anonymized student profiles
+- Application tracker with Kanban workflow and status insights
+- Team workspaces for shared planning and collaboration
+- Visa and embassy timeline intelligence based on community milestones
+- Resources hub for SOPs, checklists, and templates
+
+## Tech stack
+
+- Next.js 16 + React 19 (App Router)
+- PostgreSQL + Prisma
+- Better Auth (email/password + Google)
+- Tailwind CSS + Shadcn UI
+
+## Quick start
+
+### 1) Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2) Start Postgres
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+docker-compose up -d
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3) Configure environment
 
-## Learn More
+Create `.env` and set at least:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mero_universitat
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Google OAuth is optional for local dev. If you skip it, keep the variables empty or remove the provider configuration.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4) Generate Prisma client and apply migrations
 
-## Deploy on Vercel
+```bash
+pnpm db:generate
+pnpm db:migrate:prod
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5) Run the app
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+```
+
+Open http://localhost:3000
+
+## Optional: seed data
+
+These scripts use Bun:
+
+```bash
+bun run scripts/seed-universities.ts
+bun run scripts/seed-university-logos.ts
+bun run scripts/sync-university-cities-from-json.ts
+```
+
+## Project structure
+
+This repo is organized by feature domains in `src/modules`. UI routes live in `src/app` and import from modules.
+
+## Scripts
+
+- `pnpm dev` - start the development server
+- `pnpm build` - build for production
+- `pnpm start` - run the production server
+- `pnpm lint` - lint the codebase
+- `pnpm db:generate` - generate Prisma client
+- `pnpm db:migrate:prod` - apply migrations
+- `pnpm seed:universities` - seed university list
+- `pnpm seed:university-logos` - seed university logos
+- `pnpm sync:university-cities` - sync university cities

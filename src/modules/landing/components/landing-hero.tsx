@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 
 export function LandingHero() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-hidden bg-background">
       {/* Subtle background grid */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -24,19 +24,19 @@ export function LandingHero() {
           <div className="relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Badge
               variant="outline"
-              className="mb-6 gap-1.5 rounded-full border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700"
+              className="mb-6 gap-1.5 rounded-full border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
             >
               <span className="size-1.5 rounded-full bg-blue-500" />
               Built for Nepali students. By the community. 🇳🇵
             </Badge>
 
-            <h1 className="text-balance text-3xl sm:text-4xl font-extrabold leading-[1.12] tracking-tight text-[#0d2145] md:text-5xl lg:text-[3.75rem]">
+            <h1 className="text-balance text-3xl font-extrabold leading-[1.12] tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-[3.75rem]">
               Germany applications made{" "}
               <span className="text-primary">transparent</span> for Nepali
               students.
             </h1>
 
-            <p className="mt-5 max-w-xl text-sm lg:text-lg leading-relaxed text-slate-500">
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground lg:text-lg">
               Search universities, explore real student profiles, track your
               applications, get timelines and collaborate with your team — all
               in one platform.

@@ -44,18 +44,18 @@ export function TeamInviteCodeCard({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/3">
-      <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-border/40">
+      <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
         Invite code
       </p>
       <div className="mt-3 flex items-center gap-3">
-        <code className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap rounded-xl bg-slate-50 px-4 py-3 text-center font-mono text-xl font-bold tracking-[0.22em] text-[#0d2145]">
+        <code className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap rounded-xl bg-muted px-4 py-3 text-center font-mono text-xl font-bold tracking-[0.22em] text-foreground">
           {currentCode}
         </code>
         <button
           type="button"
           onClick={copyCode}
-          className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600  transition-all hover:bg-slate-50 hover:text-[#0d2145]"
+          className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
           title="Copy invite code"
         >
           {copied ? (
@@ -71,7 +71,7 @@ export function TeamInviteCodeCard({
           type="button"
           onClick={regenerate}
           disabled={isPending}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-600  transition-all hover:bg-slate-50 hover:text-[#0d2145] disabled:opacity-60"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:opacity-60"
         >
           <RefreshCw
             className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
@@ -85,7 +85,7 @@ export function TeamInviteCodeCard({
         <p className="mt-2 text-center text-xs text-red-600">{error}</p>
       ) : null}
 
-      <p className="mt-3 text-center text-[11px] text-slate-400">
+      <p className="mt-3 text-center text-[11px] text-muted-foreground">
         Share this code with your friends so they can join your team.
       </p>
     </div>

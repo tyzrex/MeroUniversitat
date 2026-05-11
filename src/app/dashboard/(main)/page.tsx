@@ -92,20 +92,20 @@ export default async function DashboardPage() {
       </DashboardPageIntro>
 
       {stats.profileIncomplete ? (
-        <section className="rounded-3xl border border-amber-200/90 bg-gradient-to-br from-amber-50 via-orange-50/80 to-rose-50/60 p-6 ring-1 ring-amber-100/80 md:p-7">
+        <section className="rounded-3xl border border-amber-200/90 bg-gradient-to-br from-amber-50 via-orange-50/80 to-rose-50/60 p-6 ring-1 ring-amber-100/80 dark:border-amber-500/30 dark:from-amber-500/10 dark:via-amber-500/5 dark:to-rose-500/10 dark:ring-amber-500/20 md:p-7">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white text-amber-700 shadow-sm ring-1 ring-amber-100">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-card text-amber-700 shadow-sm ring-1 ring-amber-100 dark:text-amber-300 dark:ring-amber-500/30">
                 <UserCircle2 className="size-7" strokeWidth={1.8} />
               </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-800/90">
                   Profile
                 </p>
-                <h2 className="mt-1 text-lg font-bold text-[#0d2145] md:text-xl">
+                <h2 className="mt-1 text-lg font-bold text-foreground md:text-xl">
                   Complete your academic profile
                 </h2>
-                <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-700">
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
                   Add GPA, degree background, or target intake so recommendations and
                   community submissions stay accurate — it takes under two minutes.
                 </p>
@@ -114,7 +114,7 @@ export default async function DashboardPage() {
             <Link
               href="/dashboard/settings"
               className={dashboardPrimaryActionClass(
-                "shrink-0 bg-[#c2410c] hover:bg-[#9a3412]",
+                "shrink-0 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-400",
               )}
             >
               Open settings
@@ -125,8 +125,8 @@ export default async function DashboardPage() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <GradientMetricCard
-          accent="from-indigo-500/15 via-white to-violet-500/10"
-          iconWrapClass="bg-indigo-500/15 text-indigo-700"
+          accent="from-indigo-500/15 via-background to-violet-500/10"
+          iconWrapClass="bg-indigo-500/15 text-indigo-700 dark:text-indigo-300"
           icon={GraduationCap}
           label="Applications"
           value={stats.applicationCount}
@@ -137,8 +137,8 @@ export default async function DashboardPage() {
           }
         />
         <GradientMetricCard
-          accent="from-sky-500/15 via-white to-cyan-500/10"
-          iconWrapClass="bg-sky-500/15 text-sky-800"
+          accent="from-sky-500/15 via-background to-cyan-500/10"
+          iconWrapClass="bg-sky-500/15 text-sky-800 dark:text-sky-300"
           icon={Users}
           label="Teams"
           value={stats.teamCount}
@@ -147,8 +147,8 @@ export default async function DashboardPage() {
           }
         />
         <GradientMetricCard
-          accent="from-emerald-500/15 via-white to-teal-500/10"
-          iconWrapClass="bg-emerald-500/15 text-emerald-800"
+          accent="from-emerald-500/15 via-background to-teal-500/10"
+          iconWrapClass="bg-emerald-500/15 text-emerald-800 dark:text-emerald-300"
           icon={Database}
           label="Community submissions"
           value={stats.acceptanceSubmissionCount}
@@ -161,8 +161,8 @@ export default async function DashboardPage() {
         />
         {stats.nearestDeadline ? (
           <GradientMetricCard
-            accent="from-rose-500/15 via-white to-fuchsia-500/10"
-            iconWrapClass="bg-rose-500/15 text-rose-800"
+            accent="from-rose-500/15 via-background to-fuchsia-500/10"
+            iconWrapClass="bg-rose-500/15 text-rose-800 dark:text-rose-300"
             icon={Calendar}
             label="Next deadline"
             value={stats.nearestDeadline.deadline.toLocaleDateString("en-US", {
@@ -174,8 +174,8 @@ export default async function DashboardPage() {
           />
         ) : (
           <GradientMetricCard
-            accent="from-blue-500/15 via-white to-indigo-500/10"
-            iconWrapClass="bg-blue-500/15 text-blue-900"
+            accent="from-blue-500/15 via-background to-indigo-500/10"
+            iconWrapClass="bg-blue-500/15 text-blue-900 dark:text-blue-300"
             icon={Building2}
             label="Universities"
             value="Browse"
@@ -193,18 +193,18 @@ export default async function DashboardPage() {
               <div className="mb-5 flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Sparkles className="size-5 text-[#4a52c8]" strokeWidth={1.8} />
-                    <h2 className="text-lg font-bold text-[#0d2145]">
+                    <Sparkles className="size-5 text-primary" strokeWidth={1.8} />
+                    <h2 className="text-lg font-bold text-foreground">
                       Pipeline mix
                     </h2>
                   </div>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     Share of rows by status — matches your Kanban columns.
                   </p>
                 </div>
                 <Link
                   href="/dashboard/applications/kanban"
-                  className="text-sm font-semibold text-[#4a52c8] hover:underline"
+                  className="text-sm font-semibold text-primary hover:underline"
                 >
                   Open board →
                 </Link>
@@ -213,14 +213,14 @@ export default async function DashboardPage() {
                 {stats.statusBreakdown.map(({ status, count }, i) => (
                   <div key={status}>
                     <div className="mb-1 flex justify-between text-sm">
-                      <span className="font-medium text-slate-700">
+                      <span className="font-medium text-muted-foreground">
                         {applicationStatusLabel(status)}
                       </span>
-                      <span className="tabular-nums font-bold text-[#0d2145]">
+                      <span className="tabular-nums font-bold text-foreground">
                         {count}
                       </span>
                     </div>
-                    <div className="h-2.5 overflow-hidden rounded-full bg-white/80 ring-1 ring-slate-200/80">
+                    <div className="h-2.5 overflow-hidden rounded-full bg-muted/60 ring-1 ring-border/40">
                       <div
                         className="h-full rounded-full shadow-sm"
                         style={{
@@ -235,9 +235,12 @@ export default async function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
-              <Sparkles className="mx-auto size-10 text-slate-300" strokeWidth={1.5} />
-              <p className="mt-4 font-semibold text-[#0d2145]">
+            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-border bg-muted/50 p-8 text-center">
+              <Sparkles
+                className="mx-auto size-10 text-muted-foreground/40"
+                strokeWidth={1.5}
+              />
+              <p className="mt-4 font-semibold text-foreground">
                 No pipeline data yet
               </p>
               <p className="text-muted-foreground mt-2 text-sm">
@@ -257,19 +260,22 @@ export default async function DashboardPage() {
               <div className="mb-5 flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <CalendarClock className="size-5 text-sky-700" strokeWidth={1.8} />
-                    <h2 className="text-lg font-bold text-[#0d2145]">
+                    <CalendarClock
+                      className="size-5 text-sky-700 dark:text-sky-300"
+                      strokeWidth={1.8}
+                    />
+                    <h2 className="text-lg font-bold text-foreground">
                       Deadline radar
                     </h2>
                   </div>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     Next dates across solo and team pipelines — stay ahead of
                     submissions.
                   </p>
                 </div>
                 <Link
                   href="/dashboard/applications"
-                  className="text-sm font-semibold text-[#4a52c8] hover:underline"
+                  className="text-sm font-semibold text-primary hover:underline"
                 >
                   View list →
                 </Link>
@@ -282,10 +288,10 @@ export default async function DashboardPage() {
                   return (
                     <li
                       key={`${row.universityName}-${row.deadline.toISOString()}-${i}`}
-                      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-sm ring-1 ring-slate-900/[0.04]"
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/70 bg-card/90 px-4 py-3 shadow-sm ring-1 ring-border/40"
                     >
                       <div className="min-w-0">
-                        <p className="truncate font-semibold text-[#0d2145]">
+                        <p className="truncate font-semibold text-foreground">
                           {row.universityName}
                         </p>
                         {row.intakeSemester ? (
@@ -295,10 +301,10 @@ export default async function DashboardPage() {
                         ) : null}
                       </div>
                       <div className="text-right">
-                        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                        <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
                           {days <= 0 ? "Soon" : `In ${days}d`}
                         </p>
-                        <p className="text-sm font-bold tabular-nums text-[#0d2145]">
+                        <p className="text-sm font-bold tabular-nums text-foreground">
                           {row.deadline.toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -312,9 +318,12 @@ export default async function DashboardPage() {
               </ul>
             </div>
           ) : (
-            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-slate-200 bg-sky-50/40 p-8 text-center">
-              <CalendarClock className="mx-auto size-10 text-sky-200" strokeWidth={1.5} />
-              <p className="mt-4 font-semibold text-[#0d2145]">
+            <div className="flex flex-col justify-center rounded-3xl border border-dashed border-border bg-muted/40 p-8 text-center">
+              <CalendarClock
+                className="mx-auto size-10 text-sky-200 dark:text-sky-400"
+                strokeWidth={1.5}
+              />
+              <p className="mt-4 font-semibold text-foreground">
                 No upcoming deadlines
               </p>
               <p className="text-muted-foreground mt-2 text-sm">
@@ -328,17 +337,17 @@ export default async function DashboardPage() {
       <SimilarPeersPanel userId={session.user.id} />
 
       {stats.workspacePreference === "SOLO" && stats.teamCount === 0 ? (
-        <section className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 ring-1 ring-blue-100/80">
+        <section className="rounded-3xl border border-primary/20 bg-gradient-to-r from-primary/10 to-primary/5 p-6 ring-1 ring-primary/20">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/80 bg-white text-[#4a52c8] ring-1 ring-slate-200/60">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card text-primary ring-1 ring-border/40">
                 <UsersRound className="size-6" strokeWidth={1.8} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#0d2145]">
+                <h3 className="text-lg font-bold text-foreground">
                   Want to collaborate?
                 </h3>
-                <p className="mt-1 max-w-md text-sm text-slate-600">
+                <p className="mt-1 max-w-md text-sm text-muted-foreground">
                   Create a team or join one with an invite code to share
                   applications and see everyone&apos;s progress on the same
                   Kanban board.
@@ -368,8 +377,8 @@ export default async function DashboardPage() {
       <section>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold text-[#0d2145]">Quick actions</h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <h2 className="text-xl font-bold text-foreground">Quick actions</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
               Continue with the most useful parts of your workspace.
             </p>
           </div>
@@ -378,22 +387,22 @@ export default async function DashboardPage() {
           {quickActions.map(({ description, href, icon: Icon, title }) => (
             <Link
               key={href}
-              className="group rounded-3xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 transition-colors hover:border-[#4a52c8]/30 hover:bg-gradient-to-br hover:from-white hover:to-indigo-50/40"
+              className="group rounded-3xl border border-border bg-card p-6 ring-1 ring-border/40 transition-colors hover:border-primary/30 hover:bg-gradient-to-br hover:from-card hover:to-primary/5"
               href={href}
             >
               <div className="flex items-start justify-between gap-4">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#4a52c8]/15 to-indigo-500/10 text-[#4a52c8]">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary">
                   <Icon className="size-6" strokeWidth={1.8} />
                 </div>
                 <ArrowRight
-                  className="size-4 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-[#4a52c8]"
+                  className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
                   strokeWidth={1.9}
                 />
               </div>
-              <h3 className="mt-5 text-lg font-bold text-[#0d2145]">
+              <h3 className="mt-5 text-lg font-bold text-foreground">
                 {title}
               </h3>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
                 {description}
               </p>
             </Link>
@@ -480,11 +489,11 @@ function GradientMetricCard({
     <>
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold text-slate-600">{label}</p>
-          <p className="mt-1 text-2xl font-extrabold tracking-tight text-[#0d2145]">
+          <p className="text-sm font-semibold text-muted-foreground">{label}</p>
+          <p className="mt-1 text-2xl font-extrabold tracking-tight text-foreground">
             {value}
           </p>
-          <p className="mt-1 text-xs text-slate-500">{hint}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
         </div>
         <div
           className={`flex size-11 items-center justify-center rounded-2xl ${iconWrapClass}`}
@@ -497,7 +506,7 @@ function GradientMetricCard({
 
   const shell = (
     <div
-      className={`rounded-3xl border border-slate-200/70 bg-gradient-to-br p-5 ring-1 ring-slate-900/[0.04] transition-colors ${accent} ${href ? "cursor-pointer hover:ring-[#4a52c8]/25" : ""}`}
+      className={`rounded-3xl border border-border bg-gradient-to-br p-5 ring-1 ring-border/40 transition-colors ${accent} ${href ? "cursor-pointer hover:ring-primary/30" : ""}`}
     >
       {inner}
     </div>

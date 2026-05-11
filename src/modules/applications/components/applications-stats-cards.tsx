@@ -19,7 +19,7 @@ function TrendLine({
 }: Readonly<{ pct: number | null }>) {
   if (pct === null) {
     return (
-      <span className="text-xs font-medium text-slate-400">
+      <span className="text-xs font-medium text-muted-foreground">
         No prior period
       </span>
     );
@@ -52,18 +52,18 @@ export async function ApplicationsStatsCards({
         return (
           <div
             key={card.key}
-            className="rounded-2xl border border-slate-200/80 bg-white p-5 ring-1 ring-slate-900/5"
+            className="rounded-2xl border border-border/80 bg-card p-5 ring-1 ring-border/60"
           >
             <div className="flex items-start justify-between gap-3">
-              <div className="rounded-xl bg-slate-50 p-2.5 text-[#4a52c8]">
+              <div className="rounded-xl bg-muted/60 p-2.5 text-primary">
                 <Icon className="size-5" strokeWidth={1.8} />
               </div>
               <TrendLine pct={card.trendPct} />
             </div>
-            <p className="mt-4 text-3xl font-extrabold tracking-tight text-[#0d2145]">
+            <p className="mt-4 text-3xl font-extrabold tracking-tight text-foreground">
               {card.value}
             </p>
-            <p className="mt-1 text-sm font-semibold text-slate-600">
+            <p className="mt-1 text-sm font-semibold text-muted-foreground">
               {card.title}
             </p>
           </div>

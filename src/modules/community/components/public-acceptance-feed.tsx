@@ -20,11 +20,11 @@ export async function PublicAcceptanceFeed() {
   if (rows.length === 0) {
     return (
       <section className="pt-4">
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+        <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center ">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <Database className="size-7" strokeWidth={1.8} />
           </div>
-          <h2 className="mt-5 text-xl font-bold text-[#0d2145]">
+          <h2 className="mt-5 text-xl font-bold text-foreground">
             No published records yet
           </h2>
           <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-6">
@@ -34,7 +34,7 @@ export async function PublicAcceptanceFeed() {
           <Link
             className={cn(
               buttonVariants({ size: "lg" }),
-              "mt-6 h-11 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]",
+              "mt-6 h-11 rounded-xl bg-foreground text-background hover:bg-foreground/90",
             )}
             href="/community-data"
           >
@@ -49,7 +49,7 @@ export async function PublicAcceptanceFeed() {
     <section className="pt-4">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-[#0d2145]">
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
             Approved submissions
           </h2>
           <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">
@@ -60,7 +60,7 @@ export async function PublicAcceptanceFeed() {
         <Link
           className={cn(
             buttonVariants({ variant: "outline", size: "lg" }),
-            "h-11 rounded-xl bg-white font-semibold",
+            "h-11 rounded-xl bg-background font-semibold",
           )}
           href="/community-data"
         >
@@ -82,7 +82,7 @@ export async function PublicAcceptanceFeed() {
           return (
             <li
               key={r.id}
-              className="group flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
+              className="group flex flex-col rounded-3xl border border-border bg-card p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-border/40 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <Badge variant="secondary" className="rounded-md font-semibold">
@@ -92,7 +92,7 @@ export async function PublicAcceptanceFeed() {
                   {r.intake}
                 </span>
                 <ArrowRight
-                  className="ml-auto size-4 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-[#4a52c8]"
+                  className="ml-auto size-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
                   strokeWidth={1.9}
                 />
               </div>
@@ -105,7 +105,7 @@ export async function PublicAcceptanceFeed() {
                   className="shadow-md shadow-black/5"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="font-bold text-[#0d2145]">
+                  <p className="font-bold text-foreground">
                     <Link
                       className="hover:text-primary underline-offset-4 hover:underline"
                       href={`/universities/${r.university.slug}`}
@@ -116,7 +116,7 @@ export async function PublicAcceptanceFeed() {
                   <p className="text-muted-foreground mt-1 text-sm">{program}</p>
                 </div>
               </div>
-              <div className="text-muted-foreground mt-5 grid grid-cols-2 gap-2 border-t border-slate-100 pt-5 text-xs">
+              <div className="text-muted-foreground mt-5 grid grid-cols-2 gap-2 border-t border-border pt-5 text-xs">
                 <span>GPA: {gpaStr}</span>
                 <span>%: {pctStr}</span>
               </div>

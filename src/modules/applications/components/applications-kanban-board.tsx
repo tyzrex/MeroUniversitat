@@ -45,10 +45,10 @@ type Props = {
 const MIME = "application/x-mero-application-id";
 
 const selectClass =
-  "border-input bg-background w-full rounded-lg border px-2 py-1.5 text-[11px] font-medium focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none";
+  "border-input bg-background w-full rounded-lg border px-2 py-1.5 text-[11px] font-medium text-foreground focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:outline-none";
 
 const selectClassMinimal =
-  "border-input bg-background max-w-[160px] rounded-lg border px-2 py-1 text-[10px] font-medium focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none";
+  "border-input bg-background max-w-[160px] rounded-lg border px-2 py-1 text-[10px] font-medium text-foreground focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:outline-none";
 
 const DEFAULT_COUNTRY = "Germany";
 
@@ -190,9 +190,9 @@ export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
             byMember.map(({ userId, label, items }) => (
               <section
                 key={userId}
-                className="rounded-2xl border border-slate-200 bg-white p-6"
+                className="rounded-2xl border border-border bg-card p-6"
               >
-                <h2 className="border-b border-slate-100 pb-4 text-lg font-bold text-[#0d2145]">
+                <h2 className="border-b border-border pb-4 text-lg font-bold text-foreground">
                   {label}
                   <span className="text-muted-foreground ml-2 text-sm font-semibold">
                     {items.length} application{items.length === 1 ? "" : "s"}
@@ -228,9 +228,9 @@ export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
             byTeam.map(({ key, label, items }) => (
               <section
                 key={key}
-                className="rounded-2xl border border-slate-200 bg-white p-6"
+                className="rounded-2xl border border-border bg-card p-6"
               >
-                <h2 className="border-b border-slate-100 pb-4 text-lg font-bold text-[#0d2145]">
+                <h2 className="border-b border-border pb-4 text-lg font-bold text-foreground">
                   {label}
                   <span className="text-muted-foreground ml-2 text-sm font-semibold">
                     {items.length} application{items.length === 1 ? "" : "s"}
@@ -269,10 +269,10 @@ export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
                 <div
                   key={col.id}
                   className={cn(
-                    "flex min-h-[400px] max-h-[min(86vh,920px)] w-[min(94vw,340px)] shrink-0 flex-col overflow-hidden rounded-xl border bg-white p-3 transition-colors sm:w-[310px] lg:w-[328px] xl:w-[360px]",
+                    "flex min-h-[400px] max-h-[min(86vh,920px)] w-[min(94vw,340px)] shrink-0 flex-col overflow-hidden rounded-xl border bg-card p-3 transition-colors sm:w-[310px] lg:w-[328px] xl:w-[360px]",
                     isDropTarget
-                      ? "border-[#4a52c8] ring-2 ring-[#4a52c8]/25"
-                      : "border-slate-200",
+                      ? "border-primary ring-2 ring-primary/30"
+                      : "border-border",
                   )}
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -293,7 +293,7 @@ export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
                     }
                   }}
                 >
-                  <div className="mb-3 shrink-0 flex items-start justify-between gap-2 border-b border-slate-100 pb-2">
+                  <div className="mb-3 shrink-0 flex items-start justify-between gap-2 border-b border-border/60 pb-2">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <span
@@ -302,7 +302,7 @@ export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
                             col.dot,
                           )}
                         />
-                        <h2 className="text-sm font-semibold text-[#0d2145]">
+                        <h2 className="text-sm font-semibold text-foreground">
                           {col.title}
                         </h2>
                       </div>
@@ -316,7 +316,7 @@ export function ApplicationsKanbanBoard({ cards, currentUserId, view }: Props) {
                   </div>
                   <ul className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch]">
                     {items.length === 0 ? (
-                      <li className="text-muted-foreground rounded-lg border border-dashed border-slate-200 bg-slate-50/50 p-4 text-center text-xs">
+                      <li className="text-muted-foreground rounded-lg border border-dashed border-border/60 bg-muted/40 p-4 text-center text-xs">
                         Drop cards here
                       </li>
                     ) : (
@@ -369,8 +369,8 @@ function UniversityGroupSection({
   const leadName = title;
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6">
-      <div className="flex flex-col gap-4 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+    <section className="rounded-2xl border border-border/80 bg-card p-6">
+      <div className="flex flex-col gap-4 border-b border-border/60 pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-center gap-3">
           <UniversityLogo
             name={leadName}
@@ -378,7 +378,7 @@ function UniversityGroupSection({
             size="compact"
           />
           <div className="min-w-0">
-            <h2 className="text-lg font-bold text-[#0d2145]">{title}</h2>
+            <h2 className="text-lg font-bold text-foreground">{title}</h2>
             <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
               <span aria-hidden>🇩🇪</span>
               {DEFAULT_COUNTRY}
@@ -397,7 +397,7 @@ function UniversityGroupSection({
               <OwnerAvatar key={o.userId} card={o} />
             ))}
             {owners.length > 6 ? (
-              <span className="z-10 flex size-8 items-center justify-center rounded-full border border-white bg-slate-100 text-[10px] font-bold text-slate-700 ring-2 ring-white">
+              <span className="z-10 flex size-8 items-center justify-center rounded-full border border-background bg-muted text-[10px] font-bold text-foreground ring-2 ring-background">
                 +{owners.length - 6}
               </span>
             ) : null}
@@ -444,7 +444,7 @@ function KanbanShell({
 
 function EmptyKanban() {
   return (
-    <div className="text-muted-foreground rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center text-sm">
+    <div className="text-muted-foreground rounded-2xl border border-dashed border-border/70 bg-muted/40 p-12 text-center text-sm">
       No applications visible yet.
     </div>
   );
@@ -471,7 +471,7 @@ function OwnerAvatar({
         width={32}
         height={32}
         className={cn(
-          "size-8 rounded-full border border-white object-cover ring-2 ring-white",
+          "size-8 rounded-full border border-background object-cover ring-2 ring-background",
           className,
         )}
         title={card.ownerName}
@@ -482,7 +482,7 @@ function OwnerAvatar({
   return (
     <span
       className={cn(
-        "flex size-8 items-center justify-center rounded-full border border-white bg-slate-100 text-[10px] font-bold text-slate-700 ring-2 ring-white",
+        "flex size-8 items-center justify-center rounded-full border border-background bg-muted text-[10px] font-bold text-foreground ring-2 ring-background",
         className,
       )}
       title={card.ownerName}
@@ -524,7 +524,7 @@ function KanbanApplicationCard({
           e.dataTransfer.effectAllowed = "move";
         }}
         className={cn(
-          "flex gap-2 rounded-lg border border-slate-200 bg-white p-2 text-sm",
+          "flex gap-2 rounded-lg border border-border bg-card p-2 text-sm",
           canDrag ? "cursor-grab active:cursor-grabbing" : "",
         )}
       >
@@ -533,7 +533,7 @@ function KanbanApplicationCard({
           {!isOwner ? (
             <ApplicationStatusPill className="mb-1" status={card.status} />
           ) : null}
-          <p className="truncate font-semibold leading-tight text-[#0d2145]">
+          <p className="truncate font-semibold leading-tight text-foreground">
             {card.universityName}
           </p>
           <p className="truncate text-[11px] text-muted-foreground">
@@ -566,7 +566,7 @@ function KanbanApplicationCard({
                 ))}
               </select>
               <Link
-                className="text-[10px] font-semibold text-[#2563eb]"
+                className="text-[10px] font-semibold text-primary"
                 href={`/dashboard/applications/${card.id}/edit`}
               >
                 Edit
@@ -594,14 +594,14 @@ function KanbanApplicationCard({
         e.dataTransfer.effectAllowed = "move";
       }}
       className={cn(
-        "relative rounded-xl border border-slate-200 bg-white p-3 text-sm",
+        "relative rounded-xl border border-border bg-card p-3 text-sm",
         canDrag ? "cursor-grab active:cursor-grabbing" : "",
       )}
     >
       {boardCard && isOwner ? (
         <Link
           href={`/dashboard/applications/${card.id}/edit`}
-          className="absolute top-2 right-2 z-10 inline-flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#0d2145]"
+          className="absolute top-2 right-2 z-10 inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           title="Edit application"
           onMouseDown={(e) => e.stopPropagation()}
         >
@@ -622,28 +622,30 @@ function KanbanApplicationCard({
               <ApplicationStatusPill status={card.status} />
             </div>
           ) : null}
-          <p className="font-semibold leading-snug text-[#0d2145]">
+          <p className="font-semibold leading-snug text-foreground">
             {card.universityName}
           </p>
-          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-500">
+          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
             <span aria-hidden>🇩🇪</span>
             {card.city ? `${card.city}, ${DEFAULT_COUNTRY}` : DEFAULT_COUNTRY}
           </p>
-          <p className="mt-1 text-xs text-slate-600">{card.programLabel}</p>
-          <p className="mt-1 text-[11px] font-medium text-slate-500">
+          <p className="mt-1 text-xs text-muted-foreground">
+            {card.programLabel}
+          </p>
+          <p className="mt-1 text-[11px] font-medium text-muted-foreground">
             {card.intakeSemester?.trim()
               ? `${card.intakeSemester}`
               : "Intake TBD"}
           </p>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
             <OwnerAvatar card={card} />
             <Badge
               variant="outline"
               className={cn(
-                "border-slate-200 font-semibold",
-                !card.teamLabel && "bg-slate-50 text-slate-600",
-                card.teamLabel && "border-blue-200 bg-blue-50 text-blue-900",
+                "border-border font-semibold",
+                !card.teamLabel && "bg-muted/60 text-muted-foreground",
+                card.teamLabel && "border-primary/30 bg-primary/10 text-primary",
               )}
             >
               {card.teamLabel ?? "Personal"}
@@ -677,7 +679,7 @@ function KanbanApplicationCard({
                   ))}
                 </select>
                 <Link
-                  className="inline-block text-xs font-semibold text-[#2563eb]"
+                  className="inline-block text-xs font-semibold text-primary"
                   href={`/dashboard/applications/${card.id}/edit`}
                 >
                   Full edit

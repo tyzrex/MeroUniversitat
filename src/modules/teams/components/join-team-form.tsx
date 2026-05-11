@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const TEAM_FORM_PANEL =
-  "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.03]";
+  "rounded-2xl border border-border bg-card p-6 transition-colors focus-within:border-primary/35 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-border/40";
 
 export function JoinTeamForm() {
   const router = useRouter();
@@ -40,7 +40,7 @@ export function JoinTeamForm() {
 
   return (
     <form className={TEAM_FORM_PANEL} onSubmit={onSubmit}>
-      <h3 className="text-lg font-semibold text-[#0d2145]">Join with invite code</h3>
+      <h3 className="text-lg font-semibold text-foreground">Join with invite code</h3>
       <p className="text-muted-foreground mt-1 text-sm">
         Paste the code your team owner shared (case-insensitive).
       </p>
@@ -60,10 +60,12 @@ export function JoinTeamForm() {
         <p className="text-destructive mt-3 text-sm">{error}</p>
       ) : null}
       {info ? (
-        <p className="text-emerald-700 mt-3 text-sm font-medium">{info}</p>
+        <p className="mt-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+          {info}
+        </p>
       ) : null}
       <Button
-        className="mt-4 w-full rounded-xl bg-[#0d2145] hover:bg-[#1a3461] sm:w-auto"
+        className="mt-4 w-full rounded-xl bg-foreground text-background hover:bg-foreground/90 sm:w-auto"
         disabled={pending}
         type="submit"
       >

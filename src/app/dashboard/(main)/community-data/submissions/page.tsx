@@ -110,11 +110,11 @@ export default async function MyContributionsPage() {
       </section>
 
       {rows.length === 0 ? (
-        <section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+        <section className="mt-8 rounded-3xl border border-dashed border-border bg-card p-10 text-center ">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <GraduationCap className="size-7" strokeWidth={1.7} />
           </div>
-          <h2 className="mt-5 text-xl font-bold text-[#0d2145]">
+          <h2 className="mt-5 text-xl font-bold text-foreground">
             No submissions yet
           </h2>
           <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-6">
@@ -124,7 +124,7 @@ export default async function MyContributionsPage() {
           <Link
             className={cn(
               buttonVariants({ size: "lg" }),
-              "mt-6 h-11 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]",
+              "mt-6 h-11 rounded-xl bg-foreground text-background hover:bg-foreground/90",
             )}
             href="/dashboard/community-data"
           >
@@ -161,18 +161,18 @@ function SummaryCard({
   value: number;
 }>) {
   const toneClass = {
-    blue: "bg-blue-50 text-[#4a52c8]",
-    emerald: "bg-emerald-50 text-emerald-600",
-    amber: "bg-amber-50 text-amber-600",
-    rose: "bg-rose-50 text-rose-600",
+    blue: "bg-primary/10 text-primary",
+    emerald: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
+    amber: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
+    rose: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
   }[tone];
 
   return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.03]">
+    <div className="rounded-3xl border border-border bg-card p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-border/40">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-muted-foreground text-sm font-semibold">{label}</p>
-          <p className="mt-1 text-3xl font-extrabold tracking-tight text-[#0d2145]">
+          <p className="mt-1 text-3xl font-extrabold tracking-tight text-foreground">
             {value}
           </p>
         </div>

@@ -15,7 +15,7 @@ export function DashboardPagePlaceholder({
 }: Props) {
   return (
     <Container className="max-w-[1500px] py-2">
-      <section className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
+      <section className="overflow-hidden rounded-3xl border border-border/80 bg-card shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-border/60">
         <div className="relative bg-gradient-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
           <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
           <div className="relative max-w-3xl">
@@ -33,7 +33,7 @@ export function DashboardPagePlaceholder({
               <Link
                 className={cn(
                   buttonVariants({ size: "lg" }),
-                  "h-11 rounded-xl bg-white text-[#0d2145] shadow-lg shadow-black/10 hover:bg-white/90",
+                  "h-11 rounded-xl bg-foreground text-background shadow-lg shadow-black/10 hover:bg-foreground/90",
                 )}
                 href="/dashboard/community-data"
               >
@@ -42,7 +42,7 @@ export function DashboardPagePlaceholder({
               <Link
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white hover:text-[#0d2145]",
+                  "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white/20",
                 )}
                 href="/dashboard"
               >

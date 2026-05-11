@@ -1,27 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
+
+import { ThemeToggle } from "@/modules/shared/components/theme-toggle";
+import { LogoSwitcher } from "@/modules/shared/components/logo-switcher";
+
 import { Container } from "../../shared/components/container";
-import LandingHeaderProfile from "./landing-header-profile";
+import LandingHeaderProfile from "./landing-header-profile-client";
 import { LandingNavLinks } from "./landing-nav-links";
 
 export function LandingNavbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur">
       <Container className="flex h-20 items-center gap-6">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 font-bold text-[#0d2145]"
+          className="flex shrink-0 items-center gap-2 font-bold text-foreground"
         >
-          <Image
-            src="/merounilogo.png"
-            alt="MeroUniversität"
-            width={62}
-            height={62}
-            className="size-[62px] object-contain"
-            priority
-          />
+          <LogoSwitcher size={62} className="size-[62px]" />
           <span className="hidden text-[20px] font-black tracking-tight md:block">
-            Mero<span className="text-[#1238da]">Universität</span>
+            Mero<span className="text-primary">Universität</span>
           </span>
         </Link>
 
@@ -29,7 +26,10 @@ export function LandingNavbar() {
           <LandingNavLinks />
         </div>
 
-        <LandingHeaderProfile />
+        <div className="ml-auto flex items-center gap-3">
+          <ThemeToggle />
+          <LandingHeaderProfile />
+        </div>
       </Container>
     </header>
   );

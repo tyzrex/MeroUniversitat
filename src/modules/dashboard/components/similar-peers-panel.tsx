@@ -13,12 +13,12 @@ export async function SimilarPeersPanel({
   return (
     <div className={dashboardInsightShellAlt}>
       <div className="mb-4 flex items-start gap-2">
-        <UsersRound className="size-5 shrink-0 text-[#4a52c8]" strokeWidth={1.8} />
+        <UsersRound className="size-5 shrink-0 text-primary" strokeWidth={1.8} />
         <div>
-          <h2 className="text-lg font-bold text-[#0d2145]">
+          <h2 className="text-lg font-bold text-foreground">
             Similar applicants (opt-in)
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Peers near your GPA who chose to share schools they track — names only,
             no documents.
           </p>
@@ -26,29 +26,29 @@ export async function SimilarPeersPanel({
       </div>
 
       {!result.hasGpa ? (
-        <p className="text-sm leading-relaxed text-slate-600">
+        <p className="text-sm leading-relaxed text-muted-foreground">
           Add your{" "}
           <Link
             href="/dashboard/profile#gpa"
-            className="font-semibold text-[#4a52c8] hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             GPA on your profile
           </Link>{" "}
           to unlock matching.
         </p>
       ) : !result.optedIn ? (
-        <p className="text-sm leading-relaxed text-slate-600">
+        <p className="text-sm leading-relaxed text-muted-foreground">
           Turn on peer discovery in{" "}
           <Link
             href="/dashboard/profile#peer-matching"
-            className="font-semibold text-[#4a52c8] hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             Profile settings
           </Link>{" "}
           (off by default). We only match within ±0.25 GPA points.
         </p>
       ) : result.peers.length === 0 ? (
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-muted-foreground">
           No other opted-in applicants in your GPA band yet — check back as the
           community grows.
         </p>
@@ -57,13 +57,13 @@ export async function SimilarPeersPanel({
           {result.peers.map((p) => (
             <li
               key={p.userId}
-              className="rounded-2xl border border-white/70 bg-white/80 px-4 py-3 shadow-sm ring-1 ring-slate-900/[0.04]"
+              className="rounded-2xl border border-border/70 bg-card/80 px-4 py-3 shadow-sm ring-1 ring-border/40"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="font-semibold text-[#0d2145]">
+                <span className="font-semibold text-foreground">
                   {p.displayName}
                 </span>
-                <span className="text-xs font-bold tabular-nums text-slate-500">
+                <span className="text-xs font-bold tabular-nums text-muted-foreground">
                   GPA ~{p.gpa.toFixed(2)}
                 </span>
               </div>

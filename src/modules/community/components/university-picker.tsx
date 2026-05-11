@@ -76,7 +76,7 @@ export function UniversityPicker({
   return (
     <div ref={rootRef} className="relative">
       {value ? (
-        <div className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm">
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/50 px-3 py-2.5 text-sm">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <UniversityLogo
               name={nameForLogo}
@@ -84,7 +84,7 @@ export function UniversityPicker({
               size="xs"
               className="shadow-md shadow-black/5"
             />
-            <span className="font-medium text-slate-900">{displayLabel}</span>
+            <span className="font-medium text-foreground">{displayLabel}</span>
           </div>
           <button
             type="button"
@@ -115,7 +115,7 @@ export function UniversityPicker({
               autoComplete="off"
             />
             {loading ? (
-              <Loader2 className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 animate-spin text-slate-400" />
+              <Loader2 className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
             ) : null}
           </div>
           {open && items.length > 0 ? (

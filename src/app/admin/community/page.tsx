@@ -26,7 +26,7 @@ export default async function AdminCommunityPage() {
 
   return (
     <div className="space-y-8">
-      <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
+      <header className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-border/40">
         <div className="relative bg-gradient-to-br from-[#0d2145] via-[#253980] to-[#4a52c8] p-7 text-white md:p-10">
           <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -66,14 +66,14 @@ export default async function AdminCommunityPage() {
         </div>
       </header>
 
-      <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
+      <section className="rounded-3xl border border-border bg-card p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-border/40 md:p-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+            <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <Database className="size-5" strokeWidth={1.8} />
             </div>
             <div>
-              <h2 className="font-bold text-[#0d2145]">Pending submissions</h2>
+              <h2 className="font-bold text-foreground">Pending submissions</h2>
               <p className="text-muted-foreground text-sm">
                 Oldest records appear first to keep moderation fair.
               </p>

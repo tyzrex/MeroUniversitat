@@ -65,8 +65,8 @@ function DetailCard({
   title: string;
 }>) {
   return (
-    <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03]">
-      <h2 className="text-base font-bold text-[#0d2145]">{title}</h2>
+    <section className="rounded-3xl border border-border bg-card p-6 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ring-1 ring-border/40">
+      <h2 className="text-base font-bold text-foreground">{title}</h2>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">{children}</div>
     </section>
   );
@@ -82,12 +82,12 @@ function DetailItem({
   value: ReactNode;
 }>) {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
-      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+    <div className="rounded-2xl border border-border bg-muted/80 p-4">
+      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
         <Icon className="size-4" strokeWidth={1.8} />
         {label}
       </div>
-      <div className="mt-2 text-sm font-semibold text-slate-900">{value}</div>
+      <div className="mt-2 text-sm font-semibold text-foreground">{value}</div>
     </div>
   );
 }
@@ -133,7 +133,7 @@ export default async function SubmissionDetailPage({
     <Container className="max-w-[1500px] py-2">
       <div className="mb-6">
         <Link
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-[#0d2145]"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
           href="/dashboard/community-data/submissions"
         >
           <ArrowLeft className="size-4" strokeWidth={1.8} />
@@ -141,7 +141,7 @@ export default async function SubmissionDetailPage({
         </Link>
       </div>
 
-      <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/[0.03]">
+      <header className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_18px_60px_rgba(15,23,42,0.08)] ring-1 ring-border/40">
         <div className="relative bg-gradient-to-br from-[#0d2145] via-[#273b8f] to-[#4a52c8] p-7 text-white md:p-10">
           <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_20%_20%,white_0,transparent_26%),radial-gradient(circle_at_80%_0%,white_0,transparent_22%)]" />
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -151,7 +151,7 @@ export default async function SubmissionDetailPage({
                   {moderationLabel[record.moderationStatus] ??
                     record.moderationStatus}
                 </Badge>
-                <Badge className="h-7 rounded-full border-white/20 bg-white px-3 text-[#0d2145]">
+                <Badge className="h-7 rounded-full border-white/20 bg-white px-3 text-slate-900">
                   {resultLabel[record.result] ?? record.result}
                 </Badge>
               </div>
@@ -176,7 +176,7 @@ export default async function SubmissionDetailPage({
               <Link
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white hover:text-[#0d2145]",
+                  "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white hover:text-slate-900",
                 )}
                 href={`/universities/${record.university.slug}`}
               >
@@ -186,7 +186,7 @@ export default async function SubmissionDetailPage({
                 <a
                   className={cn(
                     buttonVariants({ size: "lg" }),
-                    "h-11 rounded-xl bg-white text-[#0d2145] hover:bg-white/90",
+                    "h-11 rounded-xl bg-white text-slate-900 hover:bg-white/90",
                   )}
                   href={record.university.website}
                   rel="noopener noreferrer"
@@ -284,9 +284,9 @@ export default async function SubmissionDetailPage({
             />
           </DetailCard>
 
-          <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03]">
-            <h2 className="text-base font-bold text-[#0d2145]">Notes</h2>
-            <p className="mt-4 whitespace-pre-wrap rounded-2xl bg-slate-50/90 p-4 text-sm leading-7 text-slate-700">
+          <section className="rounded-3xl border border-border bg-card p-6 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ring-1 ring-border/40">
+            <h2 className="text-base font-bold text-foreground">Notes</h2>
+            <p className="mt-4 whitespace-pre-wrap rounded-2xl bg-muted/60 p-4 text-sm leading-7 text-muted-foreground">
               {record.notes?.trim() ||
                 "No notes were added to this submission."}
             </p>

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export function dashboardPrimaryActionClass(className?: string) {
   return cn(
     buttonVariants({ size: "lg" }),
-    "h-11 rounded-xl border-0 bg-[#0d2145] text-white hover:bg-[#1a3461]",
+    "h-11 rounded-xl border-0 bg-foreground text-background hover:bg-foreground/90",
     className,
   );
 }
@@ -14,7 +14,7 @@ export function dashboardPrimaryActionClass(className?: string) {
 export function dashboardOutlineActionClass(className?: string) {
   return cn(
     buttonVariants({ variant: "outline", size: "lg" }),
-    "h-11 rounded-xl border-slate-200 bg-white hover:bg-slate-50",
+    "h-11 rounded-xl border-border bg-background hover:bg-muted",
     className,
   );
 }
@@ -23,7 +23,7 @@ export function dashboardOutlineActionClass(className?: string) {
 export function dashboardAccentActionClass(className?: string) {
   return cn(
     buttonVariants({ size: "lg" }),
-    "h-11 rounded-xl border-0 bg-[#4a52c8] text-white shadow-md hover:bg-[#3f46b8]",
+    "h-11 rounded-xl border-0 bg-primary text-primary-foreground shadow-md hover:bg-primary/90",
     className,
   );
 }

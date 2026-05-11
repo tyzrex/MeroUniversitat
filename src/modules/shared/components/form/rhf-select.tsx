@@ -35,7 +35,7 @@ export function RHFSelect<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className={formItemClassName}>
-          <FormLabel className="text-sm font-semibold text-slate-700">
+          <FormLabel className="text-sm font-semibold text-foreground">
             {label}
           </FormLabel>
           {description ? (

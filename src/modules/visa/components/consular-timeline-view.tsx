@@ -154,8 +154,8 @@ export function ConsularTimelineView({
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-900/5 md:p-8">
-          <h2 className="text-lg font-bold text-[#0d2145]">
+        <section className="rounded-3xl border border-border/80 bg-card p-6 shadow-sm ring-1 ring-border/60 md:p-8">
+          <h2 className="text-lg font-bold text-foreground">
             Typical pipeline (indicative)
           </h2>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
@@ -166,12 +166,12 @@ export function ConsularTimelineView({
               {PROCESS_STEPS.map((step) => (
                 <div
                   key={step.key}
-                  className="flex min-w-[100px] flex-1 flex-col items-center gap-2 rounded-2xl border border-slate-100 bg-slate-50/80 px-2 py-4 text-center"
+                  className="flex min-w-[100px] flex-1 flex-col items-center gap-2 rounded-2xl border border-border/60 bg-muted/40 px-2 py-4 text-center"
                 >
                   <span className="text-xl" aria-hidden>
                     {step.icon}
                   </span>
-                  <p className="text-[11px] font-semibold leading-tight text-[#0d2145]">
+                  <p className="text-[11px] font-semibold leading-tight text-foreground">
                     {step.label}
                   </p>
                   <p className="text-muted-foreground text-[10px]">Avg {step.avg}</p>
@@ -181,17 +181,17 @@ export function ConsularTimelineView({
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-indigo-50/30 p-6 shadow-sm ring-1 ring-slate-900/5 md:p-8">
+        <section className="rounded-3xl border border-border/80 bg-gradient-to-br from-background via-muted/40 to-primary/10 p-6 shadow-sm ring-1 ring-border/60 md:p-8">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-lg font-bold text-[#0d2145]">
+              <h2 className="text-lg font-bold text-foreground">
                 Your personal timeline
               </h2>
               <p className="text-muted-foreground mt-2 text-sm">
                 From milestones on{" "}
                 <Link
                   href="/dashboard/profile#visa-journey"
-                  className="font-semibold text-[#1238da] underline-offset-4 hover:underline"
+                  className="font-semibold text-primary underline-offset-4 hover:underline"
                 >
                   Profile
                 </Link>
@@ -200,7 +200,7 @@ export function ConsularTimelineView({
             </div>
             <Link
               href="/dashboard/profile#visa-journey"
-              className="text-sm font-semibold text-[#1238da] hover:underline"
+              className="text-sm font-semibold text-primary hover:underline"
             >
               Edit dates
             </Link>
@@ -212,7 +212,7 @@ export function ConsularTimelineView({
               return (
                 <li
                   key={step.milestone}
-                  className="flex gap-3 rounded-2xl border border-transparent px-2 py-2 transition-colors hover:border-slate-100 hover:bg-white/60"
+                  className="flex gap-3 rounded-2xl border border-transparent px-2 py-2 transition-colors hover:border-border/60 hover:bg-muted/40"
                 >
                   <div className="flex shrink-0 flex-col items-center pt-0.5">
                     {isPast ? (
@@ -224,20 +224,20 @@ export function ConsularTimelineView({
                         <Clock className="size-4" strokeWidth={2} />
                       </span>
                     ) : (
-                      <span className="flex size-8 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                      <span className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
                         <ArrowRight className="size-4 opacity-50" />
                       </span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-[#0d2145]">{step.label}</p>
+                    <p className="font-semibold text-foreground">{step.label}</p>
                     {step.done && step.dateIso ? (
                       <p className="text-muted-foreground mt-1 text-xs">
                         {new Date(step.dateIso).toLocaleDateString(undefined, {
                           dateStyle: "medium",
                         })}
                         {step.expectedEta ? (
-                          <span className="text-amber-800">
+                          <span className="text-amber-800 dark:text-amber-200">
                             {" "}
                             · Est. next:{" "}
                             {new Date(step.expectedEta).toLocaleDateString(undefined, {
@@ -247,14 +247,16 @@ export function ConsularTimelineView({
                         ) : null}
                       </p>
                     ) : isCurrent ? (
-                      <p className="text-amber-900 mt-1 text-xs font-medium">
+                      <p className="text-amber-900 mt-1 text-xs font-medium dark:text-amber-200">
                         Waiting — add dates as you progress.
                       </p>
                     ) : (
                       <p className="text-muted-foreground mt-1 text-xs">Upcoming</p>
                     )}
                     {step.notes ? (
-                      <p className="mt-1 text-xs text-slate-600">{step.notes}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {step.notes}
+                      </p>
                     ) : null}
                   </div>
                 </li>
@@ -269,16 +271,18 @@ export function ConsularTimelineView({
           <ConsularCspHeatmap buckets={heatmapBuckets} />
           <ConsularCommunityWaitlist rows={communityRows} />
         </div>
-        <aside className="rounded-3xl border border-amber-200/80 bg-amber-50/60 p-6 shadow-sm ring-1 ring-amber-900/10">
+        <aside className="rounded-3xl border border-amber-200/80 bg-amber-50/60 p-6 shadow-sm ring-1 ring-amber-900/10 dark:border-amber-500/30 dark:bg-amber-500/10 dark:ring-amber-500/20">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="size-8 shrink-0 text-amber-700" strokeWidth={1.75} />
+            <AlertTriangle className="size-8 shrink-0 text-amber-700 dark:text-amber-300" strokeWidth={1.75} />
             <div>
-              <h3 className="font-bold text-amber-950">Intake risk checker</h3>
-              <p className="mt-2 text-sm leading-relaxed text-amber-950/85">
+              <h3 className="font-bold text-amber-950 dark:text-amber-100">
+                Intake risk checker
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-amber-950/85 dark:text-amber-200/90">
                 Long queues can push late CSP batches past enrolment deadlines. Book
                 slack for housing and semester start.
               </p>
-              <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-amber-950/80">
+              <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-amber-950/80 dark:text-amber-200/80">
                 <li>Movement is uneven month to month.</li>
                 <li>Peak seasons stretch prelim and review.</li>
                 <li>Use community data as one signal among many.</li>
@@ -304,16 +308,16 @@ function MetricCard({
 }>) {
   const toneClass =
     tone === "good"
-      ? "text-emerald-700"
+      ? "text-emerald-700 dark:text-emerald-300"
       : tone === "warn"
-        ? "text-amber-800"
-        : "text-slate-600";
+        ? "text-amber-800 dark:text-amber-300"
+        : "text-muted-foreground";
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm ring-1 ring-slate-900/5">
+    <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-sm ring-1 ring-border/60">
       <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
         {title}
       </p>
-      <p className="mt-2 text-2xl font-bold text-[#0d2145]">{value}</p>
+      <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
       <p className={`mt-1 text-xs font-medium ${toneClass}`}>{delta}</p>
     </div>
   );

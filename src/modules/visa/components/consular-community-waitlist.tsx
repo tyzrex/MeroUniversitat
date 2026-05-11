@@ -27,19 +27,31 @@ function stageShort(k: (typeof STAGE_KEYS)[number]): string {
 
 function statusFor(row: CommunityWaitlistRow): { label: string; className: string } {
   if (row.stages.PASSPORT_COLLECTED) {
-    return { label: "Collected", className: "bg-emerald-100 text-emerald-900" };
+    return {
+      label: "Collected",
+      className: "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/20 dark:text-emerald-200",
+    };
   }
   if (row.stages.INTERVIEW) {
-    return { label: "Interview", className: "bg-blue-100 text-blue-900" };
+    return {
+      label: "Interview",
+      className: "bg-blue-100 text-blue-900 dark:bg-blue-500/20 dark:text-blue-200",
+    };
   }
   if (
     row.stages.CASE_REVIEW ||
     row.stages.PRELIM_REVIEW ||
     row.stages.WAITING_LIST
   ) {
-    return { label: "Waiting", className: "bg-amber-100 text-amber-900" };
+    return {
+      label: "Waiting",
+      className: "bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200",
+    };
   }
-  return { label: "Started", className: "bg-slate-100 text-slate-700" };
+  return {
+    label: "Started",
+    className: "bg-muted text-muted-foreground",
+  };
 }
 
 export function ConsularCommunityWaitlist({
@@ -49,8 +61,8 @@ export function ConsularCommunityWaitlist({
 }>) {
   if (rows.length === 0) {
     return (
-      <section className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
-        <p className="font-semibold text-[#0d2145]">No community rows yet</p>
+      <section className="rounded-3xl border border-dashed border-border/70 bg-muted/40 p-8 text-center">
+        <p className="font-semibold text-foreground">No community rows yet</p>
         <p className="text-muted-foreground mt-2 text-sm">
           Opt in on your profile and add embassy milestones — anonymized rows appear
           here for peers.
@@ -60,8 +72,8 @@ export function ConsularCommunityWaitlist({
   }
 
   return (
-    <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-900/5 md:p-8">
-      <h2 className="text-lg font-bold text-[#0d2145]">
+    <section className="rounded-3xl border border-border/80 bg-card p-6 shadow-sm ring-1 ring-border/60 md:p-8">
+      <h2 className="text-lg font-bold text-foreground">
         Waitlist tracker (community)
       </h2>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
@@ -70,7 +82,7 @@ export function ConsularCommunityWaitlist({
       <div className="mt-6 overflow-x-auto">
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead>
-            <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+            <tr className="border-b border-border/60 text-xs uppercase tracking-wide text-muted-foreground">
               <th className="pb-3 pr-4 font-medium">Contributor</th>
               <th className="pb-3 pr-4 font-medium">Intake</th>
               {STAGE_KEYS.map((k) => (
@@ -81,12 +93,12 @@ export function ConsularCommunityWaitlist({
               <th className="pb-3 pl-2 text-right font-medium">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border/60">
             {rows.map((row) => {
               const st = statusFor(row);
               return (
                 <tr key={row.anonLabel}>
-                  <td className="py-3 pr-4 font-medium text-[#0d2145]">
+                  <td className="py-3 pr-4 font-medium text-foreground">
                     {row.anonLabel}
                   </td>
                   <td className="text-muted-foreground py-3 pr-4">
@@ -96,11 +108,11 @@ export function ConsularCommunityWaitlist({
                     <td key={k} className="px-1 py-3 text-center">
                       {row.stages[k] ? (
                         <span
-                          className="inline-flex size-2.5 rounded-full bg-emerald-500"
+                          className="inline-flex size-2.5 rounded-full bg-emerald-500 dark:bg-emerald-400"
                           title={row.stages[k]}
                         />
                       ) : (
-                        <span className="inline-flex size-2.5 rounded-full bg-slate-200" />
+                        <span className="inline-flex size-2.5 rounded-full bg-muted" />
                       )}
                     </td>
                   ))}

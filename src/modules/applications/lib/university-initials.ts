@@ -1,6 +1,6 @@
 const tones = [
   { chip: "bg-blue-600 text-white" },
-  { chip: "bg-slate-800 text-white" },
+  { chip: "bg-foreground text-background" },
   { chip: "bg-teal-600 text-white" },
   { chip: "bg-indigo-600 text-white" },
   { chip: "bg-rose-600 text-white" },

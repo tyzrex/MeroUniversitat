@@ -26,33 +26,33 @@ export default async function AdminUsersPage() {
       >
         <Link
           href="/admin"
-          className="inline-flex h-11 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-[#0d2145] hover:bg-slate-50"
+          className="inline-flex h-11 items-center rounded-xl border border-border bg-background px-4 text-sm font-semibold text-foreground hover:bg-muted"
         >
           <ArrowLeft className="mr-2 size-4" strokeWidth={1.8} />
           Overview
         </Link>
       </DashboardPageIntro>
 
-      <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/5">
+      <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm ring-1 ring-border/40">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50/90">
+          <thead className="border-b border-border bg-muted/60">
             <tr>
-              <th className="px-4 py-3 font-semibold text-[#0d2145]">User</th>
-              <th className="px-4 py-3 font-semibold text-[#0d2145]">Role</th>
-              <th className="px-4 py-3 font-semibold text-[#0d2145]">Apps</th>
-              <th className="px-4 py-3 font-semibold text-[#0d2145]">Joined</th>
-              <th className="px-4 py-3 font-semibold text-[#0d2145]">Status</th>
-              <th className="px-4 py-3 font-semibold text-[#0d2145]">Action</th>
+              <th className="px-4 py-3 font-semibold text-foreground">User</th>
+              <th className="px-4 py-3 font-semibold text-foreground">Role</th>
+              <th className="px-4 py-3 font-semibold text-foreground">Apps</th>
+              <th className="px-4 py-3 font-semibold text-foreground">Joined</th>
+              <th className="px-4 py-3 font-semibold text-foreground">Status</th>
+              <th className="px-4 py-3 font-semibold text-foreground">Action</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u) => (
               <tr
                 key={u.id}
-                className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50"
+                className="border-b border-border last:border-0 hover:bg-muted/50"
               >
                 <td className="px-4 py-3">
-                  <div className="font-semibold text-[#0d2145]">{u.name}</div>
+                  <div className="font-semibold text-foreground">{u.name}</div>
                   <div className="text-muted-foreground text-xs">{u.email}</div>
                 </td>
                 <td className="px-4 py-3 text-xs font-medium">{u.role}</td>
@@ -62,19 +62,19 @@ export default async function AdminUsersPage() {
                 </td>
                 <td className="px-4 py-3">
                   {u.suspendedAt ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-1 text-xs font-bold text-rose-700">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-1 text-xs font-bold text-rose-700 dark:text-rose-300">
                       <ShieldAlert className="size-3.5" />
                       Suspended
                     </span>
                   ) : (
-                    <span className="text-xs font-medium text-emerald-700">
+                    <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
                       Active
                     </span>
                   )}
                 </td>
                 <td className="px-4 py-3">
                   {u.role === "ADMIN" ? (
-                    <span className="text-xs text-slate-400">—</span>
+                    <span className="text-xs text-muted-foreground">—</span>
                   ) : (
                     <form action={toggleUserSuspendedFormAction}>
                       <input type="hidden" name="userId" value={u.id} />

@@ -38,14 +38,14 @@ export function SignUpForm() {
   return (
     <>
       <div className="mb-8">
-        <h2 className="text-3xl font-extrabold tracking-tight text-[#0d2145]">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Create your account
         </h2>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
             href={signInHref}
-            className="font-semibold text-[#1d4ed8] hover:text-[#1e40af] underline-offset-4 hover:underline"
+            className="font-semibold text-primary underline-offset-4 hover:underline"
           >
             Sign in
           </Link>
@@ -56,11 +56,11 @@ export function SignUpForm() {
         <GoogleOAuthButton callbackURL={callbackURL} />
 
         <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-slate-200" />
-          <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             or continue with email
           </span>
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-border" />
         </div>
 
         {form.formState.errors.root?.message ? (
@@ -100,7 +100,7 @@ export function SignUpForm() {
             <Field data-invalid={!!form.formState.errors.name}>
               <FieldLabel
                 htmlFor="sign-up-name"
-                className="text-sm font-semibold text-slate-700"
+                className="text-sm font-semibold text-foreground"
               >
                 Full name
               </FieldLabel>
@@ -117,7 +117,7 @@ export function SignUpForm() {
             <Field data-invalid={!!form.formState.errors.email}>
               <FieldLabel
                 htmlFor="sign-up-email"
-                className="text-sm font-semibold text-slate-700"
+                className="text-sm font-semibold text-foreground"
               >
                 Email address
               </FieldLabel>
@@ -135,7 +135,7 @@ export function SignUpForm() {
             <Field data-invalid={!!form.formState.errors.password}>
               <FieldLabel
                 htmlFor="sign-up-password"
-                className="text-sm font-semibold text-slate-700"
+                className="text-sm font-semibold text-foreground"
               >
                 Password
               </FieldLabel>
@@ -154,7 +154,7 @@ export function SignUpForm() {
           <Button
             type="submit"
             size="lg"
-            className="mt-2 h-11 w-full rounded-xl bg-[#0d2145] font-semibold text-white shadow-lg shadow-[#0d2145]/20 hover:bg-[#1a3461] disabled:opacity-60"
+            className="mt-2 h-11 w-full rounded-xl bg-foreground font-semibold text-background shadow-lg shadow-black/10 hover:bg-foreground/90 disabled:opacity-60 dark:shadow-black/40"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? (
@@ -168,18 +168,18 @@ export function SignUpForm() {
           </Button>
         </form>
 
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-muted-foreground">
           By signing up you agree to our{" "}
           <Link
             href="/terms"
-            className="text-slate-600 underline-offset-4 hover:underline"
+            className="text-muted-foreground underline-offset-4 hover:underline"
           >
             Terms
           </Link>{" "}
           and{" "}
           <Link
             href="/privacy"
-            className="text-slate-600 underline-offset-4 hover:underline"
+            className="text-muted-foreground underline-offset-4 hover:underline"
           >
             Privacy Policy
           </Link>

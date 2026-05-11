@@ -34,11 +34,11 @@ export function CommunityReviewTable({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/70 p-10 text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+      <div className="rounded-3xl border border-dashed border-border bg-muted/60 p-10 text-center">
+        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">
           <ClipboardCheck className="size-7" strokeWidth={1.8} />
         </div>
-        <h3 className="mt-5 text-lg font-bold text-[#0d2145]">
+        <h3 className="mt-5 text-lg font-bold text-foreground">
           Queue is clear
         </h3>
         <p className="text-muted-foreground mx-auto mt-2 max-w-md text-sm leading-6">
@@ -49,32 +49,32 @@ export function CommunityReviewTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white ">
+    <div className="overflow-x-auto rounded-2xl border border-border bg-card ">
       <table className="w-full min-w-[720px] text-left text-sm">
-        <thead className="border-b border-slate-200 bg-slate-50/90">
+        <thead className="border-b border-border bg-muted/60">
           <tr>
-            <th className="px-4 py-3 font-semibold text-[#0d2145]">
+            <th className="px-4 py-3 font-semibold text-foreground">
               Submitted
             </th>
-            <th className="px-4 py-3 font-semibold text-[#0d2145]">
+            <th className="px-4 py-3 font-semibold text-foreground">
               University
             </th>
-            <th className="px-4 py-3 font-semibold text-[#0d2145]">Program</th>
-            <th className="px-4 py-3 font-semibold text-[#0d2145]">Meta</th>
-            <th className="px-4 py-3 font-semibold text-[#0d2145]">
+            <th className="px-4 py-3 font-semibold text-foreground">Program</th>
+            <th className="px-4 py-3 font-semibold text-foreground">Meta</th>
+            <th className="px-4 py-3 font-semibold text-foreground">
               Submitter
             </th>
-            <th className="px-4 py-3 font-semibold text-[#0d2145]">Actions</th>
+            <th className="px-4 py-3 font-semibold text-foreground">Actions</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr
               key={r.id}
-              className="border-b border-slate-100 transition-colors last:border-0 hover:bg-slate-50/70"
+              className="border-b border-border transition-colors last:border-0 hover:bg-muted/60"
             >
               <td className="whitespace-nowrap px-4 py-4">
-                <p className="font-semibold text-slate-800">
+                <p className="font-semibold text-foreground">
                   {new Intl.DateTimeFormat("en", {
                     dateStyle: "medium",
                   }).format(new Date(r.createdAt))}
@@ -85,7 +85,7 @@ export function CommunityReviewTable({
                   }).format(new Date(r.createdAt))}
                 </p>
               </td>
-              <td className="max-w-[180px] px-4 py-4 font-semibold text-[#0d2145]">
+              <td className="max-w-[180px] px-4 py-4 font-semibold text-foreground">
                 {r.universityName}
               </td>
               <td className="text-muted-foreground max-w-[220px] px-4 py-4">

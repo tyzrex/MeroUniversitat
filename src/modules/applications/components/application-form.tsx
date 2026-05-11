@@ -35,7 +35,7 @@ import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 const formPanel =
-  "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35";
+  "rounded-2xl border border-border bg-card p-6 transition-colors focus-within:border-primary/35";
 
 type FormValues = z.input<typeof applicationCreateSchema> & { id?: string };
 
@@ -136,11 +136,11 @@ export function ApplicationForm({
   return (
     <Form {...form}>
       <form
-        className="flex w-full flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8"
+        className="flex w-full flex-col gap-6 rounded-2xl border border-border bg-card p-6 md:p-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {mirrorTeammateName ? (
-          <Alert className="rounded-xl border-amber-200 bg-amber-50 text-amber-950">
+          <Alert className="rounded-xl border-amber-200 bg-amber-50 text-amber-950 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100">
             <AlertTitle>Linking to a teammate</AlertTitle>
             <AlertDescription>
               You&apos;re adding your own program row alongside{" "}
@@ -159,8 +159,8 @@ export function ApplicationForm({
 
         <div className="grid w-full min-w-0 gap-6 xl:grid-cols-2 xl:items-start">
           <FieldSet className={panelClass}>
-            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Building2 className="size-5" strokeWidth={1.8} />
               </span>
               University & program
@@ -171,7 +171,7 @@ export function ApplicationForm({
                 name="universityId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-slate-700">
+                    <FormLabel className="text-sm font-semibold text-foreground">
                       Institution
                     </FormLabel>
                     <FormDescription>
@@ -209,8 +209,8 @@ export function ApplicationForm({
           </FieldSet>
 
           <FieldSet className={panelClass}>
-            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <UsersRound className="size-5" strokeWidth={1.8} />
               </span>
               Team & pipeline
@@ -221,7 +221,7 @@ export function ApplicationForm({
                 name="teamId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-slate-700">
+                    <FormLabel className="text-sm font-semibold text-foreground">
                       Team (optional)
                     </FormLabel>
                     <FormDescription>
@@ -230,7 +230,7 @@ export function ApplicationForm({
                     </FormDescription>
                     <FormControl>
                       <select
-                        className="border-input bg-background ring-offset-background flex h-11 w-full rounded-xl border px-4 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-[#4a52c8]/30 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+                        className="border-input bg-background ring-offset-background flex h-11 w-full rounded-xl border px-4 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={Boolean(lockTeam)}
                         value={
                           typeof field.value === "string" ? field.value : ""
@@ -276,8 +276,8 @@ export function ApplicationForm({
         </div>
 
         <FieldSet className={panelClass}>
-          <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+          <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+            <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <NotebookPen className="size-5" strokeWidth={1.8} />
             </span>
             Notes
@@ -292,9 +292,9 @@ export function ApplicationForm({
           </FieldGroup>
         </FieldSet>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
           <Link
-            className="text-muted-foreground text-sm font-medium hover:text-[#0d2145]"
+            className="text-muted-foreground text-sm font-medium hover:text-foreground"
             href="/dashboard/applications"
           >
             Cancel
@@ -302,7 +302,7 @@ export function ApplicationForm({
           <Button
             type="submit"
             disabled={form.formState.isSubmitting}
-            className="min-w-[160px] rounded-xl bg-[#0d2145] hover:bg-[#1a3461]"
+            className="min-w-[160px] rounded-xl bg-foreground text-background hover:bg-foreground/90"
           >
             {form.formState.isSubmitting ? (
               <Loader2 className="size-4 animate-spin" />

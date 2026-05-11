@@ -50,20 +50,20 @@ export function UniversityDetailView({
       className={
         embedded
           ? ""
-          : "from-slate-50 via-white to-slate-50/80 bg-gradient-to-b pb-24 pt-10"
+          : "from-background via-muted/40 to-background bg-gradient-to-b pb-24 pt-10"
       }
     >
       {!embedded ? (
         <>
           <Link
-            className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-[#0d2145]"
+            className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
             href={backHref}
           >
             <ArrowLeft className="size-4" strokeWidth={1.8} />
             {backLabel}
           </Link>
 
-          <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
+          <header className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-border/40">
             <div className="relative bg-gradient-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
               <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
               <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -75,7 +75,7 @@ export function UniversityDetailView({
                         : "Private university"}
                     </Badge>
                     {uni.ranking != null ? (
-                      <Badge className="h-7 rounded-full border-white/20 bg-white px-3 text-[#0d2145]">
+                      <Badge className="h-7 rounded-full border-white/20 bg-foreground px-3 text-background">
                         Rank #{uni.ranking}
                       </Badge>
                     ) : null}
@@ -110,7 +110,7 @@ export function UniversityDetailView({
                     <Link
                       className={cn(
                         buttonVariants({ size: "lg" }),
-                        "h-11 rounded-xl bg-white text-[#0d2145] shadow-lg shadow-black/10 hover:bg-white/90",
+                        "h-11 rounded-xl bg-foreground text-background shadow-lg shadow-black/10 hover:bg-foreground/90",
                       )}
                       href={newAppHref}
                     >
@@ -120,7 +120,7 @@ export function UniversityDetailView({
                     <Link
                       className={cn(
                         buttonVariants({ size: "lg" }),
-                        "h-11 rounded-xl bg-white text-[#0d2145] shadow-lg shadow-black/10 hover:bg-white/90",
+                        "h-11 rounded-xl bg-foreground text-background shadow-lg shadow-black/10 hover:bg-foreground/90",
                       )}
                       href={`/sign-in?callbackUrl=${encodeURIComponent(returnAfterAuth)}`}
                     >
@@ -130,7 +130,7 @@ export function UniversityDetailView({
                   <Link
                     className={cn(
                       buttonVariants({ variant: "outline", size: "lg" }),
-                      "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white hover:text-[#0d2145]",
+                      "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white/20",
                     )}
                     href="/community-data"
                   >
@@ -141,7 +141,7 @@ export function UniversityDetailView({
                     <a
                       className={cn(
                         buttonVariants({ variant: "outline", size: "lg" }),
-                        "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white hover:text-[#0d2145]",
+                        "h-11 rounded-xl border-white/25 bg-white/10 text-white hover:bg-white/20",
                       )}
                       href={uni.website}
                       rel="noopener noreferrer"
@@ -159,7 +159,7 @@ export function UniversityDetailView({
       ) : null}
 
       {embedded && uni.description ? (
-        <div className="mb-6 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-blue-50/30 p-5 text-sm leading-relaxed text-slate-700 md:p-6 md:text-base">
+        <div className="mb-6 rounded-2xl border border-border bg-gradient-to-br from-muted to-primary/10 p-5 text-sm leading-relaxed text-muted-foreground md:p-6 md:text-base">
           {uni.description}
         </div>
       ) : null}
@@ -200,24 +200,24 @@ export function UniversityDetailView({
         />
       </section>
 
-      <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
+      <section className="mt-8 rounded-3xl border border-border bg-card p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-border/40 md:p-6">
         <div className="flex flex-wrap items-start gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#4a52c8]/12 text-[#4a52c8]">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <ListChecks className="size-5" strokeWidth={1.8} />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-xl font-bold text-[#0d2145]">
+            <h2 className="text-xl font-bold text-foreground">
               Applicant playbook
             </h2>
             <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
               Use this page as your anchor: compare community outcomes to your
               GPA, then mirror deadlines and documents on your Kanban board.
             </p>
-            <ul className="mt-5 space-y-3 text-sm text-slate-700">
+            <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
               <li className="flex gap-2">
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
                 <span>
-                  <strong className="text-[#0d2145]">Benchmark:</strong>{" "}
+                  <strong className="text-foreground">Benchmark:</strong>{" "}
                   {stats.communityPublishedOutcomes} published outcome
                   {stats.communityPublishedOutcomes === 1 ? "" : "s"} from peers
                   — cross-check against your profile GPA before you submit
@@ -227,7 +227,7 @@ export function UniversityDetailView({
               <li className="flex gap-2">
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
                 <span>
-                  <strong className="text-[#0d2145]">Track:</strong> add this
+                  <strong className="text-foreground">Track:</strong> add this
                   uni as a row so intake, checklist, and deadlines stay next to
                   your other apps.
                 </span>
@@ -235,7 +235,7 @@ export function UniversityDetailView({
               <li className="flex gap-2">
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
                 <span>
-                  <strong className="text-[#0d2145]">Share:</strong> when your
+                  <strong className="text-foreground">Share:</strong> when your
                   result is final, post an anonymized outcome — it helps
                   applicants behind you.
                 </span>
@@ -245,8 +245,8 @@ export function UniversityDetailView({
         </div>
       </section>
 
-      <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
-        <h2 className="text-xl font-bold text-[#0d2145]">
+      <section className="mt-8 rounded-3xl border border-border bg-card p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-border/40 md:p-6">
+        <h2 className="text-xl font-bold text-foreground">
           Application activity
         </h2>
         <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
@@ -305,16 +305,16 @@ function StatCard({
   hint: string;
 }>) {
   return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.03]">
+    <div className="rounded-3xl border border-border bg-card p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-border/40">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-muted-foreground text-sm font-semibold">{label}</p>
-          <p className="mt-1 text-2xl font-extrabold tracking-tight text-[#0d2145]">
+          <p className="mt-1 text-2xl font-extrabold tracking-tight text-foreground">
             {value}
           </p>
           <p className="text-muted-foreground mt-1 text-xs">{hint}</p>
         </div>
-        <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+        <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <Icon className="size-5" strokeWidth={1.8} />
         </div>
       </div>

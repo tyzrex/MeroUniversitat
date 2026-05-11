@@ -27,9 +27,9 @@ const FEATURES: Feature[] = [
     desc: "Search and filter 150+ German universities and thousands of programs.",
     href: "/universities",
     cta: "Explore",
-    bg: "bg-indigo-50",
-    iconColor: "text-indigo-600",
-    ctaColor: "text-indigo-600",
+    bg: "bg-indigo-500/15",
+    iconColor: "text-indigo-600 dark:text-indigo-300",
+    ctaColor: "text-indigo-600 dark:text-indigo-300",
   },
   {
     Icon: Users,
@@ -37,9 +37,9 @@ const FEATURES: Feature[] = [
     desc: "See where students with similar profiles got accepted. Fully anonymised.",
     href: "/community",
     cta: "View Profiles",
-    bg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
-    ctaColor: "text-emerald-600",
+    bg: "bg-emerald-500/15",
+    iconColor: "text-emerald-600 dark:text-emerald-300",
+    ctaColor: "text-emerald-600 dark:text-emerald-300",
   },
   {
     Icon: LayoutGrid,
@@ -47,9 +47,9 @@ const FEATURES: Feature[] = [
     desc: "Track your applications from start to offer letter with our Kanban board.",
     href: "/sign-up",
     cta: "Track Now",
-    bg: "bg-cyan-50",
-    iconColor: "text-cyan-600",
-    ctaColor: "text-cyan-600",
+    bg: "bg-cyan-500/15",
+    iconColor: "text-cyan-600 dark:text-cyan-300",
+    ctaColor: "text-cyan-600 dark:text-cyan-300",
   },
   {
     Icon: TrendingUp,
@@ -57,9 +57,9 @@ const FEATURES: Feature[] = [
     desc: "Get average timelines for uni-assist reviews, offers, visa & more.",
     href: "/dashboard/analytics",
     cta: "See Insights",
-    bg: "bg-purple-50",
-    iconColor: "text-purple-600",
-    ctaColor: "text-purple-600",
+    bg: "bg-purple-500/15",
+    iconColor: "text-purple-600 dark:text-purple-300",
+    ctaColor: "text-purple-600 dark:text-purple-300",
   },
   {
     Icon: FolderOpen,
@@ -67,21 +67,21 @@ const FEATURES: Feature[] = [
     desc: "Access SOP samples, CV templates, checklists and much more.",
     href: "/community",
     cta: "Browse Resources",
-    bg: "bg-sky-50",
-    iconColor: "text-sky-600",
-    ctaColor: "text-sky-600",
+    bg: "bg-sky-500/15",
+    iconColor: "text-sky-600 dark:text-sky-300",
+    ctaColor: "text-sky-600 dark:text-sky-300",
   },
 ];
 
 export function LandingFeatures() {
   return (
-    <section className="bg-slate-50/60 py-16 md:py-20">
+    <section className="bg-muted/60 py-16 md:py-20">
       <Container>
         <div className="mx-auto max-w-2xl space-y-6 text-center">
           <h2 className="text-3xl font-black tracking-tight md:text-4xl">
             Everything you need for your Germany journey
           </h2>
-          <p className="mt-3 text-slate-500">
+          <p className="mt-3 text-muted-foreground">
             Powerful tools and real data to help you apply smarter and achieve
             your dreams.
           </p>
@@ -92,20 +92,20 @@ export function LandingFeatures() {
             ({ Icon, title, desc, href, cta, bg, iconColor, ctaColor }) => (
               <div
                 key={title}
-                className="group flex flex-col space-y-3 rounded-lg border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="group flex flex-col space-y-3 rounded-lg border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div
-                  className={`mb-4 inline-flex size-14 rounded-full items-center justify-center border border-slate-100 ${bg}`}
+                  className={`mb-4 inline-flex size-14 rounded-full items-center justify-center border border-border ${bg}`}
                 >
                   <Icon className={`size-6 ${iconColor}`} />
                 </div>
                 <h3 className="text-[16px] font-black">{title}</h3>
-                <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-slate-500">
+                <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-muted-foreground">
                   {desc}
                 </p>
                 <Link
                   href={href}
-                  className={`mt-4 inline-flex items-center gap-1 text-[14px] text-blue-600 hover:underline font-black`}
+                  className={`mt-4 inline-flex items-center gap-1 text-[14px] font-black ${ctaColor} hover:underline`}
                 >
                   {cta} →
                 </Link>

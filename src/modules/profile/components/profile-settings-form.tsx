@@ -36,7 +36,7 @@ const germanLabels: Record<(typeof PROFILE_GERMAN_LEVELS)[number], string> = {
 };
 
 const formPanel =
-  "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35";
+  "rounded-2xl border border-border bg-card p-6 transition-colors focus-within:border-primary/35";
 
 export function ProfileSettingsForm({
   defaultValues,
@@ -68,11 +68,11 @@ export function ProfileSettingsForm({
   return (
     <Form {...form}>
       <form
-        className="flex w-full flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8"
+        className="flex w-full flex-col gap-6 rounded-2xl border border-border bg-card p-6 md:p-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {saved ? (
-          <Alert className="rounded-xl border-emerald-200 bg-emerald-50 text-emerald-950">
+          <Alert className="rounded-xl border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-100">
             <AlertTitle>Profile saved</AlertTitle>
             <AlertDescription>Your details were updated.</AlertDescription>
           </Alert>
@@ -87,8 +87,8 @@ export function ProfileSettingsForm({
 
         <div className="grid w-full gap-6 lg:grid-cols-2 lg:items-start">
           <FieldSet className={formPanel}>
-            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <UserRound className="size-5" strokeWidth={1.8} />
               </span>
               About you
@@ -130,8 +130,8 @@ export function ProfileSettingsForm({
           </FieldSet>
 
           <FieldSet id="gpa" className={formPanel}>
-            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+            <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <GraduationCap className="size-5" strokeWidth={1.8} />
               </span>
               Academics
@@ -224,12 +224,12 @@ export function ProfileSettingsForm({
           </FieldSet>
         </div>
 
-        <div className="flex justify-end border-t border-slate-200/80 pt-6">
+        <div className="flex justify-end border-t border-border pt-6">
           <Button
             type="submit"
             size="lg"
             disabled={form.formState.isSubmitting}
-            className="h-12 min-w-[180px] rounded-xl bg-[#0d2145] font-semibold text-white shadow-lg shadow-[#0d2145]/20 hover:bg-[#1a3461]"
+            className="h-12 min-w-[180px] rounded-xl bg-foreground font-semibold text-background shadow-lg shadow-black/10 hover:bg-foreground/90 dark:shadow-black/40"
           >
             {form.formState.isSubmitting ? (
               <span className="inline-flex items-center gap-2">

@@ -54,7 +54,7 @@ export function UniversityLogo({
     return (
       <div
         className={cn(
-          "relative shrink-0 overflow-hidden bg-slate-50 ring-1 ring-slate-200/80",
+          "relative shrink-0 overflow-hidden bg-muted ring-1 ring-border",
           box[size],
           className,
         )}

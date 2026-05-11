@@ -30,17 +30,17 @@ export function DashboardPageIntro({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-slate-200/80 bg-white p-6 ring-1 ring-slate-900/5 md:p-7",
+        "rounded-2xl border border-border/80 bg-card p-6 ring-1 ring-border/60 md:p-7",
         className,
       )}
     >
       <nav
         aria-label="Breadcrumb"
-        className="flex flex-wrap items-center gap-1 text-sm text-slate-500"
+        className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground"
       >
         <Link
           href="/dashboard"
-          className="hover:text-[#0d2145] hover:underline-offset-4"
+          className="hover:text-foreground hover:underline-offset-4"
         >
           Dashboard
         </Link>
@@ -53,12 +53,12 @@ export function DashboardPageIntro({
             {c.href ? (
               <Link
                 href={c.href}
-                className="hover:text-[#0d2145] hover:underline-offset-4"
+                className="hover:text-foreground hover:underline-offset-4"
               >
                 {c.label}
               </Link>
             ) : (
-              <span className="font-semibold text-slate-800">{c.label}</span>
+              <span className="font-semibold text-foreground">{c.label}</span>
             )}
           </span>
         ))}
@@ -66,7 +66,7 @@ export function DashboardPageIntro({
 
       <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
-          <h1 className="text-balance text-2xl font-extrabold tracking-tight text-[#0d2145] md:text-3xl">
+          <h1 className="text-balance text-2xl font-extrabold tracking-tight text-foreground md:text-3xl">
             {title}
           </h1>
           {description ? (

@@ -14,7 +14,7 @@ export default async function LandingHeaderProfile() {
   return (
     <>
       {!session?.user ? (
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/sign-in"
             className={cn(
@@ -35,14 +35,14 @@ export default async function LandingHeaderProfile() {
           </Link>
         </div>
       ) : (
-        <div className="ml-auto flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <button
             type="button"
-            className="relative flex size-10 items-center justify-center rounded-full border border-slate-200 text-slate-600"
+            className="relative flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:bg-muted"
             aria-label="Notifications"
           >
             <Bell className="size-5" strokeWidth={1.8} />
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-white" />
+            <span className="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-background" />
           </button>
           <UserAccountMenu
             user={{

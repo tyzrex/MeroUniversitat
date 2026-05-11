@@ -63,7 +63,7 @@ const germanLabels: Record<(typeof germanLevels)[number], string> = {
 };
 
 const formPanel =
-  "rounded-2xl border border-slate-200 bg-white p-6 transition-colors focus-within:border-[#1238da]/35";
+  "rounded-2xl border border-border bg-card p-6 transition-colors focus-within:border-primary/35";
 
 type Props = Readonly<{
   defaultContributorName: string;
@@ -156,15 +156,15 @@ export function CommunityAcceptanceForm({
   return (
     <Form {...form}>
       <form
-        className="flex w-full max-w-none flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8"
+        className="flex w-full max-w-none flex-col gap-6 rounded-2xl border border-border bg-card p-6 md:p-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {done ? (
           <Alert
             className={
               done.moderationStatus === "PENDING"
-                ? "rounded-xl border-amber-200/90 bg-amber-50 text-amber-950"
-                : "rounded-xl border-emerald-200 bg-emerald-50 text-emerald-950"
+                ? "rounded-xl border-amber-200/90 bg-amber-50 text-amber-950 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100"
+                : "rounded-xl border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-100"
             }
           >
             <AlertTitle>
@@ -200,8 +200,8 @@ export function CommunityAcceptanceForm({
               onClick={() => setActiveStep(0)}
               onFocusCapture={() => setActiveStep(0)}
             >
-              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <UserRound className="size-5" strokeWidth={1.8} />
                 </span>
                 About you
@@ -235,8 +235,8 @@ export function CommunityAcceptanceForm({
               onClick={() => setActiveStep(0)}
               onFocusCapture={() => setActiveStep(0)}
             >
-              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <GraduationCap className="size-5" strokeWidth={1.8} />
                 </span>
                 Academic snapshot
@@ -331,8 +331,8 @@ export function CommunityAcceptanceForm({
               onClick={() => setActiveStep(1)}
               onFocusCapture={() => setActiveStep(1)}
             >
-              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <FileCheck2 className="size-5" strokeWidth={1.8} />
                 </span>
                 Application
@@ -343,7 +343,7 @@ export function CommunityAcceptanceForm({
                   name="universityId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-semibold text-slate-700">
+                      <FormLabel className="text-sm font-semibold text-foreground">
                         University
                       </FormLabel>
                       <FormDescription>
@@ -374,8 +374,8 @@ export function CommunityAcceptanceForm({
               onClick={() => setActiveStep(2)}
               onFocusCapture={() => setActiveStep(2)}
             >
-              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-[#0d2145]">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-[#1238da]">
+              <div className="mb-3 flex items-center gap-3 text-lg font-bold text-foreground">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <CalendarCheck2 className="size-5" strokeWidth={1.8} />
                 </span>
                 Outcome
@@ -436,14 +436,14 @@ export function CommunityAcceptanceForm({
         <BeforeSubmitPanel onActivate={() => setActiveStep(3)} />
 
         <div
-          className="flex w-full flex-col gap-3 border-t border-slate-200/80 pt-6 sm:flex-row sm:items-center sm:justify-end"
+          className="flex w-full flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-end"
           onFocusCapture={() => setActiveStep(3)}
         >
           <Button
             type="submit"
             size="lg"
             disabled={form.formState.isSubmitting}
-            className="h-12 w-full rounded-xl bg-[#1238da] font-bold text-white hover:bg-[#0d2bb0] sm:w-auto sm:min-w-65"
+            className="h-12 w-full rounded-xl bg-primary font-bold text-primary-foreground hover:bg-primary/90 sm:w-auto sm:min-w-65"
           >
             {form.formState.isSubmitting ? (
               <span className="inline-flex items-center gap-2">
@@ -490,7 +490,7 @@ function CommunityFormSteps({
   ] as const;
 
   return (
-    <div className="grid gap-5 border-b border-slate-200/80 pb-7 md:grid-cols-4">
+    <div className="grid gap-5 border-b border-border pb-7 md:grid-cols-4">
       {steps.map(({ subtitle, title }, index) => {
         const active = activeStep === index;
         return (
@@ -503,8 +503,8 @@ function CommunityFormSteps({
             <span
               className={`flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors ${
                 active
-                  ? "bg-[#1238da] text-white"
-                  : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-[#1238da]"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
               }`}
             >
               {index + 1}
@@ -512,17 +512,17 @@ function CommunityFormSteps({
             <span className="min-w-0 flex-1">
               <span
                 className={`block truncate text-sm font-bold transition-colors ${
-                  active ? "text-[#0d2145]" : "text-slate-700"
+                  active ? "text-foreground" : "text-muted-foreground"
                 }`}
               >
                 {title}
               </span>
-              <span className="block truncate text-xs text-slate-500">
+              <span className="block truncate text-xs text-muted-foreground">
                 {subtitle}
               </span>
             </span>
             {index < steps.length - 1 ? (
-              <span className="hidden h-px flex-1 bg-slate-200 lg:block" />
+              <span className="hidden h-px flex-1 bg-border lg:block" />
             ) : null}
           </button>
         );
@@ -559,17 +559,17 @@ function BeforeSubmitPanel({
 
   return (
     <section
-      className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6"
+      className="rounded-2xl border border-border bg-muted/70 p-6"
       data-form-step="3"
       onClick={onActivate}
       onFocusCapture={onActivate}
     >
       <div className="mb-6 flex items-start gap-4">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-[#1238da]">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <ShieldCheck className="size-6" strokeWidth={1.8} />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-[#0d2145]">
+          <h2 className="text-lg font-bold text-foreground">
             Before you submit
           </h2>
           <p className="text-muted-foreground mt-1 text-sm">
@@ -581,11 +581,11 @@ function BeforeSubmitPanel({
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {items.map(({ description, icon: Icon, title }) => (
           <div key={title} className="flex gap-3">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#1238da]">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-background text-primary">
               <Icon className="size-4" strokeWidth={1.8} />
             </div>
             <div>
-              <p className="text-sm font-bold text-[#0d2145]">{title}</p>
+              <p className="text-sm font-bold text-foreground">{title}</p>
               <p className="text-muted-foreground mt-1 text-xs leading-5">
                 {description}
               </p>

@@ -60,7 +60,7 @@ export function ApplicationRowActions({
           Me too
         </Link>
       ) : (
-        <span className="text-sm font-medium text-slate-300">—</span>
+        <span className="text-sm font-medium text-muted-foreground/50">—</span>
       )}
 
       {showMenu ? (
@@ -72,8 +72,8 @@ export function ApplicationRowActions({
             disabled={pending}
             onClick={() => setOpen((v) => !v)}
             className={cn(
-              "inline-flex size-9 items-center justify-center rounded-lg border border-transparent text-slate-500 transition-colors hover:border-slate-200 hover:bg-slate-50 hover:text-slate-700",
-              open && "border-slate-200 bg-slate-50 text-slate-800",
+              "inline-flex size-9 items-center justify-center rounded-lg border border-transparent text-muted-foreground transition-colors hover:border-border hover:bg-muted hover:text-foreground",
+              open && "border-border bg-muted text-foreground",
             )}
           >
             <MoreHorizontal className="size-4" strokeWidth={2} />
@@ -82,15 +82,15 @@ export function ApplicationRowActions({
           {open ? (
             <div
               role="menu"
-              className="absolute right-0 z-50 mt-1 min-w-40 rounded-xl border border-slate-200 bg-white py-1 shadow-lg ring-1 ring-slate-900/5"
+              className="absolute right-0 z-50 mt-1 min-w-40 rounded-xl border border-border bg-card py-1 shadow-lg ring-1 ring-border/40"
             >
               <Link
                 role="menuitem"
                 href={`/dashboard/applications/${applicationId}/edit`}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
                 onClick={() => setOpen(false)}
               >
-                <Pencil className="size-3.5 text-slate-500" strokeWidth={2} />
+                <Pencil className="size-3.5 text-muted-foreground" strokeWidth={2} />
                 Edit
               </Link>
               <button
