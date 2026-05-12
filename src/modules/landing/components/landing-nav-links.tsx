@@ -8,8 +8,7 @@ const NAV = [
   { label: "Home", href: "/" },
   { label: "Universities", href: "/universities" },
   { label: "Community Data", href: "/community-data" },
-  { label: "Resources", href: "/#resources" },
-  { label: "About", href: "/#about" },
+  { label: "Feedback", href: "/feedback" },
 ] as const;
 
 function isActive(pathname: string, href: string) {

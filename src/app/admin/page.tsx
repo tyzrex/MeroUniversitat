@@ -15,6 +15,7 @@ import {
   ArrowRight,
   ClipboardList,
   Database,
+  MessageSquareText,
   Settings,
   ShieldAlert,
   UsersRound,
@@ -63,7 +64,7 @@ export default async function AdminOverviewPage() {
         />
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-3">
+      <section className="grid gap-6 lg:grid-cols-4">
         <Link
           href="/admin/community"
           className={`${dashboardInsightShell} group transition-colors hover:ring-[#4a52c8]/30`}
@@ -79,6 +80,25 @@ export default async function AdminOverviewPage() {
           </p>
           <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#4a52c8]">
             Open queue
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </Link>
+
+        <Link
+          href="/admin/feedback"
+          className={`${dashboardInsightShell} group transition-colors hover:ring-[#4a52c8]/30`}
+        >
+          <div className="flex size-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+            <MessageSquareText className="size-5" strokeWidth={1.8} />
+          </div>
+          <h2 className="mt-4 text-lg font-bold text-[#0d2145]">
+            Feedback &amp; requests
+          </h2>
+          <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+            Acknowledge and respond to community feedback and feature requests.
+          </p>
+          <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#4a52c8]">
+            {stats.pendingFeedbackCount} pending
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
           </span>
         </Link>

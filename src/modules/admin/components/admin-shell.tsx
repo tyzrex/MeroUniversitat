@@ -1,13 +1,14 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Container } from "@/modules/shared/components/container";
-import { ArrowLeft, Database, Settings, ShieldCheck, Users } from "lucide-react";
+import { ArrowLeft, Database, MessageSquareText, Settings, ShieldCheck, Users } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 const links = [
   { href: "/admin", label: "Overview", icon: ShieldCheck },
   { href: "/admin/community", label: "Community review", icon: Database },
+  { href: "/admin/feedback", label: "Feedback", icon: MessageSquareText },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/settings", label: "Site settings", icon: Settings },
 ] as const;

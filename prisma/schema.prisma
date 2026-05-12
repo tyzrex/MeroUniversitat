@@ -107,6 +107,22 @@ enum WorkspacePreference {
   TEAM
 }
 
+enum FeedbackType {
+  FEATURE_REQUEST
+  COMMUNITY_FEEDBACK
+  BUG_REPORT
+  OTHER
+}
+
+enum FeedbackStatus {
+  PENDING
+  UNDER_REVIEW
+  ACKNOWLEDGED
+  IN_PROGRESS
+  COMPLETED
+  DECLINED
+}
+
 /// Nepal / embassy pipeline — documents through passport pickup (community + personal tracker).
 enum VisaJourneyMilestone {
   DOCUMENTS_PREP
@@ -161,6 +177,9 @@ model User {
   teamMemberships    TeamMember[]
 
   teamActivityEvents TeamActivity[] @relation("TeamActivityActor")
+
+  feedbackSubmissions    Feedback[]
+  feedbackReviews        Feedback[]     @relation("FeedbackReviewer")
 
   visaJourneyCheckpoints VisaJourneyCheckpoint[]
 }
@@ -460,4 +479,30 @@ model Program {
   acceptanceRecords AcceptanceRecord[]
 
   @@unique([universityId, slug])
+}
+
+model Feedback {
+  id          String         @id @default(cuid())
+  userId      String?
+  user        User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  type        FeedbackType
+  title       String
+  description String
+  category    String?
+
+  status      FeedbackStatus @default(PENDING)
+  adminNotes  String?
+  reviewedById String?
+  reviewedBy   User?          @relation("FeedbackReviewer", fields: [reviewedById], references: [id])
+  reviewedAt   DateTime?
+
+  isAnonymous Boolean        @default(false)
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
 }

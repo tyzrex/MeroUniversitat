@@ -21,6 +21,7 @@ import {
   Columns3,
   Database,
   LayoutDashboard,
+  Lightbulb,
   Plane,
   Settings,
   Shield,
@@ -75,6 +76,11 @@ const NAV_ITEMS: NavItem[] = [
     title: "My contributions",
     href: "/dashboard/community-data/submissions",
     icon: ClipboardList,
+  },
+  {
+    title: "Feedback",
+    href: "/dashboard/feedback",
+    icon: Lightbulb,
   },
   {
     title: "Consular timeline",

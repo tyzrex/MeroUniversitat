@@ -7,6 +7,8 @@ export type AdminOverviewStats = {
   approvedAcceptanceCount: number;
   applicationCount: number;
   suspendedUserCount: number;
+  pendingFeedbackCount: number;
+  totalFeedbackCount: number;
 };
 
 export const getAdminOverviewStats = cache(async function getAdminOverviewStats(): Promise<AdminOverviewStats> {
@@ -16,6 +18,8 @@ export const getAdminOverviewStats = cache(async function getAdminOverviewStats(
     approvedAcceptanceCount,
     applicationCount,
     suspendedUserCount,
+    pendingFeedbackCount,
+    totalFeedbackCount,
   ] = await Promise.all([
     db.user.count(),
     db.acceptanceRecord.count({
@@ -26,6 +30,8 @@ export const getAdminOverviewStats = cache(async function getAdminOverviewStats(
     }),
     db.application.count(),
     db.user.count({ where: { suspendedAt: { not: null } } }),
+    db.feedback.count({ where: { status: "PENDING" } }),
+    db.feedback.count(),
   ]);
 
   return {
@@ -34,6 +40,8 @@ export const getAdminOverviewStats = cache(async function getAdminOverviewStats(
     approvedAcceptanceCount,
     applicationCount,
     suspendedUserCount,
+    pendingFeedbackCount,
+    totalFeedbackCount,
   };
 });
 
