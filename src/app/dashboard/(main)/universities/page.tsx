@@ -25,7 +25,7 @@ function UniversitiesFallback() {
 export default function DashboardUniversitiesPage({
   searchParams,
 }: Readonly<{
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 }>) {
   return (
     <Suspense fallback={<UniversitiesFallback />}>
@@ -37,12 +37,14 @@ export default function DashboardUniversitiesPage({
 async function UniversitiesDirectoryPageInner({
   searchParams,
 }: Readonly<{
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 }>) {
-  const q = (await searchParams).q ?? "";
+  const params = await searchParams;
+  const q = params.q ?? "";
+  const page = Math.max(1, Number(params.page ?? "1") || 1);
   return (
     <div className="flex flex-col gap-8">
-      <UniversitiesDirectoryDashboard query={q} />
+      <UniversitiesDirectoryDashboard query={q} page={page} />
     </div>
   );
 }

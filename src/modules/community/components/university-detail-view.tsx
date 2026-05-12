@@ -74,6 +74,11 @@ export function UniversityDetailView({
                         ? "Public university"
                         : "Private university"}
                     </Badge>
+                    {uni.verificationStatus === "PENDING" ? (
+                      <Badge className="h-7 rounded-full border-amber-200/80 bg-amber-50 px-3 text-amber-900">
+                        Unverified
+                      </Badge>
+                    ) : null}
                     {uni.ranking != null ? (
                       <Badge className="h-7 rounded-full border-white/20 bg-white px-3 text-[#0d2145]">
                         Rank #{uni.ranking}

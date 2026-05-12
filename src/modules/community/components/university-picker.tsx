@@ -3,8 +3,18 @@
 import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { FormInput } from "@/modules/shared/components/form-input";
 import { searchUniversitiesAction } from "@/modules/community/actions/search-universities.action";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { UniversityRequestForm } from "@/modules/community/components/university-request-form";
 import { Building2, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { UniversityRequestFormInput } from "@/modules/community/schema/university-request-form-schema";
 
 type Uni = {
   id: string;
@@ -12,15 +22,21 @@ type Uni = {
   city: string;
   logoUrl: string | null;
   imageUrl: string | null;
+  verificationStatus: "APPROVED" | "PENDING" | "REJECTED";
 };
 
-type PickMeta = { label: string; logoSrc: string | null };
+type PickMeta = {
+  label: string;
+  logoSrc: string | null;
+  verificationStatus: "APPROVED" | "PENDING" | "REJECTED";
+};
 
 export function UniversityPicker({
   value,
   onChange,
   initialLabel,
   initialLogoUrl,
+  initialVerificationStatus,
 }: Readonly<{
   value: string;
   onChange: (id: string) => void;
@@ -28,6 +44,7 @@ export function UniversityPicker({
   initialLabel?: string;
   /** Resolved logo URL when `value` is preset (logo preferred over hero image in callers). */
   initialLogoUrl?: string | null;
+  initialVerificationStatus?: "APPROVED" | "PENDING" | "REJECTED";
 }>) {
   const [query, setQuery] = useState("");
   const [picked, setPicked] = useState<PickMeta | null>(null);
@@ -35,6 +52,10 @@ export function UniversityPicker({
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<Uni[]>([]);
   const rootRef = useRef<HTMLDivElement>(null);
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [requestDefaults, setRequestDefaults] = useState<
+    Partial<UniversityRequestFormInput> | undefined
+  >();
 
   const displayLabel = value
     ? (picked?.label ?? initialLabel ?? "University selected")
@@ -43,6 +64,11 @@ export function UniversityPicker({
   const logoSrc =
     value != null && value !== ""
       ? (picked?.logoSrc ?? initialLogoUrl ?? null)
+      : null;
+
+  const verificationStatus =
+    value != null && value !== ""
+      ? (picked?.verificationStatus ?? initialVerificationStatus ?? null)
       : null;
 
   const nameForLogo = displayLabel.split(/\s—\s/)[0]?.trim() || "University";
@@ -72,6 +98,37 @@ export function UniversityPicker({
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
+  function openRequestDialog() {
+    setRequestDefaults({ name: query.trim() });
+    setOpen(false);
+    setRequestOpen(true);
+  }
+
+  function applyRequestedUniversity(
+    data: Readonly<{
+      id: string;
+      name: string;
+      city: string;
+      verificationStatus: string;
+    }>,
+  ) {
+    const status =
+      data.verificationStatus === "APPROVED" ||
+      data.verificationStatus === "PENDING" ||
+      data.verificationStatus === "REJECTED"
+        ? data.verificationStatus
+        : "PENDING";
+    onChange(data.id);
+    setPicked({
+      label: `${data.name} — ${data.city}`,
+      logoSrc: null,
+      verificationStatus: status,
+    });
+    setRequestOpen(false);
+    setQuery("");
+    setOpen(false);
+  }
+
   return (
     <div ref={rootRef} className="relative">
       {value ? (
@@ -83,7 +140,14 @@ export function UniversityPicker({
               size="xs"
               className="shadow-md shadow-black/5"
             />
-            <span className="font-medium text-slate-900">{displayLabel}</span>
+            <div className="min-w-0">
+              <span className="font-medium text-slate-900">{displayLabel}</span>
+              {verificationStatus === "PENDING" ? (
+                <Badge className="ml-2 h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                  Unverified
+                </Badge>
+              ) : null}
+            </div>
           </div>
           <button
             type="button"
@@ -118,46 +182,100 @@ export function UniversityPicker({
             ) : null}
           </div>
           {open && items.length > 0 ? (
-            <ul
-              className="border-input bg-popover text-popover-foreground absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border py-1 shadow-md"
-              role="listbox"
-            >
-              {items.map((u) => (
-                <li key={u.id} role="option" aria-selected={value === u.id}>
-                  <button
-                    type="button"
-                    className="hover:bg-muted flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => {
-                      onChange(u.id);
-                      setPicked({
-                        label: `${u.name} — ${u.city}`,
-                        logoSrc: u.logoUrl ?? u.imageUrl ?? null,
-                      });
-                      setQuery("");
-                      setOpen(false);
-                    }}
-                  >
-                    <UniversityLogo
-                      name={u.name}
-                      logoUrl={u.logoUrl}
-                      imageUrl={u.imageUrl}
-                      size="xs"
-                      className=""
-                    />
-                    <span className="min-w-0 flex-1">
-                      <span className="font-medium">{u.name}</span>
-                      <span className="text-muted-foreground ml-2 text-xs">
-                        {u.city}
+            <div className="border-input bg-popover text-popover-foreground absolute z-50 mt-1 w-full overflow-hidden rounded-lg border shadow-md">
+              <ul className="max-h-60 overflow-auto py-1" role="listbox">
+                {items.map((u) => (
+                  <li key={u.id} role="option" aria-selected={value === u.id}>
+                    <button
+                      type="button"
+                      className="hover:bg-muted flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        onChange(u.id);
+                        setPicked({
+                          label: `${u.name} — ${u.city}`,
+                          logoSrc: u.logoUrl ?? u.imageUrl ?? null,
+                          verificationStatus: u.verificationStatus,
+                        });
+                        setQuery("");
+                        setOpen(false);
+                      }}
+                    >
+                      <UniversityLogo
+                        name={u.name}
+                        logoUrl={u.logoUrl}
+                        imageUrl={u.imageUrl}
+                        size="xs"
+                        className=""
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="font-medium">{u.name}</span>
+                        {u.verificationStatus === "PENDING" ? (
+                          <Badge className="ml-2 h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                            Unverified
+                          </Badge>
+                        ) : null}
+                        <span className="text-muted-foreground ml-2 text-xs">
+                          {u.city}
+                        </span>
                       </span>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="border-t border-slate-100 px-3 py-2">
+                <button
+                  type="button"
+                  className="text-primary cursor-pointer underline text-xs font-semibold"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={openRequestDialog}
+                >
+                  Can’t find it? Add a university
+                </button>
+              </div>
+            </div>
+          ) : null}
+          {open && items.length === 0 && !loading ? (
+            <div className="border-input bg-popover text-popover-foreground absolute z-50 mt-1 w-full rounded-lg border p-3 shadow-md">
+              <p className="text-muted-foreground text-xs">
+                No matches. Add the university so others can find it.
+              </p>
+              <button
+                type="button"
+                className="text-primary mt-2 text-xs font-semibold"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={openRequestDialog}
+              >
+                Add a university
+              </button>
+            </div>
           ) : null}
         </>
       )}
+
+      <Dialog open={requestOpen} onOpenChange={setRequestOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Request a university</DialogTitle>
+            <DialogDescription>
+              If it’s missing, share the details and we’ll review it.
+            </DialogDescription>
+          </DialogHeader>
+          <UniversityRequestForm
+            variant="dialog"
+            showHeader={false}
+            initialValues={requestDefaults}
+            onSuccess={(data) => {
+              applyRequestedUniversity({
+                id: data.id,
+                name: data.name,
+                city: data.city,
+                verificationStatus: data.verificationStatus,
+              });
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

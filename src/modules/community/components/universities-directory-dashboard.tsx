@@ -1,30 +1,45 @@
+import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  UniversitiesDirectoryHero,
-} from "@/modules/community/components/community-data-hero";
-import { UniversityLogo } from "@/modules/community/components/university-logo";
-import { listUniversitiesDirectory } from "@/modules/community/services/university.service";
 import { cn } from "@/lib/utils";
+import { UniversityLogo } from "@/modules/community/components/university-logo";
+import { UniversityRequestNotice } from "@/modules/community/components/university-request-notice";
+import { listUniversitiesDirectory } from "@/modules/community/services/university.service";
+import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import { ArrowRight, MapPin, Search } from "lucide-react";
 import Link from "next/link";
 
 export async function UniversitiesDirectoryDashboard({
   query,
-}: Readonly<{ query: string }>) {
-  const universities = await listUniversitiesDirectory({
+  page,
+}: Readonly<{ query: string; page: number }>) {
+  const {
+    rows: universities,
+    total,
+    page: safePage,
+  } = await listUniversitiesDirectory({
     query,
-    limit: 72,
+    page,
+    pageSize: 24,
   });
+  const shownCount = universities.length;
+  const hasMore = shownCount < total;
 
   return (
     <>
-      <UniversitiesDirectoryHero
-        resultCount={universities.length}
-        hasSearchQuery={query.trim().length > 0}
+      <DashboardPageIntro
+        title="Universities Directory"
+        crumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Universities", href: "/dashboard/universities" },
+        ]}
+        description="Browse our directory of universities"
+        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
       />
 
+      <UniversityRequestNotice className="mt-4" />
+
       <form
-        className="rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] sm:flex sm:items-center sm:gap-3"
+        className="rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/3 sm:flex sm:items-center sm:gap-3"
         action="/dashboard/universities"
         method="get"
       >
@@ -59,8 +74,8 @@ export async function UniversitiesDirectoryDashboard({
             No universities found
           </h2>
           <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-6">
-            No universities match “{query}”. Try another search or run the seed script
-            locally.
+            No universities match “{query}”. Try another search or run the seed
+            script locally.
           </p>
         </section>
       ) : (
@@ -68,7 +83,7 @@ export async function UniversitiesDirectoryDashboard({
           {universities.map((u) => (
             <li key={u.id}>
               <Link
-                className="group flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
+                className="group flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/3 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
                 href={`/dashboard/universities/${u.slug}`}
               >
                 <div className="flex items-start justify-between gap-4">
@@ -81,9 +96,16 @@ export async function UniversitiesDirectoryDashboard({
                       className="shadow-lg shadow-[#0d2145]/15"
                     />
                     <div className="min-w-0">
-                      <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
-                        {u.name}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
+                          {u.name}
+                        </p>
+                        {u.verificationStatus === "PENDING" ? (
+                          <Badge className="h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                            Unverified
+                          </Badge>
+                        ) : null}
+                      </div>
                       <p className="text-muted-foreground mt-1 inline-flex items-center gap-1.5 text-sm">
                         <MapPin className="size-4" strokeWidth={1.8} />
                         {u.city}
@@ -120,17 +142,34 @@ export async function UniversitiesDirectoryDashboard({
         </ul>
       )}
 
-      <div className="mt-10 text-center">
-        <Link
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            "h-11 rounded-xl bg-white font-semibold",
-          )}
-          href="/dashboard/community-data"
-        >
-          Share your university outcome
-        </Link>
-      </div>
+      {hasMore ? (
+        <div className="mt-8 flex justify-center">
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 rounded-xl bg-white font-semibold",
+            )}
+            href={`/dashboard/universities?q=${encodeURIComponent(
+              query,
+            )}&page=${safePage + 1}`}
+              scroll={false}
+          >
+            Load more ({shownCount} of {total})
+          </Link>
+        </div>
+      ) : null}
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 rounded-xl bg-white font-semibold",
+            )}
+            href="/dashboard/community-data"
+          >
+            Share your university outcome
+          </Link>
+        </div>
     </>
   );
 }

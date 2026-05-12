@@ -1,8 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { ManualReviewToggle } from "@/modules/admin/components/manual-review-toggle";
+import {
+  UniversityRequestReviewTable,
+  type PendingUniversityRequestRow,
+} from "@/modules/admin/components/university-request-review-table";
 import { requireAdminSession } from "@/modules/admin/server/guards";
 import { getSiteSettings } from "@/modules/community/services/site-settings.service";
-import { Settings, ShieldCheck } from "lucide-react";
+import { listPendingUniversityRequests } from "@/modules/community/services/university-request.service";
+import { Database, Settings, ShieldCheck } from "lucide-react";
 
 export const metadata = {
   title: "Site settings | Admin",
@@ -11,6 +16,21 @@ export const metadata = {
 export default async function AdminSiteSettingsPage() {
   await requireAdminSession();
   const settings = await getSiteSettings();
+  const pendingRequests = await listPendingUniversityRequests();
+  const requestRows: PendingUniversityRequestRow[] = pendingRequests.map(
+    (r) => ({
+      id: r.id,
+      name: r.name,
+      city: r.city,
+      website: r.website,
+      programUrl: r.requestProgramUrl,
+      notes: r.requestNotes,
+      submitterLabel: r.requestedBy
+        ? `${r.requestedBy.name} · ${r.requestedBy.email}`
+        : "Unknown submitter",
+      createdAt: (r.requestedAt ?? new Date()).toISOString(),
+    }),
+  );
 
   return (
     <div className="space-y-8">
@@ -65,6 +85,28 @@ export default async function AdminSiteSettingsPage() {
 
         <ManualReviewToggle initial={settings.acceptanceManualReview} />
       </div>
+
+      <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+              <Database className="size-5" strokeWidth={1.8} />
+            </div>
+            <div>
+              <h2 className="font-bold text-[#0d2145]">
+                Pending university requests
+              </h2>
+              <p className="text-muted-foreground text-sm">
+                Approve to verify listings or reject incomplete submissions.
+              </p>
+            </div>
+          </div>
+          <Badge className="rounded-full border-slate-200 bg-slate-50 text-slate-700">
+            {requestRows.length} pending
+          </Badge>
+        </div>
+        <UniversityRequestReviewTable rows={requestRows} />
+      </section>
     </div>
   );
 }
