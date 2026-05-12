@@ -2,6 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { UniversityLogo } from "@/modules/community/components/university-logo";
+import { UniversityRequestNotice } from "@/modules/community/components/university-request-notice";
 import { listUniversitiesDirectory } from "@/modules/community/services/university.service";
 import { Container } from "@/modules/shared/components/container";
 import { ArrowRight, Building2, MapPin, Search } from "lucide-react";
@@ -32,11 +33,11 @@ export default async function UniversitiesDirectoryPage({
   const hasMore = shownCount < total;
 
   return (
-    <main className="from-slate-50 via-white to-slate-50/80 bg-gradient-to-b py-10 pb-24">
-      <Container className="max-w-[1500px]">
-        <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
-          <div className="relative bg-gradient-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
-            <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
+    <main className="from-slate-50 via-white to-slate-50/80 bg-linear-to-b py-10 pb-24">
+      <Container className="max-w-375">
+        <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/3">
+          <div className="relative bg-linear-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
+            <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
             <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-4xl">
                 <p className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-blue-100">
@@ -63,8 +64,10 @@ export default async function UniversitiesDirectoryPage({
           </div>
         </header>
 
+        <UniversityRequestNotice />
+
         <form
-          className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] sm:flex sm:items-center sm:gap-3"
+          className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/3 sm:flex sm:items-center sm:gap-3"
           action="/universities"
           method="get"
         >
@@ -108,7 +111,7 @@ export default async function UniversitiesDirectoryPage({
             {universities.map((u) => (
               <li key={u.id}>
                 <Link
-                  className="group flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
+                  className="group flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/3 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.10)]"
                   href={`/universities/${u.slug}`}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -177,6 +180,7 @@ export default async function UniversitiesDirectoryPage({
               href={`/universities?q=${encodeURIComponent(q)}&page=${
                 safePage + 1
               }`}
+              scroll={false}
             >
               Load more ({shownCount} of {total})
             </Link>

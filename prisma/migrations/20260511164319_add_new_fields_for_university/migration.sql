@@ -2,13 +2,13 @@
 CREATE TYPE "UniversityVerificationStatus" AS ENUM ('APPROVED', 'PENDING', 'REJECTED');
 
 -- DropIndex
-DROP INDEX "Application_applicationGroupId_idx";
+DROP INDEX IF EXISTS "Application_applicationGroupId_idx";
 
 -- DropIndex
-DROP INDEX "Application_mirrorsApplicationId_idx";
+DROP INDEX IF EXISTS "Application_mirrorsApplicationId_idx";
 
 -- DropIndex
-DROP INDEX "Application_universityId_idx";
+DROP INDEX IF EXISTS "Application_universityId_idx";
 
 -- AlterTable
 ALTER TABLE "University" ADD COLUMN     "requestNotes" TEXT,
