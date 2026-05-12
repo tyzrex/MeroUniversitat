@@ -1,7 +1,5 @@
-import Image from "next/image";
-import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
-import { Container } from "@/modules/shared/components/container";
+import Image from "next/image";
 
 type Variant = "sign-in" | "sign-up";
 

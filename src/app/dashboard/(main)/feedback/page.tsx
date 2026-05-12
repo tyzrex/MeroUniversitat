@@ -11,8 +11,12 @@ import { headers } from "next/headers";
 import { ExternalLink, Lightbulb, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Feedback & feature requests | MeroUniversität",
+  description:
+    "Submit feedback, feature requests, or bug reports for the platform.",
 };
 
 export default async function DashboardFeedbackPage() {

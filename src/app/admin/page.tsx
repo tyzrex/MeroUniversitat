@@ -21,8 +21,12 @@ import {
   UsersRound,
 } from "lucide-react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Admin overview | MeroUniversität",
+  description:
+    "Admin dashboard for managing the MeroUniversität platform.",
 };
 
 export default async function AdminOverviewPage() {

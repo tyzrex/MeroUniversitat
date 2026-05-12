@@ -8,8 +8,12 @@ import { Container } from "@/modules/shared/components/container";
 import { ArrowRight, Building2, MapPin, Search } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Universities | MeroUniversität",
+  description:
+    "Browse German universities, search by name or city, and explore programs and admission data.",
 };
 
 export default async function UniversitiesDirectoryPage({

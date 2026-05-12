@@ -11,8 +11,12 @@ import { ArrowRight, CalendarClock, UserSearch } from "lucide-react";
 import { Suspense } from "react";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Profile | MeroUniversität",
+  description:
+    "Manage your academic profile, GPA, test scores, and peer matching preferences.",
 };
 
 export default function ProfilePage() {

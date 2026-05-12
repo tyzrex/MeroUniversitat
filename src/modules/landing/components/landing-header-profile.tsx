@@ -14,7 +14,7 @@ export default async function LandingHeaderProfile() {
   return (
     <>
       {!session?.user ? (
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        <div className="ml-auto hidden shrink-0 items-center gap-2 lg:flex">
           <Link
             href="/sign-in"
             className={cn(

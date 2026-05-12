@@ -5,8 +5,12 @@ import {
 } from "@/modules/dashboard/components/dashboard-route-skeletons";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Universities | MeroUniversität",
+  description:
+    "Browse and manage German universities from your dashboard.",
 };
 
 function UniversitiesFallback() {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 import {
   dashboardOutlineActionClass,
@@ -15,6 +16,12 @@ import {
   Shield,
   UserRound,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Settings",
+  description:
+    "Manage your academic profile, community data sharing, and discovery preferences.",
+};
 
 export default async function SettingsPage() {
   const session = await auth.api.getSession({ headers: await headers() });

@@ -156,7 +156,7 @@ export function CommunityAcceptanceForm({
   return (
     <Form {...form}>
       <form
-        className="flex w-full max-w-none flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8"
+        className="flex w-full max-w-none flex-col gap-6 rounded-2xl sm:border border-slate-200 sm:bg-white p-0 sm:p-6 md:p-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {done ? (
@@ -490,7 +490,7 @@ function CommunityFormSteps({
   ] as const;
 
   return (
-    <div className="grid gap-5 border-b border-slate-200/80 pb-7 md:grid-cols-4">
+    <div className="hidden md:grid gap-5 border-b border-slate-200/80 pb-7 md:grid-cols-4">
       {steps.map(({ subtitle, title }, index) => {
         const active = activeStep === index;
         return (

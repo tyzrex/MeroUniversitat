@@ -9,8 +9,12 @@ import { getSiteSettings } from "@/modules/community/services/site-settings.serv
 import { listPendingUniversityRequests } from "@/modules/community/services/university-request.service";
 import { Database, Settings, ShieldCheck } from "lucide-react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Site settings | Admin",
+  description:
+    "Configure global platform settings and preferences.",
 };
 
 export default async function AdminSiteSettingsPage() {

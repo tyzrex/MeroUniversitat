@@ -3,8 +3,12 @@ import { AuthMarketingPanel } from "@/modules/auth/components/auth-marketing-pan
 import { SignInForm } from "@/modules/auth/components/sign-in-form";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Sign in",
+  description:
+    "Sign in to your MeroUniversität account to track applications and connect with peers.",
 };
 
 function SignInFallback() {
