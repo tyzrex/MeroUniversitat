@@ -34,7 +34,7 @@ export default async function UniversitiesDirectoryPage({
 
   return (
     <main className="from-slate-50 via-white to-slate-50/80 bg-linear-to-b py-10 pb-24">
-      <Container className="max-w-375">
+      <Container>
         <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/3">
           <div className="relative bg-linear-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
             <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
