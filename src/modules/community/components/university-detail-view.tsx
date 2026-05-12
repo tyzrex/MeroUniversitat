@@ -54,7 +54,7 @@ export function UniversityDetailView({
       }
     >
       {!embedded ? (
-        <>
+        <div className="w-full max-w-375 mx-auto px-6">
           <Link
             className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-[#0d2145]"
             href={backHref}
@@ -62,7 +62,6 @@ export function UniversityDetailView({
             <ArrowLeft className="size-4" strokeWidth={1.8} />
             {backLabel}
           </Link>
-
           <header className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.07)] ring-1 ring-slate-900/[0.03]">
             <div className="relative bg-gradient-to-br from-[#0d2145] via-[#263b8b] to-[#4a52c8] p-7 text-white md:p-10">
               <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_12%_18%,white_0,transparent_24%),radial-gradient(circle_at_88%_6%,white_0,transparent_22%)]" />
@@ -160,7 +159,7 @@ export function UniversityDetailView({
               </div>
             </div>
           </header>
-        </>
+        </div>
       ) : null}
 
       {embedded && uni.description ? (
@@ -169,131 +168,133 @@ export function UniversityDetailView({
         </div>
       ) : null}
 
-      <section
-        className={cn(
-          "grid gap-5 sm:grid-cols-2 xl:grid-cols-4",
-          embedded ? "mt-0" : "mt-8",
-        )}
-      >
-        <StatCard
-          icon={GraduationCap}
-          label="Applications tracked"
-          value={stats.totalTrackedApplications}
-          hint="Rows linked to this university"
-        />
-        <StatCard
-          icon={Users}
-          label="Applicants on platform"
-          value={stats.distinctApplicants}
-          hint="Unique students with this school in their pipeline"
-        />
-        <StatCard
-          icon={ShieldCheck}
-          label="Published outcomes"
-          value={stats.communityPublishedOutcomes}
-          hint="Moderated acceptance records for this institution"
-        />
-        <StatCard
-          icon={UserCheck}
-          label="My applications"
-          value={isSignedIn ? stats.myApplicationCount : "—"}
-          hint={
-            isSignedIn
-              ? "Your rows for this university"
-              : "Sign in to see your count"
-          }
-        />
-      </section>
+      <div className="mx-auto w-full max-w-375 px-6">
+        <section
+          className={cn(
+            "grid gap-5 sm:grid-cols-2 xl:grid-cols-4",
+            embedded ? "mt-0" : "mt-8",
+          )}
+        >
+          <StatCard
+            icon={GraduationCap}
+            label="Applications tracked"
+            value={stats.totalTrackedApplications}
+            hint="Rows linked to this university"
+          />
+          <StatCard
+            icon={Users}
+            label="Applicants on platform"
+            value={stats.distinctApplicants}
+            hint="Unique students with this school in their pipeline"
+          />
+          <StatCard
+            icon={ShieldCheck}
+            label="Published outcomes"
+            value={stats.communityPublishedOutcomes}
+            hint="Moderated acceptance records for this institution"
+          />
+          <StatCard
+            icon={UserCheck}
+            label="My applications"
+            value={isSignedIn ? stats.myApplicationCount : "—"}
+            hint={
+              isSignedIn
+                ? "Your rows for this university"
+                : "Sign in to see your count"
+            }
+          />
+        </section>
 
-      <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
-        <div className="flex flex-wrap items-start gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#4a52c8]/12 text-[#4a52c8]">
-            <ListChecks className="size-5" strokeWidth={1.8} />
+        <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
+          <div className="flex flex-wrap items-start gap-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#4a52c8]/12 text-[#4a52c8]">
+              <ListChecks className="size-5" strokeWidth={1.8} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-xl font-bold text-[#0d2145]">
+                Applicant playbook
+              </h2>
+              <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
+                Use this page as your anchor: compare community outcomes to your
+                GPA, then mirror deadlines and documents on your Kanban board.
+              </p>
+              <ul className="mt-5 space-y-3 text-sm text-slate-700">
+                <li className="flex gap-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                  <span>
+                    <strong className="text-[#0d2145]">Benchmark:</strong>{" "}
+                    {stats.communityPublishedOutcomes} published outcome
+                    {stats.communityPublishedOutcomes === 1 ? "" : "s"} from
+                    peers — cross-check against your profile GPA before you
+                    submit yours.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                  <span>
+                    <strong className="text-[#0d2145]">Track:</strong> add this
+                    uni as a row so intake, checklist, and deadlines stay next
+                    to your other apps.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                  <span>
+                    <strong className="text-[#0d2145]">Share:</strong> when your
+                    result is final, post an anonymized outcome — it helps
+                    applicants behind you.
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <h2 className="text-xl font-bold text-[#0d2145]">
-              Applicant playbook
-            </h2>
-            <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
-              Use this page as your anchor: compare community outcomes to your
-              GPA, then mirror deadlines and documents on your Kanban board.
-            </p>
-            <ul className="mt-5 space-y-3 text-sm text-slate-700">
-              <li className="flex gap-2">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
-                <span>
-                  <strong className="text-[#0d2145]">Benchmark:</strong>{" "}
-                  {stats.communityPublishedOutcomes} published outcome
-                  {stats.communityPublishedOutcomes === 1 ? "" : "s"} from peers
-                  — cross-check against your profile GPA before you submit
-                  yours.
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
-                <span>
-                  <strong className="text-[#0d2145]">Track:</strong> add this
-                  uni as a row so intake, checklist, and deadlines stay next to
-                  your other apps.
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" />
-                <span>
-                  <strong className="text-[#0d2145]">Share:</strong> when your
-                  result is final, post an anonymized outcome — it helps
-                  applicants behind you.
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
-        <h2 className="text-xl font-bold text-[#0d2145]">
-          Application activity
-        </h2>
-        <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
-          See how many students are actively tracking this university in their
-          pipeline. Add your own row to manage deadlines, documents, and status
-          on the Kanban board alongside teammates.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          {isSignedIn ? (
-            <>
+        <section className="mt-8 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03] md:p-6">
+          <h2 className="text-xl font-bold text-[#0d2145]">
+            Application activity
+          </h2>
+          <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed">
+            See how many students are actively tracking this university in their
+            pipeline. Add your own row to manage deadlines, documents, and
+            status on the Kanban board alongside teammates.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {isSignedIn ? (
+              <>
+                <Link
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "h-11 rounded-xl font-semibold",
+                  )}
+                  href={newAppHref}
+                >
+                  Add application for {uni.nameShort ?? uni.name}
+                </Link>
+                <Link
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "lg" }),
+                    "h-11 rounded-xl font-semibold",
+                  )}
+                  href="/dashboard/applications/kanban"
+                >
+                  Open Kanban
+                </Link>
+              </>
+            ) : (
               <Link
                 className={cn(
                   buttonVariants({ size: "lg" }),
                   "h-11 rounded-xl font-semibold",
                 )}
-                href={newAppHref}
+                href={`/sign-in?callbackUrl=${encodeURIComponent(returnAfterAuth)}`}
               >
-                Add application for {uni.nameShort ?? uni.name}
+                Sign in to add your pipeline
               </Link>
-              <Link
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-11 rounded-xl font-semibold",
-                )}
-                href="/dashboard/applications/kanban"
-              >
-                Open Kanban
-              </Link>
-            </>
-          ) : (
-            <Link
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "h-11 rounded-xl font-semibold",
-              )}
-              href={`/sign-in?callbackUrl=${encodeURIComponent(returnAfterAuth)}`}
-            >
-              Sign in to add your pipeline
-            </Link>
-          )}
-        </div>
-      </section>
+            )}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
