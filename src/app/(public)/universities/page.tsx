@@ -1,4 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { listUniversitiesDirectory } from "@/modules/community/services/university.service";
@@ -13,13 +14,22 @@ export const metadata = {
 export default async function UniversitiesDirectoryPage({
   searchParams,
 }: Readonly<{
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 }>) {
-  const q = (await searchParams).q ?? "";
-  const universities = await listUniversitiesDirectory({
+  const params = await searchParams;
+  const q = params.q ?? "";
+  const page = Math.max(1, Number(params.page ?? "1") || 1);
+  const {
+    rows: universities,
+    total,
+    page: safePage,
+  } = await listUniversitiesDirectory({
     query: q,
-    limit: 72,
+    page,
+    pageSize: 24,
   });
+  const shownCount = universities.length;
+  const hasMore = shownCount < total;
 
   return (
     <main className="from-slate-50 via-white to-slate-50/80 bg-gradient-to-b py-10 pb-24">
@@ -46,10 +56,8 @@ export default async function UniversitiesDirectoryPage({
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-100">
                   Showing
                 </p>
-                <p className="mt-1 text-3xl font-extrabold">
-                  {universities.length}
-                </p>
-                <p className="text-sm text-white/70">universities</p>
+                <p className="mt-1 text-3xl font-extrabold">{shownCount}</p>
+                <p className="text-sm text-white/70">of {total} universities</p>
               </div>
             </div>
           </div>
@@ -113,9 +121,16 @@ export default async function UniversitiesDirectoryPage({
                         className="shadow-lg shadow-[#0d2145]/15"
                       />
                       <div className="min-w-0">
-                        <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
-                          {u.name}
-                        </p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
+                            {u.name}
+                          </p>
+                          {u.verificationStatus === "PENDING" ? (
+                            <Badge className="h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                              Unverified
+                            </Badge>
+                          ) : null}
+                        </div>
                         <p className="text-muted-foreground mt-1 inline-flex items-center gap-1.5 text-sm">
                           <MapPin className="size-4" strokeWidth={1.8} />
                           {u.city}
@@ -151,6 +166,22 @@ export default async function UniversitiesDirectoryPage({
             ))}
           </ul>
         )}
+
+        {hasMore ? (
+          <div className="mt-8 flex justify-center">
+            <Link
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "h-11 rounded-xl bg-white font-semibold",
+              )}
+              href={`/universities?q=${encodeURIComponent(q)}&page=${
+                safePage + 1
+              }`}
+            >
+              Load more ({shownCount} of {total})
+            </Link>
+          </div>
+        ) : null}
 
         <div className="mt-10 text-center">
           <Link

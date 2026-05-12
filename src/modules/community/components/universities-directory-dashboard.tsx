@@ -1,25 +1,34 @@
 import { buttonVariants } from "@/components/ui/button";
-import {
-  UniversitiesDirectoryHero,
-} from "@/modules/community/components/community-data-hero";
+import { UniversitiesDirectoryHero } from "@/modules/community/components/community-data-hero";
 import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { listUniversitiesDirectory } from "@/modules/community/services/university.service";
+import { UniversityRequestForm } from "@/modules/community/components/university-request-form";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ArrowRight, MapPin, Search } from "lucide-react";
 import Link from "next/link";
 
 export async function UniversitiesDirectoryDashboard({
   query,
-}: Readonly<{ query: string }>) {
-  const universities = await listUniversitiesDirectory({
+  page,
+}: Readonly<{ query: string; page: number }>) {
+  const {
+    rows: universities,
+    total,
+    page: safePage,
+  } = await listUniversitiesDirectory({
     query,
-    limit: 72,
+    page,
+    pageSize: 24,
   });
+  const shownCount = universities.length;
+  const hasMore = shownCount < total;
 
   return (
     <>
       <UniversitiesDirectoryHero
-        resultCount={universities.length}
+        shownCount={shownCount}
+        totalCount={total}
         hasSearchQuery={query.trim().length > 0}
       />
 
@@ -59,8 +68,8 @@ export async function UniversitiesDirectoryDashboard({
             No universities found
           </h2>
           <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-6">
-            No universities match “{query}”. Try another search or run the seed script
-            locally.
+            No universities match “{query}”. Try another search or run the seed
+            script locally.
           </p>
         </section>
       ) : (
@@ -81,9 +90,16 @@ export async function UniversitiesDirectoryDashboard({
                       className="shadow-lg shadow-[#0d2145]/15"
                     />
                     <div className="min-w-0">
-                      <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
-                        {u.name}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-bold leading-6 text-[#0d2145] transition-colors group-hover:text-[#4a52c8]">
+                          {u.name}
+                        </p>
+                        {u.verificationStatus === "PENDING" ? (
+                          <Badge className="h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                            Unverified
+                          </Badge>
+                        ) : null}
+                      </div>
                       <p className="text-muted-foreground mt-1 inline-flex items-center gap-1.5 text-sm">
                         <MapPin className="size-4" strokeWidth={1.8} />
                         {u.city}
@@ -120,16 +136,44 @@ export async function UniversitiesDirectoryDashboard({
         </ul>
       )}
 
-      <div className="mt-10 text-center">
-        <Link
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            "h-11 rounded-xl bg-white font-semibold",
-          )}
-          href="/dashboard/community-data"
-        >
-          Share your university outcome
-        </Link>
+      {hasMore ? (
+        <div className="mt-8 flex justify-center">
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 rounded-xl bg-white font-semibold",
+            )}
+            href={`/dashboard/universities?q=${encodeURIComponent(
+              query,
+            )}&page=${safePage + 1}`}
+          >
+            Load more ({shownCount} of {total})
+          </Link>
+        </div>
+      ) : null}
+
+      <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <UniversityRequestForm />
+        <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-slate-200/80 bg-white p-8 text-center shadow-[0_12px_35px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/[0.03]">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-500">
+            Community data
+          </p>
+          <h3 className="text-xl font-bold text-[#0d2145]">
+            Share your university outcome
+          </h3>
+          <p className="text-muted-foreground text-sm">
+            Add your admission result to help future applicants.
+          </p>
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 rounded-xl bg-white font-semibold",
+            )}
+            href="/dashboard/community-data"
+          >
+            Share your university outcome
+          </Link>
+        </div>
       </div>
     </>
   );

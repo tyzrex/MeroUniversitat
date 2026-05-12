@@ -20,8 +20,8 @@ export function CommunityDataHero({
         title="Share & track admission outcomes"
         description={
           <>
-            Submit an outcome below, or open your list to check moderation status. Every
-            entry is reviewed before it appears publicly.
+            Submit an outcome below, or open your list to check moderation
+            status. Every entry is reviewed before it appears publicly.
           </>
         }
         actions={
@@ -114,10 +114,12 @@ export function CommunityDataPageWrap({
 
 /** Banner hero matching Community Data — dashboard universities directory. */
 export function UniversitiesDirectoryHero({
-  resultCount,
+  shownCount,
+  totalCount,
   hasSearchQuery,
 }: Readonly<{
-  resultCount: number;
+  shownCount: number;
+  totalCount: number;
   hasSearchQuery: boolean;
 }>) {
   return (
@@ -126,9 +128,9 @@ export function UniversitiesDirectoryHero({
       title="Browse universities in Germany"
       description={
         <>
-          Search by name or city, open full profiles, and track applications from your
-          dashboard. Each profile shows how many students already track that institution on
-          MeroUniversität.
+          Search by name or city, open full profiles, and track applications
+          from your dashboard. Each profile shows how many students already
+          track that institution on MeroUniversität.
         </>
       }
       aside={
@@ -136,8 +138,10 @@ export function UniversitiesDirectoryHero({
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-100">
             {hasSearchQuery ? "Matches" : "Showing"}
           </p>
-          <p className="mt-1 text-3xl font-extrabold tabular-nums">{resultCount}</p>
-          <p className="text-sm text-white/70">universities</p>
+          <p className="mt-1 text-3xl font-extrabold tabular-nums">
+            {shownCount}
+          </p>
+          <p className="text-sm text-white/70">of {totalCount} universities</p>
         </div>
       }
     />

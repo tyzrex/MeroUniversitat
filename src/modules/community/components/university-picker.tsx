@@ -3,6 +3,7 @@
 import { UniversityLogo } from "@/modules/community/components/university-logo";
 import { FormInput } from "@/modules/shared/components/form-input";
 import { searchUniversitiesAction } from "@/modules/community/actions/search-universities.action";
+import { Badge } from "@/components/ui/badge";
 import { Building2, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -12,15 +13,21 @@ type Uni = {
   city: string;
   logoUrl: string | null;
   imageUrl: string | null;
+  verificationStatus: "APPROVED" | "PENDING" | "REJECTED";
 };
 
-type PickMeta = { label: string; logoSrc: string | null };
+type PickMeta = {
+  label: string;
+  logoSrc: string | null;
+  verificationStatus: "APPROVED" | "PENDING" | "REJECTED";
+};
 
 export function UniversityPicker({
   value,
   onChange,
   initialLabel,
   initialLogoUrl,
+  initialVerificationStatus,
 }: Readonly<{
   value: string;
   onChange: (id: string) => void;
@@ -28,6 +35,7 @@ export function UniversityPicker({
   initialLabel?: string;
   /** Resolved logo URL when `value` is preset (logo preferred over hero image in callers). */
   initialLogoUrl?: string | null;
+  initialVerificationStatus?: "APPROVED" | "PENDING" | "REJECTED";
 }>) {
   const [query, setQuery] = useState("");
   const [picked, setPicked] = useState<PickMeta | null>(null);
@@ -43,6 +51,11 @@ export function UniversityPicker({
   const logoSrc =
     value != null && value !== ""
       ? (picked?.logoSrc ?? initialLogoUrl ?? null)
+      : null;
+
+  const verificationStatus =
+    value != null && value !== ""
+      ? (picked?.verificationStatus ?? initialVerificationStatus ?? null)
       : null;
 
   const nameForLogo = displayLabel.split(/\s—\s/)[0]?.trim() || "University";
@@ -83,7 +96,14 @@ export function UniversityPicker({
               size="xs"
               className="shadow-md shadow-black/5"
             />
-            <span className="font-medium text-slate-900">{displayLabel}</span>
+            <div className="min-w-0">
+              <span className="font-medium text-slate-900">{displayLabel}</span>
+              {verificationStatus === "PENDING" ? (
+                <Badge className="ml-2 h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                  Unverified
+                </Badge>
+              ) : null}
+            </div>
           </div>
           <button
             type="button"
@@ -133,6 +153,7 @@ export function UniversityPicker({
                       setPicked({
                         label: `${u.name} — ${u.city}`,
                         logoSrc: u.logoUrl ?? u.imageUrl ?? null,
+                        verificationStatus: u.verificationStatus,
                       });
                       setQuery("");
                       setOpen(false);
@@ -147,6 +168,11 @@ export function UniversityPicker({
                     />
                     <span className="min-w-0 flex-1">
                       <span className="font-medium">{u.name}</span>
+                      {u.verificationStatus === "PENDING" ? (
+                        <Badge className="ml-2 h-5 rounded-full border-amber-200 bg-amber-50 text-[10px] font-semibold text-amber-900">
+                          Unverified
+                        </Badge>
+                      ) : null}
                       <span className="text-muted-foreground ml-2 text-xs">
                         {u.city}
                       </span>
