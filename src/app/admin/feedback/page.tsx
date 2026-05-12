@@ -10,8 +10,12 @@ import {
 import { requireModeratorSession } from "@/modules/admin/server/guards";
 import { Clock3, MessageSquareText, ShieldCheck } from "lucide-react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Feedback management | Admin | MeroUniversität",
+  description:
+    "Review and manage user feedback submissions.",
 };
 
 export default async function AdminFeedbackPage() {

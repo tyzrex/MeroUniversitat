@@ -8,8 +8,12 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Edit application | MeroUniversität",
+  description:
+    "Edit your university application details and status.",
 };
 
 export default async function EditApplicationPage({

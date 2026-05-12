@@ -100,6 +100,7 @@ export async function generateMetadata({
   const { id } = await params;
   return {
     title: `Contribution ${id.slice(0, 6)} | MeroUniversität`,
+    description: "View your community acceptance data submission details.",
   };
 }
 

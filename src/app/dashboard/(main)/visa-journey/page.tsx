@@ -13,8 +13,12 @@ import { CalendarClock, MapPin, Sparkles } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Visa & embassy journey | MeroUniversität",
+  description:
+    "Track your visa and embassy journey from application to passport pickup.",
 };
 
 export default function VisaJourneyPage() {

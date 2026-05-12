@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NAV = [
+export const NAV = [
   { label: "Home", href: "/" },
   { label: "Universities", href: "/universities" },
   { label: "Community Data", href: "/community-data" },

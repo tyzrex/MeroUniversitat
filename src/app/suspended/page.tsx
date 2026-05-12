@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Account suspended",
+  description:
+    "This account has been suspended and cannot access the workspace.",
+  robots: { index: false, follow: false },
+};
 
 export default function SuspendedPage() {
   return (

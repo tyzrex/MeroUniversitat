@@ -16,8 +16,12 @@ import { Columns3, FileText, Users, UsersRound } from "lucide-react";
 import type * as React from "react";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Team management | MeroUniversität",
+  description:
+    "Manage teams, members, roles, and shared application pipelines.",
 };
 
 export default function TeamsPage() {

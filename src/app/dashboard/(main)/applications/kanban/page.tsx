@@ -19,8 +19,12 @@ import { redirect } from "next/navigation";
 import { BarChart3, FileText, Plus } from "lucide-react";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Kanban | MeroUniversität",
+  description:
+    "Visual kanban board for managing your application pipeline.",
 };
 
 function parseView(raw: string | undefined): KanbanViewMode {

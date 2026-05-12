@@ -11,8 +11,12 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Consular timeline | MeroUniversität",
+  description:
+    "Community-sourced consular processing timelines and wait times.",
 };
 
 export default async function TimelinesPage() {

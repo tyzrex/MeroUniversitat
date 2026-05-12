@@ -6,8 +6,12 @@ import {
 import { listPendingAcceptanceRecords } from "@/modules/community/services/acceptance-record.service";
 import { Clock3, Database, ShieldCheck } from "lucide-react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Community review | Admin",
+  description:
+    "Review and moderate community-contributed content.",
 };
 
 export default async function AdminCommunityPage() {

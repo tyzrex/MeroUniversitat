@@ -16,8 +16,12 @@ import { Columns3, Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Applications | MeroUniversität",
+  description:
+    "Track and manage all your university applications in one place.",
 };
 
 export default async function ApplicationsPage({

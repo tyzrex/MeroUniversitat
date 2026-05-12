@@ -6,8 +6,12 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowLeft, ShieldAlert } from "lucide-react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Users | Admin",
+  description:
+    "Manage user accounts and permissions.",
 };
 
 export default async function AdminUsersPage() {

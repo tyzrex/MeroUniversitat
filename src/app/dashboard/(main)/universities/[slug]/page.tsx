@@ -25,6 +25,9 @@ export async function generateMetadata({
   }
   return {
     title: `${uni.name} | MeroUniversität`,
+    description:
+      uni.description ??
+      `Applications, programs, and admission data for ${uni.name} in ${uni.city}.`,
   };
 }
 

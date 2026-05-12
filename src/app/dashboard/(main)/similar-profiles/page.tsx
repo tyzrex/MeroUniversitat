@@ -8,8 +8,12 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Similar applicants | MeroUniversität",
+  description:
+    "Discover peers with similar academic profiles who are applying to German universities.",
 };
 
 export default function SimilarProfilesPage() {

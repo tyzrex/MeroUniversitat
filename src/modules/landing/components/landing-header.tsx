@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "../../shared/components/container";
 import LandingHeaderProfile from "./landing-header-profile";
+import { LandingMobileNav } from "./landing-mobile-nav";
 import { LandingNavLinks } from "./landing-nav-links";
 
 export function LandingNavbar() {
@@ -30,6 +31,8 @@ export function LandingNavbar() {
         </div>
 
         <LandingHeaderProfile />
+
+        <LandingMobileNav />
       </Container>
     </header>
   );

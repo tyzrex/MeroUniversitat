@@ -9,8 +9,12 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "New application | MeroUniversität",
+  description:
+    "Add a new university application to your tracking dashboard.",
 };
 
 export default async function NewApplicationPage({

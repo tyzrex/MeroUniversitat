@@ -26,8 +26,12 @@ import { redirect } from "next/navigation";
 import type { ComponentType } from "react";
 import { Suspense } from "react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Acceptance submissions | MeroUniversität",
+  description:
+    "View and manage your community acceptance data submissions.",
 };
 
 export default async function MyContributionsPage() {

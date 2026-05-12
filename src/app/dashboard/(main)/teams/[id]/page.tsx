@@ -25,8 +25,26 @@ import {
   Users,
 } from "lucide-react";
 
-export async function generateMetadata() {
-  return { title: `Team | MeroUniversität` };
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: Readonly<{
+  params: Promise<{ id: string }>;
+}>): Promise<Metadata> {
+  const { id } = await params;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return { title: "Team | MeroUniversität" };
+  }
+  const team = await getTeamDetail(id, session.user.id);
+  if (!team) {
+    return { title: "Team | MeroUniversität" };
+  }
+  return {
+    title: `${team.name} | MeroUniversität`,
+    description: `Manage team members, roles, and applications for ${team.name}.`,
+  };
 }
 
 export default async function TeamDetailPage({
