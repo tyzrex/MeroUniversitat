@@ -4,15 +4,15 @@ This app groups code by **domain** so features stay easy to find and change.
 
 ## Conventions
 
-| Path | Role |
-|------|------|
-| `modules/<domain>/components/` | UI for that feature (client or server components). |
-| `modules/<domain>/actions/` | **Server actions** (`"use server"`) — thin entry points; validate input, call services, return `ActionResult`. |
-| `modules/<domain>/services/` | **Server-only** business logic: Prisma, external APIs, no React. |
-| `modules/<domain>/schema/` | Zod (and similar) schemas shared by actions and forms. |
-| `modules/<domain>/constants/` | Enums, labels, static config. |
-| `modules/shared/` | Cross-feature UI and server helpers (form controls, `Container`, session). |
-| `app/` | Routes, layouts, metadata — **import** from `modules/`, keep files small. |
+| Path                           | Role                                                                                                           |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `modules/<domain>/components/` | UI for that feature (client or server components).                                                             |
+| `modules/<domain>/actions/`    | **Server actions** (`"use server"`) — thin entry points; validate input, call services, return `ActionResult`. |
+| `modules/<domain>/services/`   | **Server-only** business logic: Prisma, external APIs, no React.                                               |
+| `modules/<domain>/schema/`     | Zod (and similar) schemas shared by actions and forms.                                                         |
+| `modules/<domain>/constants/`  | Enums, labels, static config.                                                                                  |
+| `modules/shared/`              | Cross-feature UI and server helpers (form controls, `Container`, session).                                     |
+| `app/`                         | Routes, layouts, metadata — **import** from `modules/`, keep files small.                                      |
 
 ## Why actions + services?
 

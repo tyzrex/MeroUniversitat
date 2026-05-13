@@ -1,12 +1,12 @@
-import { AdminShell } from "@/modules/admin/components/admin-shell";
-import { requireModeratorSession } from "@/modules/admin/server/guards";
-import type * as React from "react";
+import { AdminShell } from '@/modules/admin/components/admin-shell';
+import { requireModeratorSession } from '@/modules/admin/server/guards';
+import type * as React from 'react';
 
 export default async function AdminLayout({
-  children,
+	children
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  await requireModeratorSession();
-  return <AdminShell>{children}</AdminShell>;
+	await requireModeratorSession();
+	return <AdminShell>{children}</AdminShell>;
 }

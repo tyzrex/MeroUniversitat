@@ -1,16 +1,16 @@
-import { LandingFooter } from "@/modules/landing/components/landing-footer";
-import { LandingNavbar } from "@/modules/landing/components/landing-header";
+import { LandingFooter } from '@/modules/landing/components/landing-footer';
+import { LandingNavbar } from '@/modules/landing/components/landing-header';
 
 export default function Layout({
-  children,
+	children
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <LandingNavbar />
-      {children}
-      <LandingFooter />
-    </>
-  );
+	return (
+		<>
+			<LandingNavbar />
+			{children}
+			<LandingFooter />
+		</>
+	);
 }
