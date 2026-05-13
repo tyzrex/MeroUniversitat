@@ -1,194 +1,193 @@
-import { DashboardPageIntro } from "@/modules/dashboard/components/dashboard-page-intro";
+import { DashboardPageIntro } from '@/modules/dashboard/components/dashboard-page-intro';
 import {
-  dashboardOutlineActionClass,
-  dashboardPrimaryActionClass,
-} from "@/modules/dashboard/lib/dashboard-header-actions";
-import { auth } from "@/lib/auth";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+	dashboardOutlineActionClass,
+	dashboardPrimaryActionClass
+} from '@/modules/dashboard/lib/dashboard-header-actions';
+import { auth } from '@/lib/auth';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import {
-  MyContributionsView,
-  type ContributionRow,
-} from "@/modules/community/components/my-contributions-view";
-import { Skeleton } from "@/components/ui/skeleton";
-import { listAcceptanceRecordsForUser } from "@/modules/community/services/acceptance-record.service";
+	MyContributionsView,
+	type ContributionRow
+} from '@/modules/community/components/my-contributions-view';
+import { Skeleton } from '@/components/ui/skeleton';
+import { listAcceptanceRecordsForUser } from '@/modules/community/services/acceptance-record.service';
 import {
-  CheckCircle2,
-  Clock3,
-  FileText,
-  GraduationCap,
-  Plus,
-  XCircle,
-} from "lucide-react";
-import { headers } from "next/headers";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import type { ComponentType } from "react";
-import { Suspense } from "react";
+	CheckCircle2,
+	Clock3,
+	FileText,
+	GraduationCap,
+	Plus,
+	XCircle
+} from 'lucide-react';
+import { headers } from 'next/headers';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import type { ComponentType } from 'react';
+import { Suspense } from 'react';
 
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Acceptance submissions | MeroUniversität",
-  description:
-    "View and manage your community acceptance data submissions.",
+	title: 'Acceptance submissions | MeroUniversität',
+	description: 'View and manage your community acceptance data submissions.'
 };
 
 export default async function MyContributionsPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user?.id) {
-    redirect("/sign-in");
-  }
+	const session = await auth.api.getSession({
+		headers: await headers()
+	});
+	if (!session?.user?.id) {
+		redirect('/sign-in');
+	}
 
-  const rows = await listAcceptanceRecordsForUser(session.user.id);
-  const payload: ContributionRow[] = rows.map((r) => ({
-    id: r.id,
-    intake: r.intake,
-    result: r.result,
-    moderationStatus: r.moderationStatus,
-    createdAt: r.createdAt.toISOString(),
-    programNameSnapshot: r.programNameSnapshot,
-    university: {
-      name: r.university.name,
-      slug: r.university.slug,
-      logoUrl: r.university.logoUrl,
-      imageUrl: r.university.imageUrl,
-    },
-  }));
+	const rows = await listAcceptanceRecordsForUser(session.user.id);
+	const payload: ContributionRow[] = rows.map((r) => ({
+		id: r.id,
+		intake: r.intake,
+		result: r.result,
+		moderationStatus: r.moderationStatus,
+		createdAt: r.createdAt.toISOString(),
+		programNameSnapshot: r.programNameSnapshot,
+		university: {
+			name: r.university.name,
+			slug: r.university.slug,
+			logoUrl: r.university.logoUrl,
+			imageUrl: r.university.imageUrl
+		}
+	}));
 
-  const summary = {
-    total: rows.length,
-    approved: rows.filter((r) => r.moderationStatus === "APPROVED").length,
-    pending: rows.filter((r) => r.moderationStatus === "PENDING").length,
-    rejected: rows.filter((r) => r.moderationStatus === "REJECTED").length,
-  };
+	const summary = {
+		total: rows.length,
+		approved: rows.filter((r) => r.moderationStatus === 'APPROVED').length,
+		pending: rows.filter((r) => r.moderationStatus === 'PENDING').length,
+		rejected: rows.filter((r) => r.moderationStatus === 'REJECTED').length
+	};
 
-  return (
-    <div className="flex flex-col gap-8">
-      <DashboardPageIntro
-        className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
-        crumbs={[
-          { label: "Community data", href: "/dashboard/community-data" },
-          { label: "Acceptance submissions" },
-        ]}
-        title="My acceptance submissions"
-        description="Track moderation status for every admission outcome you shared while signed in. Published rows appear in public community stats."
-      >
-        <Link
-          className={dashboardOutlineActionClass()}
-          href="/dashboard/community-data"
-        >
-          Submit another outcome
-        </Link>
-        <Link
-          className={dashboardPrimaryActionClass()}
-          href="/dashboard/community-data"
-        >
-          <Plus className="size-4" strokeWidth={1.8} />
-          New submission
-        </Link>
-      </DashboardPageIntro>
+	return (
+		<div className="flex flex-col gap-8">
+			<DashboardPageIntro
+				className="rounded-none border-0 bg-transparent p-0 shadow-none ring-0 md:p-0"
+				crumbs={[
+					{ label: 'Community data', href: '/dashboard/community-data' },
+					{ label: 'Acceptance submissions' }
+				]}
+				title="My acceptance submissions"
+				description="Track moderation status for every admission outcome you shared while signed in. Published rows appear in public community stats."
+			>
+				<Link
+					className={dashboardOutlineActionClass()}
+					href="/dashboard/community-data"
+				>
+					Submit another outcome
+				</Link>
+				<Link
+					className={dashboardPrimaryActionClass()}
+					href="/dashboard/community-data"
+				>
+					<Plus className="size-4" strokeWidth={1.8} />
+					New submission
+				</Link>
+			</DashboardPageIntro>
 
-      <section className="grid gap-4 md:grid-cols-4">
-        <SummaryCard label="Total" value={summary.total} icon={FileText} />
-        <SummaryCard
-          label="Published"
-          value={summary.approved}
-          icon={CheckCircle2}
-          tone="emerald"
-        />
-        <SummaryCard
-          label="Pending"
-          value={summary.pending}
-          icon={Clock3}
-          tone="amber"
-        />
-        <SummaryCard
-          label="Rejected"
-          value={summary.rejected}
-          icon={XCircle}
-          tone="rose"
-        />
-      </section>
+			<section className="grid gap-4 md:grid-cols-4">
+				<SummaryCard label="Total" value={summary.total} icon={FileText} />
+				<SummaryCard
+					label="Published"
+					value={summary.approved}
+					icon={CheckCircle2}
+					tone="emerald"
+				/>
+				<SummaryCard
+					label="Pending"
+					value={summary.pending}
+					icon={Clock3}
+					tone="amber"
+				/>
+				<SummaryCard
+					label="Rejected"
+					value={summary.rejected}
+					icon={XCircle}
+					tone="rose"
+				/>
+			</section>
 
-      {rows.length === 0 ? (
-        <section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center ">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
-            <GraduationCap className="size-7" strokeWidth={1.7} />
-          </div>
-          <h2 className="mt-5 text-xl font-bold text-[#0d2145]">
-            No submissions yet
-          </h2>
-          <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-6">
-            Share your first admission outcome to help applicants compare real
-            profiles and timelines.
-          </p>
-          <Link
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "mt-6 h-11 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]",
-            )}
-            href="/dashboard/community-data"
-          >
-            Share your first outcome
-          </Link>
-        </section>
-      ) : (
-        <Suspense
-          fallback={
-            <div className="mt-8 space-y-4">
-              <div className="flex justify-end">
-                <Skeleton className="h-9 w-48 rounded-xl" />
-              </div>
-              <Skeleton className="h-[420px] w-full rounded-3xl" />
-            </div>
-          }
-        >
-          <MyContributionsView rows={payload} />
-        </Suspense>
-      )}
-    </div>
-  );
+			{rows.length === 0 ? (
+				<section className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
+					<div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-blue-50 text-[#4a52c8]">
+						<GraduationCap className="size-7" strokeWidth={1.7} />
+					</div>
+					<h2 className="mt-5 text-xl font-bold text-[#0d2145]">
+						No submissions yet
+					</h2>
+					<p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm leading-6">
+						Share your first admission outcome to help applicants compare real
+						profiles and timelines.
+					</p>
+					<Link
+						className={cn(
+							buttonVariants({ size: 'lg' }),
+							'mt-6 h-11 rounded-xl bg-[#0d2145] text-white hover:bg-[#1a3461]'
+						)}
+						href="/dashboard/community-data"
+					>
+						Share your first outcome
+					</Link>
+				</section>
+			) : (
+				<Suspense
+					fallback={
+						<div className="mt-8 space-y-4">
+							<div className="flex justify-end">
+								<Skeleton className="h-9 w-48 rounded-xl" />
+							</div>
+							<Skeleton className="h-[420px] w-full rounded-3xl" />
+						</div>
+					}
+				>
+					<MyContributionsView rows={payload} />
+				</Suspense>
+			)}
+		</div>
+	);
 }
 
 function SummaryCard({
-  icon: Icon,
-  label,
-  tone = "blue",
-  value,
+	icon: Icon,
+	label,
+	tone = 'blue',
+	value
 }: Readonly<{
-  icon: ComponentType<{ className?: string; strokeWidth?: number }>;
-  label: string;
-  tone?: "blue" | "emerald" | "amber" | "rose";
-  value: number;
+	icon: ComponentType<{ className?: string; strokeWidth?: number }>;
+	label: string;
+	tone?: 'blue' | 'emerald' | 'amber' | 'rose';
+	value: number;
 }>) {
-  const toneClass = {
-    blue: "bg-blue-50 text-[#4a52c8]",
-    emerald: "bg-emerald-50 text-emerald-600",
-    amber: "bg-amber-50 text-amber-600",
-    rose: "bg-rose-50 text-rose-600",
-  }[tone];
+	const toneClass = {
+		blue: 'bg-blue-50 text-[#4a52c8]',
+		emerald: 'bg-emerald-50 text-emerald-600',
+		amber: 'bg-amber-50 text-amber-600',
+		rose: 'bg-rose-50 text-rose-600'
+	}[tone];
 
-  return (
-    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.03]">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-muted-foreground text-sm font-semibold">{label}</p>
-          <p className="mt-1 text-3xl font-extrabold tracking-tight text-[#0d2145]">
-            {value}
-          </p>
-        </div>
-        <div
-          className={cn(
-            "flex size-11 items-center justify-center rounded-2xl",
-            toneClass,
-          )}
-        >
-          <Icon className="size-5" strokeWidth={1.8} />
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.03]">
+			<div className="flex items-center justify-between gap-4">
+				<div>
+					<p className="text-muted-foreground text-sm font-semibold">{label}</p>
+					<p className="mt-1 text-3xl font-extrabold tracking-tight text-[#0d2145]">
+						{value}
+					</p>
+				</div>
+				<div
+					className={cn(
+						'flex size-11 items-center justify-center rounded-2xl',
+						toneClass
+					)}
+				>
+					<Icon className="size-5" strokeWidth={1.8} />
+				</div>
+			</div>
+		</div>
+	);
 }
